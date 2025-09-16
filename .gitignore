@@ -1,0 +1,35 @@
+# --- Monorepo ignores ---
+# Package managers / installs
+node_modules
+.pnpm-store
+pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+.next
+dist
+build
+out
+.turbo
+coverage
+
+# Tooling
+.DS_Store
+.eslintcache
+.vercel
+.swc
+
+# Env files (opt-in commit)
+.env*
+
+# IDE/editor
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Misc
+*.pem
+*.tsbuildinfo
+

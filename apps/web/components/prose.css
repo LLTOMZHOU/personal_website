@@ -1,0 +1,6 @@
+.prose h1 { font-weight: 800; font-size: 2rem; margin-top: 1.25rem; }
+.prose h2 { font-weight: 700; font-size: 1.375rem; margin-top: 1.25rem; }
+.prose p, .prose ul, .prose ol { margin-top: 0.75rem; line-height: 1.7; }
+.prose a { text-decoration: underline; }
+blockquote { border-left: 4px solid currentColor; padding-left: .75rem; }
+
