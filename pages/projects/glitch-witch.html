@@ -1,21 +1,209 @@
-<article class="page">
-  <header class="hero">
-    <p class="eyebrow">Project</p>
-    <h1>Glitch Witch</h1>
-    <p class="lede">
-      A systems-heavy game project with room for custom structure, screenshots, diagrams, and
-      embedded media without depending on markdown.
-    </p>
-  </header>
-
-  <section class="grid-two">
-    <div class="card">
-      <p class="eyebrow">Problem</p>
-      <p class="lede">How do you support flexible gameplay systems while keeping telemetry legible?</p>
+<article class="mb-32">
+  <section class="mb-28 grid grid-cols-1 gap-12 border-b border-text-main/10 pb-14 md:grid-cols-12 md:items-end">
+    <div class="md:col-span-8">
+      <p class="mb-6 font-body text-[0.68rem] font-bold uppercase tracking-[0.24em] text-primary">
+        Case Study No. 001
+      </p>
+      <h1 class="font-headline text-[3.5rem] font-bold leading-[0.9] tracking-tighter text-text-main md:text-[5.5rem]">
+        The <br>
+        Glitch <br>
+        <span class="font-normal italic text-primary/80">Witch.</span>
+      </h1>
     </div>
-    <div class="card">
-      <p class="eyebrow">Outcome</p>
-      <p class="lede">This page is an authored HTML fragment assembled into a complete static route.</p>
+    <div class="md:col-span-4 md:pb-4">
+      <div class="bg-surface-container-low p-8">
+        <p class="font-body text-sm leading-7 text-text-muted">
+          I was an engineering lead on The Glitch Witch, a retro-future puzzle adventure built in
+          Unreal Engine 5. What made it interesting to me was the way its systems, narrative, and
+          visual identity all revolved around the same core idea: restoring broken technology in a
+          world that treats technical understanding like magic.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative mb-40 w-full">
+    <div class="absolute inset-x-0 top-12 -z-10 h-3/4 bg-surface-container-low"></div>
+    <div>
+      <div class="grid grid-cols-1 md:grid-cols-12">
+        <div class="md:col-start-2 md:col-span-11">
+          <div class="group relative overflow-hidden shadow-2xl">
+            <img
+              alt="The Glitch Witch logo inside a bright hexagonal neon frame."
+              class="aspect-[21/9] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              src="https://images.squarespace-cdn.com/content/v1/5f6b6caec90f2d572ac8f7f9/788767e9-44d4-47a4-aedd-0d2f3d8a9a0f/Expo%2BLogo%2B4.png"
+            >
+            <div class="absolute bottom-8 right-8 max-w-xs bg-surface/90 p-6 backdrop-blur-md">
+              <span class="mb-2 block font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-primary">
+                Core Premise
+              </span>
+              <p class="font-body text-xs leading-6 text-text-main">
+                Repairing old machines is both the puzzle loop and the narrative engine. That is
+                what gives the game its identity.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-40 grid grid-cols-1 gap-16 md:grid-cols-12">
+    <aside class="space-y-12 md:col-span-3">
+      <div>
+        <h4 class="mb-4 font-body text-[0.64rem] font-bold uppercase tracking-[0.24em] text-text-muted">
+          My Role
+        </h4>
+        <p class="font-headline text-xl italic text-text-main">Engineering lead</p>
+      </div>
+      <div>
+        <h4 class="mb-4 font-body text-[0.64rem] font-bold uppercase tracking-[0.24em] text-text-muted">
+          Format
+        </h4>
+        <p class="font-headline text-xl italic text-text-main">Adventure / puzzle / narrative / 2.5D</p>
+      </div>
+      <div>
+        <h4 class="mb-4 font-body text-[0.64rem] font-bold uppercase tracking-[0.24em] text-text-muted">
+          Public Status
+        </h4>
+        <p class="font-headline text-xl italic text-text-main">USC Games Expo 2024 / Steam coming soon</p>
+      </div>
+      <div class="border-t border-outline-variant/20 pt-8">
+        <a
+          class="group inline-flex items-center gap-4 font-body text-[0.68rem] font-bold uppercase tracking-[0.24em] text-primary"
+          href="https://store.steampowered.com/app/2942710/The_Glitch_Witch/"
+        >
+          Steam Page
+          <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </a>
+      </div>
+    </aside>
+
+    <div class="md:col-span-8 md:col-start-5">
+      <h2 class="mb-12 max-w-2xl font-headline text-4xl font-bold leading-tight text-text-main">
+        A game where system repair is not a side mechanic. It is the story.
+      </h2>
+      <div class="columns-1 gap-12 font-body text-base leading-loose text-text-muted md:columns-2">
+        <p class="mb-8">
+          The Glitch Witch works because its mechanics and fiction are aligned. Rosette is not just
+          solving abstract puzzles. She is restoring devices in a town that no longer understands
+          the infrastructure around it. That gives the game a stronger internal logic than a
+          generic “solve puzzle, unlock next area” structure.
+        </p>
+        <p class="mb-8">
+          As an engineer, that kind of setup is appealing because implementation decisions carry
+          more meaning. State changes matter. Interaction feedback matters. The transition between
+          exploration and puzzle spaces matters. You are not just building systems that function.
+          You are building the logic by which the world makes sense to the player.
+        </p>
+        <p>
+          That is also why the project had real production value. It forced the team to solve for
+          coherence across gameplay, UI, art, and narrative. In a project with this much scope,
+          engineering is partly about making things work and partly about making the whole project
+          easier for other disciplines to build on.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-40 bg-surface-container-high py-24">
+    <div class="mx-auto max-w-4xl px-8 text-center">
+      <h3 class="font-headline text-3xl italic font-medium leading-tight text-text-main md:text-4xl">
+        The strongest part of the game is that it turns technical literacy into both a mechanic and
+        a social tension.
+      </h3>
+      <p class="mt-8 font-body text-[0.68rem] font-bold uppercase tracking-[0.28em] text-primary">
+        That is what makes it more than a style exercise.
+      </p>
+    </div>
+  </section>
+
+  <section class="mb-40">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      <div class="cursor-default bg-surface-container p-10 transition-colors hover:bg-surface-container-high md:col-span-2 md:aspect-square">
+        <span class="material-symbols-outlined mb-6 text-4xl text-primary">memory</span>
+        <h4 class="mb-4 font-headline text-2xl font-bold text-text-main">Technical storytelling</h4>
+        <p class="max-w-xs font-body text-sm leading-7 text-text-muted">
+          Repairing machines is also an argument about lost knowledge, cultural memory, and who gets
+          to interpret the world correctly.
+        </p>
+      </div>
+      <div class="bg-primary p-10 text-white md:aspect-[1/2]">
+        <h4 class="mb-4 font-headline text-2xl font-bold">Systems integration</h4>
+        <p class="font-body text-sm leading-7 text-white/80">
+          Exploration, puzzle states, UI language, and progression all had to feel like parts of
+          one game rather than adjacent prototypes.
+        </p>
+        <div class="mt-10 h-1 w-full bg-white/20">
+          <div class="h-full w-2/3 bg-white"></div>
+        </div>
+      </div>
+      <div class="flex flex-col gap-6">
+        <div class="bg-surface-container-low p-8">
+          <span class="mb-4 block font-body text-[0.64rem] font-bold uppercase tracking-[0.24em] text-text-muted">
+            Why It’s Good Work
+          </span>
+          <p class="font-headline text-lg italic leading-snug text-text-main">
+            The premise is easy to grasp and distinctive enough to travel well in trailers and expo
+            settings.
+          </p>
+        </div>
+        <div class="bg-surface-container-low p-8">
+          <span class="mb-4 block font-body text-[0.64rem] font-bold uppercase tracking-[0.24em] text-text-muted">
+            Why I Included It
+          </span>
+          <p class="font-headline text-lg italic leading-snug text-text-main">
+            It reflects how I like to build: clear systems, strong internal logic, and technology
+            that supports the meaning of the work.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid gap-6 border-t border-text-main/10 pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div>
+      <p class="mb-5 font-body text-[0.72rem] font-bold uppercase tracking-[0.22em] text-primary">
+        See More
+      </p>
+      <ul class="space-y-3 font-body text-sm leading-7 text-text-muted">
+        <li>
+          <a class="text-primary underline decoration-text-main/20 underline-offset-4" href="https://store.steampowered.com/app/2942710/The_Glitch_Witch/">
+            Steam listing
+          </a>
+        </li>
+        <li>
+          <a class="text-primary underline decoration-text-main/20 underline-offset-4" href="https://www.uscgamesexpo.com/2024-expo-games">
+            USC Games Expo 2024
+          </a>
+        </li>
+        <li>
+          <a class="text-primary underline decoration-text-main/20 underline-offset-4" href="https://cinema.usc.edu/development/studentstories/view.cfm?id=71594">
+            USC Cinematic Arts interview
+          </a>
+        </li>
+        <li>
+          <a class="text-primary underline decoration-text-main/20 underline-offset-4" href="https://www.mossdooley.com/games/glitch-witch">
+            Moss Dooley portfolio page
+          </a>
+        </li>
+        <li>
+          <a class="text-primary underline decoration-text-main/20 underline-offset-4" href="https://www.youtube.com/watch?v=qyG_PyY3I0o">
+            Official trailer
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border border-text-main/10 bg-surface-container-low p-8">
+      <p class="mb-4 font-body text-[0.72rem] font-bold uppercase tracking-[0.22em] text-primary">
+        Framing
+      </p>
+      <p class="font-body text-sm leading-7 text-text-muted">
+        This page is meant to show how I approach engineering in creative work: make the systems
+        strong, make them coherent, and let the technical choices support what the project is
+        trying to say.
+      </p>
     </div>
   </section>
 </article>

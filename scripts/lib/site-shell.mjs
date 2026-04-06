@@ -26,8 +26,8 @@ function renderNav(section) {
     const current = item.section === section ? ' aria-current="page"' : "";
     const currentClass =
       item.section === section
-        ? "nav-link-base nav-link-current text-primary"
-        : "nav-link-base text-text-main/60 transition-colors hover:text-primary";
+        ? "nav-link-base inline-flex items-center text-primary nav-link-current"
+        : "nav-link-base inline-flex items-center text-text-main/60 transition-colors hover:text-primary";
 
     return `<a class="${currentClass}" href="${item.href}"${current}>${item.label}</a>`;
   }).join("");
@@ -38,8 +38,8 @@ function renderNav(section) {
       aria-label="Primary"
       data-site-nav
     >
-      <div class="mx-auto flex max-w-screen-2xl items-center justify-between px-8 py-6 md:px-16">
-        <a class="headline-bold text-2xl text-text-main" href="/">Yuxing Zhou</a>
+      <div class="mx-auto flex max-w-screen-2xl items-center justify-between px-8 py-6 md:flex md:items-center md:gap-10 md:px-16">
+        <a class="headline-bold inline-flex h-10 shrink-0 items-center text-2xl text-text-main" href="/">Yuxing Zhou</a>
         <button
           class="font-body text-[0.7rem] font-bold uppercase tracking-[0.2em] text-text-main md:hidden"
           type="button"
@@ -50,13 +50,13 @@ function renderNav(section) {
           Menu
         </button>
         <div
-          class="absolute left-8 right-8 top-full hidden flex-col gap-5 border-b border-text-main/5 bg-surface/95 py-5 font-headline text-[0.8rem] font-bold uppercase tracking-[0.2em] md:static md:flex md:flex-row md:items-center md:gap-10 md:border-0 md:bg-transparent md:py-0"
+          class="absolute left-8 right-8 top-full hidden flex-col gap-5 border-b border-text-main/5 bg-surface/95 py-5 font-headline text-[0.8rem] font-bold uppercase tracking-[0.2em] md:static md:flex md:h-10 md:flex-1 md:flex-row md:items-center md:justify-center md:gap-10 md:border-0 md:bg-transparent md:py-0"
           id="primary-nav"
         >
           ${links}
         </div>
         <button
-          class="hidden border border-text-main/20 px-6 py-2.5 font-body text-[0.7rem] font-bold uppercase tracking-[0.2em] transition-all hover:border-primary hover:bg-primary hover:text-white md:block"
+          class="hidden h-10 shrink-0 items-center border border-text-main/20 px-6 font-body text-[0.7rem] font-bold uppercase tracking-[0.2em] transition-all hover:border-primary hover:bg-primary hover:text-white md:inline-flex"
           type="button"
           aria-expanded="false"
           aria-controls="assistant-panel"
