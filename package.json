@@ -1,16 +1,17 @@
 {
-  "name": "personal-site-monorepo",
+  "name": "personal-site",
   "private": true,
   "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "dev": "turbo run dev --parallel",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
+    "build": "node scripts/build-site.mjs",
+    "dev": "node scripts/dev.mjs",
+    "preview": "node scripts/preview.mjs",
     "format": "prettier -w ."
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.11",
     "prettier": "^3.3.3",
-    "turbo": "^2.0.0"
+    "tailwindcss": "^4.1.11",
+    "vite": "^6.2.0"
   }
 }
-

@@ -1,0 +1,8 @@
+{
+  "title": "AI Media",
+  "description": "AI-generated media collections by Yuxing Zhou.",
+  "path": "/ai-media/",
+  "section": "ai-media",
+  "bundles": ["gallery"],
+  "bodyClass": "page-ai-media"
+}

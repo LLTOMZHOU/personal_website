@@ -1,0 +1,8 @@
+{
+  "title": "Projects",
+  "description": "Selected projects by Yuxing Zhou.",
+  "path": "/projects/",
+  "section": "projects",
+  "bundles": ["search"],
+  "bodyClass": "page-projects"
+}

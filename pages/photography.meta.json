@@ -1,0 +1,8 @@
+{
+  "title": "Photography",
+  "description": "Photography collections by Yuxing Zhou.",
+  "path": "/photography/",
+  "section": "photography",
+  "bundles": ["gallery"],
+  "bodyClass": "page-photography"
+}
