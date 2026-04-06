@@ -188,4 +188,5 @@ When addressing PR review comments:
 - only reply after the fix is actually implemented
 - reply `done` for straightforward fixes
 - reply `good point, done` when the review caught something genuinely useful
+- when replying `good point, done`, resolve the thread if the fix is complete and the thread is actionable
 - if the right action is ambiguous or needs product judgment, leave the thread for the user instead of guessing
