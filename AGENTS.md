@@ -74,12 +74,12 @@ If a page is missing a metadata sidecar, the build should fail.
 ## Bundle Model
 
 The global `site` bundle is included automatically on every page.
+The `assistant` bundle is also included automatically on every page.
 
 Optional bundles are declared through page metadata.
 
 Current bundle names include:
 
-- `assistant`
 - `gallery`
 - `search`
 - `motion-home`
