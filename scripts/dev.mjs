@@ -37,9 +37,15 @@ await rebuild();
 await startPreviewServer();
 
 for (const dir of WATCH_DIRS) {
-  watch(dir, { recursive: true }, () => {
+  const onChange = () => {
     rebuild().catch((error) => {
       console.error(`rebuild failed for watch path: ${dir}`, error);
     });
-  });
+  };
+
+  try {
+    watch(dir, { recursive: true }, onChange);
+  } catch {
+    watch(dir, onChange);
+  }
 }

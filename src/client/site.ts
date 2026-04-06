@@ -72,7 +72,11 @@ async function setupAssistant() {
       target instanceof HTMLInputElement ||
       target instanceof HTMLTextAreaElement ||
       (target instanceof HTMLElement &&
-        (target.isContentEditable || target.closest("[contenteditable]") instanceof HTMLElement));
+        (
+          target.isContentEditable ||
+          target.closest("[contenteditable]") instanceof HTMLElement ||
+          target.getAttribute("role") === "textbox"
+        ));
 
     if (event.key === "/" && !isTypingTarget) {
       event.preventDefault();
