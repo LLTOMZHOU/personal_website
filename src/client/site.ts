@@ -25,6 +25,7 @@ async function setupAssistant() {
     return;
   }
 
+  const panelElement = panel;
   let loaded = false;
   let importFailed = false;
 
@@ -37,11 +38,11 @@ async function setupAssistant() {
       }
     }
 
-    panel.hidden = expanded;
-    panel.classList.toggle("hidden", expanded);
+    panelElement.hidden = expanded;
+    panelElement.classList.toggle("hidden", expanded);
 
     if (!expanded && !loaded && !importFailed) {
-      const moduleSrc = panel.dataset.assistantSrc;
+      const moduleSrc = panelElement.dataset.assistantSrc;
       if (moduleSrc) {
         try {
           await import(/* @vite-ignore */ moduleSrc);
@@ -49,7 +50,7 @@ async function setupAssistant() {
         } catch (error) {
           importFailed = true;
           console.error("Failed to load assistant module:", error);
-          const root = panel.querySelector("#assistant-root");
+          const root = panelElement.querySelector("#assistant-root");
 
           if (root instanceof HTMLElement) {
             root.innerHTML =
