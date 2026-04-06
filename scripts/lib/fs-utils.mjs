@@ -11,7 +11,9 @@ export async function cleanDir(dir) {
 }
 
 export async function listFiles(dir, extension) {
-  const entries = await readdir(dir, { withFileTypes: true });
+  const entries = (await readdir(dir, { withFileTypes: true })).sort((left, right) =>
+    left.name.localeCompare(right.name)
+  );
   const files = [];
 
   for (const entry of entries) {
@@ -27,15 +29,19 @@ export async function listFiles(dir, extension) {
     }
   }
 
-  return files;
+  return files.sort((left, right) => left.localeCompare(right));
 }
 
 export async function fileExists(filePath) {
   try {
     await stat(filePath);
     return true;
-  } catch {
-    return false;
+  } catch (error) {
+    if (error && typeof error === "object" && "code" in error && error.code === "ENOENT") {
+      return false;
+    }
+
+    throw error;
   }
 }
 

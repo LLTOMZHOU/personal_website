@@ -19,7 +19,7 @@ The site should work both as:
 - a design-forward artifact that reflects taste, not just information
 - a demonstration surface for AI/agent work through an interactive chat experience
 - a media surface for photography and AI-generated visual work
-- potentially a centralized front face for various other github projects presenting the preview and iteractables instead of just dry links to repo.
+- potentially a centralized front face for various other github projects presenting the preview and interactables instead of just dry links to repo.
 
 
 ## Primary Goals

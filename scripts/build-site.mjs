@@ -9,7 +9,16 @@ import { renderPage } from "./lib/site-shell.mjs";
 const ROOT = process.cwd();
 const DIST_DIR = path.resolve(ROOT, "dist");
 const PAGES_DIR = path.resolve(ROOT, "pages");
-const SITE_URL = process.env.SITE_URL ?? "http://127.0.0.1:4173";
+
+function resolveSiteUrl() {
+  const siteUrl = process.env.SITE_URL;
+
+  if (!siteUrl) {
+    throw new Error("SITE_URL must be set before building so canonical metadata is correct");
+  }
+
+  return siteUrl;
+}
 
 function normalizeRoute(route) {
   if (typeof route !== "string" || route.length === 0) {
@@ -69,7 +78,11 @@ function outputPathForRoute(route) {
 
 function entryFilesFromManifest(manifest, entryName) {
   const entry = Object.values(manifest).find(
-    (item) => item.name === entryName || item.src === `src/client/${entryName}.ts`
+    (item) =>
+      item.name === entryName ||
+      (typeof item.src === "string" &&
+        item.src.includes("/client/") &&
+        item.src.endsWith(`/${entryName}.ts`))
   );
 
   if (!entry) {
@@ -88,6 +101,7 @@ async function buildAssets() {
 }
 
 async function assemblePages(manifest) {
+  const siteUrl = resolveSiteUrl();
   const pageFiles = await listFiles(PAGES_DIR, ".html");
   const siteEntry = entryFilesFromManifest(manifest, "site");
   const assistantEntry = entryFilesFromManifest(manifest, "assistant");
@@ -116,12 +130,12 @@ async function assemblePages(manifest) {
     }
 
     const html = renderPage({
-      siteUrl: SITE_URL,
+      siteUrl,
       metadata: { ...metadata, path: route },
       bodyHtml,
       cssFiles: [...new Set(pageCss)],
       scriptFiles: [...new Set(pageScripts)],
-      assistantSrc: assistantEntry.scripts[0]
+      assistantSrc: assistantEntry.scripts[0] ?? null
     });
 
     await writeText(outputPathForRoute(route), html);

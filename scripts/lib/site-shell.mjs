@@ -5,6 +5,8 @@ const NAV_ITEMS = [
   { href: "/ai-media/", label: "AI-Generated Media", section: "ai-media" },
   { href: "/about/", label: "About", section: "about" }
 ];
+const RSS_FEED_URL = "/rss.xml";
+const SOURCE_REPO_URL = "https://github.com/LLTOMZHOU/personal_website";
 
 function escapeHtml(value) {
   return String(value)
@@ -80,10 +82,10 @@ function renderFooter() {
           <a class="font-body text-[0.8rem] text-text-muted transition-colors hover:text-primary" href="/about/">
             Colophon
           </a>
-          <a class="font-body text-[0.8rem] text-text-muted transition-colors hover:text-primary" href="/writing/">
+          <a class="font-body text-[0.8rem] text-text-muted transition-colors hover:text-primary" href="${RSS_FEED_URL}">
             RSS
           </a>
-          <a class="font-body text-[0.8rem] text-text-muted transition-colors hover:text-primary" href="/projects/">
+          <a class="font-body text-[0.8rem] text-text-muted transition-colors hover:text-primary" href="${SOURCE_REPO_URL}">
             Source
           </a>
         </div>
@@ -114,6 +116,8 @@ function renderFloatingAssistant() {
 }
 
 function renderAssistantShell(assistantSrc) {
+  const assistantSource = assistantSrc ? escapeAttr(assistantSrc) : "";
+
   return `
     <section
       class="fixed inset-x-6 top-28 z-40 mx-auto hidden max-w-3xl"
@@ -121,7 +125,7 @@ function renderAssistantShell(assistantSrc) {
       hidden
       aria-live="polite"
       data-assistant-panel
-      data-assistant-src="${assistantSrc}"
+      data-assistant-src="${assistantSource}"
     >
       <div class="border border-text-main/10 bg-surface px-6 py-5 shadow-2xl shadow-text-main/10 md:px-8">
         <p class="mb-4 font-body text-[0.7rem] font-bold uppercase tracking-[0.2em] text-primary">Assistant</p>
@@ -149,7 +153,7 @@ export function renderPage({
   bodyHtml,
   cssFiles,
   scriptFiles,
-  assistantSrc
+  assistantSrc = null
 }) {
   const canonicalUrl = metadata.canonicalUrl ?? new URL(metadata.path, siteUrl).toString();
   const title = escapeHtml(`${metadata.title} | Yuxing Zhou`);

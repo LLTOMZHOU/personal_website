@@ -180,3 +180,12 @@ When in doubt, prefer:
 - CSS for presentation and basic motion
 - plain JavaScript for simple enhancement
 - isolated bundles for heavier interactions
+
+## PR Review Replies
+
+When addressing PR review comments:
+
+- only reply after the fix is actually implemented
+- reply `done` for straightforward fixes
+- reply `good point, done` when the review caught something genuinely useful
+- if the right action is ambiguous or needs product judgment, leave the thread for the user instead of guessing

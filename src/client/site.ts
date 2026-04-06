@@ -26,6 +26,7 @@ async function setupAssistant() {
   }
 
   let loaded = false;
+  let importFailed = false;
 
   async function toggleAssistant() {
     const expanded = triggers[0]?.getAttribute("aria-expanded") === "true";
@@ -39,11 +40,22 @@ async function setupAssistant() {
     panel.hidden = expanded;
     panel.classList.toggle("hidden", expanded);
 
-    if (!expanded && !loaded) {
+    if (!expanded && !loaded && !importFailed) {
       const moduleSrc = panel.dataset.assistantSrc;
       if (moduleSrc) {
-        await import(/* @vite-ignore */ moduleSrc);
-        loaded = true;
+        try {
+          await import(/* @vite-ignore */ moduleSrc);
+          loaded = true;
+        } catch (error) {
+          importFailed = true;
+          console.error("Failed to load assistant module:", error);
+          const root = panel.querySelector("#assistant-root");
+
+          if (root instanceof HTMLElement) {
+            root.innerHTML =
+              '<p class="font-body text-sm leading-7 text-text-muted">Assistant is temporarily unavailable.</p>';
+          }
+        }
       }
     }
   }
@@ -55,7 +67,14 @@ async function setupAssistant() {
   }
 
   document.addEventListener("keydown", async (event) => {
-    if (event.key === "/" && !(event.target instanceof HTMLInputElement) && !(event.target instanceof HTMLTextAreaElement)) {
+    const target = event.target;
+    const isTypingTarget =
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      (target instanceof HTMLElement &&
+        (target.isContentEditable || target.closest("[contenteditable]") instanceof HTMLElement));
+
+    if (event.key === "/" && !isTypingTarget) {
       event.preventDefault();
       await toggleAssistant();
     }

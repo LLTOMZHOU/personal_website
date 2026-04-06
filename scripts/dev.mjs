@@ -1,9 +1,13 @@
 import path from "node:path";
-import { watch } from "node:fs";
+import { existsSync, watch } from "node:fs";
 import { buildProject } from "./build-site.mjs";
 import { startPreviewServer } from "./preview.mjs";
 
-const WATCH_DIRS = ["pages", "src", "public", "content"].map((dir) => path.join(process.cwd(), dir));
+process.env.SITE_URL ??= "http://127.0.0.1:4173";
+
+const WATCH_DIRS = ["pages", "src", "public", "content"]
+  .map((dir) => path.join(process.cwd(), dir))
+  .filter((dir) => existsSync(dir));
 
 let building = false;
 let queued = false;
@@ -33,7 +37,9 @@ await rebuild();
 await startPreviewServer();
 
 for (const dir of WATCH_DIRS) {
-  watch(dir, { recursive: true }, async () => {
-    await rebuild();
+  watch(dir, { recursive: true }, () => {
+    rebuild().catch((error) => {
+      console.error(`rebuild failed for watch path: ${dir}`, error);
+    });
   });
 }
