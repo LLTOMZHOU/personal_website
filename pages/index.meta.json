@@ -3,6 +3,5 @@
   "description": "Yuxing Zhou personal site rebuilt as a static-first system with authored HTML and isolated interactivity.",
   "path": "/",
   "section": "home",
-  "bundles": ["motion-home"],
   "bodyClass": "page-home"
 }

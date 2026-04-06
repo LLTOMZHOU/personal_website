@@ -100,11 +100,12 @@ function renderFloatingAssistant() {
       <button
         class="flex h-16 w-16 cursor-pointer items-center justify-center bg-text-main text-white shadow-2xl transition-all hover:bg-primary"
         type="button"
+        aria-label="Open assistant"
         aria-expanded="false"
         aria-controls="assistant-panel"
         data-assistant-trigger
       >
-        <span class="material-symbols-outlined text-3xl">terminal</span>
+        <span aria-hidden="true" class="material-symbols-outlined text-3xl">terminal</span>
       </button>
       <div
         class="assistant-tooltip pointer-events-none absolute bottom-full right-0 mb-6 whitespace-nowrap px-5 py-3 text-[0.7rem] font-bold uppercase tracking-widest opacity-0 shadow-xl transition-opacity group-hover:opacity-100"

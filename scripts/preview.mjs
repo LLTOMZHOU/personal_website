@@ -8,6 +8,7 @@ const PORT = Number(process.env.PORT ?? 4173);
 const HOST = process.env.HOST ?? "127.0.0.1";
 
 const MIME_TYPES = {
+  ".avif": "image/avif",
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
   ".ico": "image/x-icon",
@@ -15,9 +16,12 @@ const MIME_TYPES = {
   ".jpg": "image/jpeg",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".map": "application/json; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml; charset=utf-8",
-  ".webp": "image/webp"
+  ".webp": "image/webp",
+  ".woff2": "font/woff2"
 };
 
 function resolveInsideDist(targetPath) {

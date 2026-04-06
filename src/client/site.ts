@@ -17,6 +17,26 @@ function setupNav() {
   });
 }
 
+function setupPlaceholderForms() {
+  const forms = document.querySelectorAll("[data-placeholder-form]");
+
+  for (const form of forms) {
+    if (!(form instanceof HTMLFormElement)) {
+      continue;
+    }
+
+    const status = form.querySelector("[data-form-status]");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (status instanceof HTMLElement) {
+        status.textContent = "Newsletter signup is not wired up yet.";
+      }
+    });
+  }
+}
+
 async function setupAssistant() {
   const triggers = document.querySelectorAll("[data-assistant-trigger]");
   const panel = document.querySelector("[data-assistant-panel]");
@@ -87,4 +107,5 @@ async function setupAssistant() {
 }
 
 setupNav();
+setupPlaceholderForms();
 setupAssistant();

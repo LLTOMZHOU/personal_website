@@ -132,7 +132,14 @@ Use:
 - `pnpm dev` for a local rebuild-and-preview loop
 - `pnpm preview` to serve `dist/`
 
-If you change page assembly, metadata handling, asset wiring, or bundles, run `pnpm build`.
+Before running `pnpm build`, set `SITE_URL`. The build requires it to generate canonical URLs and Open Graph metadata.
+
+Typical `SITE_URL` values:
+
+- local build or preview: `http://127.0.0.1:4173`
+- production build: the deployed site origin, for example `https://example.com`
+
+If you change page assembly, metadata handling, asset wiring, or bundles, set `SITE_URL` and run `pnpm build`.
 
 ## Build System Notes
 

@@ -3,6 +3,5 @@
   "description": "Writing and essays by Yuxing Zhou.",
   "path": "/writing/",
   "section": "writing",
-  "bundles": ["search"],
   "bodyClass": "page-writing"
 }
