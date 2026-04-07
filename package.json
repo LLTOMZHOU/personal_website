@@ -8,7 +8,10 @@
   "scripts": {
     "build": "node scripts/build-site.mjs",
     "dev": "node scripts/dev.mjs",
+    "lint:repo": "node scripts/lint-repo.mjs",
     "preview": "node scripts/preview.mjs",
+    "test": "pnpm lint:repo && pnpm test:smoke",
+    "test:smoke": "node --test tests/*.test.mjs",
     "format": "prettier -w .",
     "typecheck": "tsc --noEmit"
   },

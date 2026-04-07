@@ -6,7 +6,7 @@ import { startPreviewServer } from "./preview.mjs";
 
 process.env.SITE_URL ??= "http://127.0.0.1:4173";
 
-const WATCH_DIRS = ["pages", "src", "public", "content"]
+const WATCH_DIRS = ["pages", "src", "public", "content", "scripts"]
   .map((dir) => path.join(process.cwd(), dir))
   .filter((dir) => existsSync(dir));
 

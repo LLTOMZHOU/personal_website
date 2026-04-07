@@ -3,6 +3,7 @@
   "description": "Editorial project page for The Glitch Witch, a retro-future UE5 puzzle adventure about Rosette, circuit repair, and technology mistaken for witchcraft.",
   "path": "/projects/glitch-witch/",
   "section": "projects",
+  "ogImage": "",
   "bundles": [],
   "bodyClass": "page-project page-project-glitch-witch"
 }

@@ -3,5 +3,7 @@
   "description": "Selected projects by Yuxing Zhou.",
   "path": "/projects/",
   "section": "projects",
+  "ogImage": "",
+  "bundles": [],
   "bodyClass": "page-projects"
 }
