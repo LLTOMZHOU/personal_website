@@ -309,7 +309,16 @@ For photography or AI-media collections, prefer a shape like:
 }
 ```
 
-The exact schema can evolve, but the core rule is stable:
+The exact schema can evolve, but for the current photography pipeline these album-level fields are required for reliable generation:
+
+- `slug`
+- `title`
+- `cover` object with a non-empty `src`
+- `items` array
+
+`description` is strongly recommended. The current build can fall back to a default meta description when it is missing, but album copy should normally still be authored intentionally.
+
+The core rule is stable:
 
 - repo content stores canonical delivery references and useful metadata
 
