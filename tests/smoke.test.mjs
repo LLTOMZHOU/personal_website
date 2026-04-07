@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import path from "node:path";
-import { after, before, describe, test } from "node:test";
+import { before, describe, test } from "node:test";
 import { spawn } from "node:child_process";
 import { readFile, stat } from "node:fs/promises";
-import { buildProject } from "../scripts/build-site.mjs";
 import { listFiles, readJson } from "../scripts/lib/fs-utils.mjs";
+import { renderDocumentTitle } from "../scripts/lib/site-shell.mjs";
 
 const ROOT = process.cwd();
 const PAGES_DIR = path.resolve(ROOT, "pages");
@@ -13,15 +13,9 @@ const SITE_URL = "http://127.0.0.1:4173";
 
 let routeFixtures = [];
 
-function getAttribute(html, tagPattern, attributeName) {
-  const match = html.match(tagPattern);
-
-  if (!match) {
-    return null;
-  }
-
-  const attributePattern = new RegExp(`${attributeName}="([^"]+)"`);
-  return match[1]?.match(attributePattern)?.[1] ?? null;
+function getCaptureGroup(html, pattern, captureIndex = 1) {
+  const match = html.match(pattern);
+  return match?.[captureIndex] ?? null;
 }
 
 function collectAssetPaths(html) {
@@ -56,7 +50,7 @@ async function loadRouteFixtures() {
       return {
         metadataPath,
         route: metadata.path,
-        title: `${metadata.title} | Yuxing Zhou`,
+        title: renderDocumentTitle(metadata.title),
         description: metadata.description
       };
     })
@@ -93,12 +87,6 @@ describe("static site smoke tests", () => {
   before(async () => {
     process.env.SITE_URL = SITE_URL;
     routeFixtures = await loadRouteFixtures();
-    await buildProject();
-  });
-
-  after(() => {});
-
-  test("build command succeeds with SITE_URL set", async () => {
     await runBuildCommand();
   });
 
@@ -135,10 +123,10 @@ describe("static site smoke tests", () => {
   test("homepage wires assistant shell and lazy assistant bundle", async () => {
     const html = await readFile(path.join(DIST_DIR, "index.html"), "utf8");
 
-    const assistantPanel = getAttribute(html, /(<section[\s\S]*?data-assistant-panel[\s\S]*?>)/, "data-assistant-src");
+    const assistantPanel = getCaptureGroup(html, /data-assistant-src="([^"]+)"/);
     assert.ok(assistantPanel, "assistant panel should include a lazy bundle source");
 
-    const siteScript = getAttribute(html, /(<script[^>]+src="([^"]+)"[^>]*><\/script>)/, "src");
+    const siteScript = getCaptureGroup(html, /<script[^>]+src="([^"]+)"[^>]*><\/script>/);
     assert.ok(siteScript, "homepage should include the site bundle");
 
     const scriptText = await readFile(path.join(DIST_DIR, siteScript.slice(1)), "utf8");

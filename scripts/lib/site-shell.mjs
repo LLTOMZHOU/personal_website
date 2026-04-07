@@ -7,6 +7,7 @@ const NAV_ITEMS = [
 ];
 const RSS_FEED_URL = "/rss.xml";
 const SOURCE_REPO_URL = "https://github.com/LLTOMZHOU/personal_website";
+export const SITE_TITLE_SUFFIX = " | Yuxing Zhou";
 
 function escapeHtml(value) {
   return String(value)
@@ -148,6 +149,10 @@ function renderScriptTags(scriptFiles) {
   return scriptFiles.map((src) => `<script type="module" src="${src}"></script>`).join("\n");
 }
 
+export function renderDocumentTitle(pageTitle) {
+  return `${pageTitle}${SITE_TITLE_SUFFIX}`;
+}
+
 export function renderPage({
   siteUrl,
   metadata,
@@ -157,7 +162,7 @@ export function renderPage({
   assistantSrc = null
 }) {
   const canonicalUrl = metadata.canonicalUrl ?? new URL(metadata.path, siteUrl).toString();
-  const title = escapeHtml(`${metadata.title} | Yuxing Zhou`);
+  const title = escapeHtml(renderDocumentTitle(metadata.title));
   const description = escapeAttr(metadata.description);
   const escapedCanonicalUrl = escapeAttr(canonicalUrl);
   const ogImage = metadata.ogImage ? escapeAttr(metadata.ogImage) : "";
