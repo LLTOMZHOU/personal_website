@@ -9,7 +9,7 @@ const RSS_FEED_URL = "/rss.xml";
 const SOURCE_REPO_URL = "https://github.com/LLTOMZHOU/personal_website";
 export const SITE_TITLE_SUFFIX = " | Yuxing Zhou";
 
-function escapeHtml(value) {
+export function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -18,7 +18,7 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
-function escapeAttr(value) {
+export function escapeAttr(value) {
   return escapeHtml(value);
 }
 
