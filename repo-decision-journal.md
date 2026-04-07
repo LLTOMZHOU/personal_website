@@ -16,12 +16,12 @@ It exists so future work on this repo can understand the reasoning behind the cu
 
 This journal consolidates:
 
-- the original product requirements in [spec.md](/Users/yuxingzhou/Local_Projects/personal_website/spec.md)
-- the technical direction in [tech-stack.md](/Users/yuxingzhou/Local_Projects/personal_website/tech-stack.md)
-- the page assembly model in [site-assembly-and-bundling-plan.md](/Users/yuxingzhou/Local_Projects/personal_website/site-assembly-and-bundling-plan.md)
-- the media workflow notes in [media-ingestion-workflow.md](/Users/yuxingzhou/Local_Projects/personal_website/media-ingestion-workflow.md)
-- the image strategy in [image-delivery-plan.md](/Users/yuxingzhou/Local_Projects/personal_website/image-delivery-plan.md)
-- the repo operating instructions in [AGENTS.md](/Users/yuxingzhou/Local_Projects/personal_website/AGENTS.md)
+- the original product requirements in [spec.md](spec.md)
+- the technical direction in [tech-stack.md](tech-stack.md)
+- the page assembly model in [site-assembly-and-bundling-plan.md](site-assembly-and-bundling-plan.md)
+- the media workflow notes in [media-ingestion-workflow.md](media-ingestion-workflow.md)
+- the image strategy in [image-delivery-plan.md](image-delivery-plan.md)
+- the repo operating instructions in [AGENTS.md](AGENTS.md)
 - the architectural discussions that led from the original Next.js setup to the current static-first rebuild
 
 ## Product Goals Recap
@@ -393,7 +393,7 @@ At the time of writing, the repo follows this model:
 - per-page metadata in `pages/*.meta.json`
 - shared shell in `scripts/lib/site-shell.mjs`
 - custom build orchestration in `scripts/build-site.mjs`
-- Vite for JS/CSS bundling in [vite.config.mjs](/Users/yuxingzhou/Local_Projects/personal_website/vite.config.mjs)
+- Vite for JS/CSS bundling in [vite.config.mjs](vite.config.mjs)
 - shared client code in `src/client/`
 - shared styles in `src/styles/`
 - static output in `dist/`
@@ -595,7 +595,7 @@ The repo also accumulated some operational rules during PR review work:
 - when replying `good point, done`, resolve the thread if the fix is complete
 - leave ambiguous product-judgment comments to the owner
 
-Those rules now live in [AGENTS.md](/Users/yuxingzhou/Local_Projects/personal_website/AGENTS.md), but they are part of the repo’s evolving workflow practice as much as the code itself.
+Those rules now live in [AGENTS.md](AGENTS.md), but they are part of the repo’s evolving workflow practice as much as the code itself.
 
 ## Branch and Review Policy Notes
 

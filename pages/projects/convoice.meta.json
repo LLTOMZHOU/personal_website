@@ -3,5 +3,7 @@
   "description": "Editorial project page for Convoice AI, a startup focused on custom AI voicebots for inbound and outbound business calls.",
   "path": "/projects/convoice/",
   "section": "projects",
+  "ogImage": "",
+  "bundles": [],
   "bodyClass": "page-project page-project-convoice"
 }

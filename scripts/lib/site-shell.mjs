@@ -26,8 +26,8 @@ function renderNav(section) {
     const current = item.section === section ? ' aria-current="page"' : "";
     const currentClass =
       item.section === section
-        ? "nav-link-base inline-flex items-center text-primary nav-link-current"
-        : "nav-link-base inline-flex items-center text-text-main/60 transition-colors hover:text-primary";
+        ? "nav-link-base text-primary nav-link-current"
+        : "nav-link-base text-text-main/60 transition-colors hover:text-primary";
 
     return `<a class="${currentClass}" href="${item.href}"${current}>${item.label}</a>`;
   }).join("");
