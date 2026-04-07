@@ -28,7 +28,8 @@ As currently implemented:
 - album detail pages are generated at `/photography/<slug>/` by `scripts/lib/content-renderers.mjs`
 - uploads currently happen through a locally authenticated `wrangler` CLI flow
 - `wrangler` is not installed as a repo dependency and there is no committed `pnpm` upload script yet
-- the proven upload path currently uses original JPGs, not a standardized derivative pipeline
+- the photography index can use per-image `thumb` URLs when present, while album pages still use the original `src`
+- the current proven derivative pattern is JPEG thumbnails stored alongside originals using `@thumb` suffixes such as `cover@thumb.jpg` and `001@thumb.jpg`
 
 Be explicit about those facts when operating this skill.
 
@@ -111,6 +112,11 @@ For a normal photography run, “done” means all of the following are true:
 
 Do not treat “JSON was written” as success if the upload path or delivery verification is still broken.
 
+When thumbnail derivatives are created for photography, the expected output also includes:
+
+- preview assets under `https://media.yuxingzhou.me/photography/<slug>/*@thumb.jpg`
+- `thumb` fields in the photography JSON for the cover and any items that should render on the index
+
 ## Operating Flow
 
 ### 1. Environment Preflight
@@ -182,7 +188,9 @@ Normalize the ingest plan, not necessarily the original source folder.
 Prefer deterministic object keys such as:
 
 - `photography/<slug>/cover.jpg`
+- `photography/<slug>/cover@thumb.jpg`
 - `photography/<slug>/001.jpg`
+- `photography/<slug>/001@thumb.jpg`
 - `photography/<slug>/002.jpg`
 - `projects/<slug>/cover.jpg`
 - `writing/<slug>/figure-01.jpg`
@@ -236,7 +244,8 @@ Do not block the workflow on perfect optimization if the main need is to get a c
 Current repo note:
 
 - the working ingest path currently uploads original JPGs and records `width`, `height`, and `alt` in JSON
-- derivative generation is still optional and not yet codified into the repo workflow
+- thumbnail derivatives are useful for `/photography/` and similar preview surfaces
+- when created, thumbnails should stay adjacent to originals and use stable `@thumb` naming
 - unless the user explicitly wants optimization work, treat original JPG upload as the current default path
 
 ### 8. Upload To Canonical Storage
@@ -266,7 +275,9 @@ Operational fallback order:
 Real key examples:
 
 - `photography/laguna-beach-july-2023/cover.jpg`
+- `photography/laguna-beach-july-2023/cover@thumb.jpg`
 - `photography/laguna-beach-july-2023/001.jpg`
+- `photography/laguna-beach-july-2023/001@thumb.jpg`
 - `photography/laguna-beach-july-2023/002.jpg`
 
 Avoid:
@@ -329,7 +340,9 @@ Also do a quick editorial sanity check on the photography index:
 
 - no single album should dominate the page unintentionally
 - preview image counts should stay reasonable for the current layout
-- repo-internal implementation notes should not leak into user-facing copy
+- the photography index should use lighter thumbnail assets when thumbnails exist
+- album pages can continue using full-size originals
+- no repo-internal implementation notes should leak into user-facing copy
 
 ## JSON Guidance
 
@@ -342,6 +355,7 @@ For photography or AI-media collections, prefer a shape like:
   "description": "Coastal studies and late-afternoon light in Laguna Beach.",
   "cover": {
     "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover.jpg",
+    "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@thumb.jpg",
     "width": 1600,
     "height": 1067,
     "alt": "Waves breaking against dark rocks near sunset."
@@ -349,6 +363,7 @@ For photography or AI-media collections, prefer a shape like:
   "items": [
     {
       "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@thumb.jpg",
       "width": 2400,
       "height": 1600,
       "alt": "Foam patterns moving across wet sand."
@@ -377,7 +392,7 @@ For current photography albums, each image object should include at least:
 - `height`
 - `alt`
 
-Do not invent `thumb` fields unless a real thumbnail object exists.
+`thumb` is optional, but when a real preview derivative exists it should be recorded explicitly and used for index-like surfaces rather than inferred later.
 
 ## Decision Heuristics
 
