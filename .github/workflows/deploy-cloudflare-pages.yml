@@ -1,0 +1,110 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  build:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate SITE_URL is set
+        run: |
+          if [ -z "$SITE_URL" ]; then
+            echo "Missing repository variable SITE_URL."
+            echo "Set Settings > Secrets and variables > Actions > Variables > SITE_URL"
+            exit 1
+          fi
+
+      - name: Build static site
+        run: pnpm build
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: ${{ vars.SITE_URL }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate SITE_URL is set
+        run: |
+          if [ -z "$SITE_URL" ]; then
+            echo "Missing repository variable SITE_URL."
+            echo "Set Settings > Secrets and variables > Actions > Variables > SITE_URL"
+            exit 1
+          fi
+
+      - name: Validate CLOUDFLARE_PAGES_PROJECT is set
+        run: |
+          if [ -z "$CLOUDFLARE_PAGES_PROJECT" ]; then
+            echo "Missing repository variable CLOUDFLARE_PAGES_PROJECT."
+            echo "Set Settings > Secrets and variables > Actions > Variables > CLOUDFLARE_PAGES_PROJECT"
+            exit 1
+          fi
+
+      - name: Validate CLOUDFLARE_ACCOUNT_ID is set
+        run: |
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "Missing repository variable CLOUDFLARE_ACCOUNT_ID."
+            echo "Set Settings > Secrets and variables > Actions > Variables > CLOUDFLARE_ACCOUNT_ID"
+            exit 1
+          fi
+
+      - name: Build static site
+        run: pnpm build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
+          command: >-
+            pages deploy dist
+            --project-name=${{ env.CLOUDFLARE_PAGES_PROJECT }}
+            --branch=${{ github.ref_name }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
