@@ -102,9 +102,34 @@ For a normal photography album ingest in the current repo, the expected output i
 - a generated landing-page card on `/photography/`
 - a generated album page at `/photography/<slug>/`
 
+For a normal photography run, “done” means all of the following are true:
+
+- upload credentials and bucket access were confirmed before final repo writes
+- public delivery URLs were verified after upload
+- repo content points only at verified canonical URLs
+- `/photography/` and `/photography/<slug>/` were checked after the build
+
+Do not treat “JSON was written” as success if the upload path or delivery verification is still broken.
+
 ## Operating Flow
 
-### 1. Inspect First
+### 1. Environment Preflight
+
+Before inspecting or uploading, confirm the operational path is usable.
+
+Check at least:
+
+- `node -v`
+- `npx wrangler --version`
+- `wrangler whoami`
+- that the target bucket exists
+- that a remote `wrangler` R2 operation is possible from the current machine
+
+If the repo cwd has a toolchain conflict, such as a shadowed `node` binary or an `npx`/Node mismatch, prefer a neutral working directory such as `/tmp` and use absolute file paths for upload commands.
+
+Do not install random new tooling in the middle of ingestion just to get around a local environment issue.
+
+### 2. Inspect First
 
 Start read-only.
 
@@ -122,7 +147,7 @@ If dimensions or file sizes are easy to inspect, include them.
 
 Do not upload or rewrite content before this summary exists.
 
-### 2. Infer The Intended Shape
+### 3. Infer The Intended Shape
 
 Use judgment to determine what the folder most likely represents:
 
@@ -136,7 +161,7 @@ Infer a proposed mapping before asking questions.
 
 Good AI behavior here means presenting a probable interpretation, not dumping raw filesystem output and stopping.
 
-### 3. Ask Only The Minimum Clarifying Questions
+### 4. Ask Only The Minimum Clarifying Questions
 
 Only ask when the answer materially affects storage keys, page placement, or authored metadata.
 
@@ -150,7 +175,7 @@ Typical questions, if needed:
 
 If the answers are obvious enough, proceed and state the assumptions.
 
-### 4. Normalize Without Losing Meaning
+### 5. Normalize Without Losing Meaning
 
 Normalize the ingest plan, not necessarily the original source folder.
 
@@ -173,7 +198,15 @@ Rules:
 - keep cover assets explicit
 - avoid object keys that depend on temporary local folder names unless those names are already canonical
 
-### 5. Use AI For Semantics, Not For Guessing Randomly
+For messy source folders:
+
+- normalize folder names aggressively for slugs
+- preserve human-facing title decisions separately from slug normalization
+- trim trailing spaces and other filesystem noise
+- fix obvious place-name singular/plural issues in titles when confidence is high
+- if date information is missing, it is acceptable to ship a date-less title and slug rather than inventing one
+
+### 6. Use AI For Semantics, Not For Guessing Randomly
 
 AI should help with:
 
@@ -187,7 +220,7 @@ AI should not silently invent critical metadata when confidence is low.
 
 If confidence is low on something user-facing, surface the uncertainty.
 
-### 6. Prepare Delivery Assets
+### 7. Prepare Delivery Assets
 
 Derivative generation is allowed, but it is not the defining step of the workflow.
 
@@ -206,7 +239,7 @@ Current repo note:
 - derivative generation is still optional and not yet codified into the repo workflow
 - unless the user explicitly wants optimization work, treat original JPG upload as the current default path
 
-### 7. Upload To Canonical Storage
+### 8. Upload To Canonical Storage
 
 Upload to Cloudflare R2 using deterministic keys.
 
@@ -223,6 +256,13 @@ Current working operational path:
 
 If the machine still has an `npx`/Node mismatch, use the already-working local Wrangler path rather than installing random new tooling mid-ingest.
 
+Operational fallback order:
+
+- first try the normal local `wrangler` path
+- if the repo cwd injects conflicting binaries, run from a neutral directory
+- use absolute source file paths when operating outside the repo
+- only proceed to repo writes after the upload path is proven to work
+
 Real key examples:
 
 - `photography/laguna-beach-july-2023/cover.jpg`
@@ -237,7 +277,7 @@ Avoid:
 
 If rerunning an ingestion, favor predictability over novelty. The user should be able to infer where the object landed.
 
-### 8. Verify Delivery
+### 9. Verify Delivery
 
 After upload, verify the public URLs.
 
@@ -249,7 +289,9 @@ Check:
 
 Do not write final canonical URLs into the repo until delivery verification passes or the failure is explicitly acknowledged.
 
-### 9. Write Repo References
+If upload verification fails, stop before writing final canonical URLs unless the user explicitly asks for a partial or placeholder repo update.
+
+### 10. Write Repo References
 
 Write canonical URLs into the appropriate repo source.
 
@@ -270,7 +312,7 @@ Current photography rule:
 - the album page is generated from shared build logic
 - do not hand-author a normal album page under `pages/photography/`
 
-### 10. Validate The Site
+### 11. Validate The Site
 
 After content updates:
 
@@ -282,6 +324,12 @@ For photography albums, verify at least:
 
 - `/photography/`
 - `/photography/<slug>/`
+
+Also do a quick editorial sanity check on the photography index:
+
+- no single album should dominate the page unintentionally
+- preview image counts should stay reasonable for the current layout
+- repo-internal implementation notes should not leak into user-facing copy
 
 ## JSON Guidance
 
@@ -337,7 +385,10 @@ Prefer these defaults unless the user says otherwise:
 
 - one subfolder usually means one album
 - a folder full of similarly named image files usually belongs to one sequence
-- the strongest horizontal or most representative frame is a reasonable cover candidate
+- choose the strongest representative horizontal frame as cover by default
+- if the set is mostly portrait, a portrait cover is acceptable only if the page layout can support it cleanly
+- avoid covers that feel redundant with another hero image already leading the same landing page
+- if uncertain, use the first strong representative frame and state that assumption
 - `photography` and `ai-media` should remain JSON-backed
 - editorial page images should stay embedded in authored HTML
 - new photography albums should be rendered through the shared renderer and generated routes, not custom page markup
@@ -364,6 +415,9 @@ When reporting completion, include:
 
 - what folder was ingested
 - what interpretation was used
+- the chosen title
+- the chosen slug
+- the chosen cover file
 - where the assets were uploaded
 - which repo files were updated
 - any assumptions made
@@ -373,6 +427,7 @@ Also include:
 
 - the exact R2 key prefix used
 - whether the upload used original JPGs or generated derivatives
+- whether album order followed filename sort or a curated order
 - the JSON file created or updated
 - whether `/photography/` and `/photography/<slug>/` were verified
 
