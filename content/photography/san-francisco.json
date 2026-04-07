@@ -1,25 +1,43 @@
 {
   "slug": "san-francisco",
   "title": "San Francisco",
-  "description": "A short San Francisco diptych balancing Chinatown street density with a steep upward study of the Transamerica Pyramid.",
+  "description": "San Francisco: the Transamerica Pyramid from its base, a downtown street canyon with the Bay Bridge in the distance, Chinatown lanterns and street life, and the Gold Mountain Sagely Monastery sign.",
   "cover": {
-    "src": "https://media.yuxingzhou.me/photography/san-francisco/cover@full.webp",
-    "thumb": "https://media.yuxingzhou.me/photography/san-francisco/cover@thumb.webp",
     "width": 4000,
     "height": 6000,
-    "alt": "Transamerica Pyramid photographed from its base, rising into broken clouds.",
     "originalSrc": "https://media.yuxingzhou.me/photography/san-francisco/cover.jpg",
-    "display": "https://media.yuxingzhou.me/photography/san-francisco/cover@display.webp"
+    "src": "https://media.yuxingzhou.me/photography/san-francisco/cover@full.webp",
+    "display": "https://media.yuxingzhou.me/photography/san-francisco/cover@display.webp",
+    "thumb": "https://media.yuxingzhou.me/photography/san-francisco/cover@thumb.webp",
+    "alt": "Looking straight up the Transamerica Pyramid from its base, its textured concrete taper rising into broken clouds."
   },
   "items": [
     {
+      "width": 3873,
+      "height": 6000,
+      "originalSrc": "https://media.yuxingzhou.me/photography/san-francisco/001.jpg",
       "src": "https://media.yuxingzhou.me/photography/san-francisco/001@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/san-francisco/001@display.webp",
       "thumb": "https://media.yuxingzhou.me/photography/san-francisco/001@thumb.webp",
+      "alt": "A downtown San Francisco street canyon with the Bay Bridge visible between towers at the far end."
+    },
+    {
       "width": 4000,
       "height": 6000,
-      "alt": "Chinatown street lined with lanterns, storefronts, parked cars, and a centered do-not-enter sign.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/san-francisco/001.jpg",
-      "display": "https://media.yuxingzhou.me/photography/san-francisco/001@display.webp"
+      "originalSrc": "https://media.yuxingzhou.me/photography/san-francisco/002.jpg",
+      "src": "https://media.yuxingzhou.me/photography/san-francisco/002@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/san-francisco/002@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/san-francisco/002@thumb.webp",
+      "alt": "Chinatown street with red lanterns, a centered 'Do Not Enter' sign on a lamp post, and a crowd beyond."
+    },
+    {
+      "width": 4000,
+      "height": 3407,
+      "originalSrc": "https://media.yuxingzhou.me/photography/san-francisco/003.jpg",
+      "src": "https://media.yuxingzhou.me/photography/san-francisco/003@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/san-francisco/003@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/san-francisco/003@thumb.webp",
+      "alt": "The Gold Mountain Sagely Monastery sign in Chinese characters and English, Chinatown skyline behind."
     }
   ]
 }

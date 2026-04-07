@@ -1,61 +1,61 @@
 {
   "slug": "laguna-beach-july-2023",
   "title": "Laguna Beach, July 2023",
-  "description": "A dusk sequence through Laguna Beach: storefronts, transit, murals, corridors, and the Pacific at sunset.",
+  "description": "A dusk sequence through Laguna Beach: a golden sunset over utility lines, a corridor framing the ocean, street life at the intersection, the transit trolley, a coastal mural, and warm-lit storefronts.",
   "cover": {
-    "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@full.webp",
-    "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@thumb.webp",
     "width": 4382,
     "height": 3549,
-    "alt": "Golden sunset over the Pacific seen past utility lines and the edge of a coastal street in Laguna Beach.",
     "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover.jpg",
-    "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@display.webp"
+    "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@full.webp",
+    "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@display.webp",
+    "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@thumb.webp",
+    "alt": "A street lamp and utility lines cutting across a glowing golden sunset sky above Laguna Beach."
   },
   "items": [
     {
-      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@thumb.webp",
-      "width": 4965,
-      "height": 2926,
-      "alt": "Motorcycles and a red Camaro paused at a Laguna Beach intersection in late-afternoon light.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001.jpg",
-      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@display.webp"
-    },
-    {
-      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002@thumb.webp",
-      "width": 6000,
-      "height": 3425,
-      "alt": "A Laguna Beach transit trolley passing storefronts under warm evening light.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002.jpg",
-      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002@display.webp"
-    },
-    {
-      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003@thumb.webp",
-      "width": 5327,
-      "height": 3635,
-      "alt": "Sunlit facade and signage for The Saloon and Pepper Tree in Laguna Beach.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003.jpg",
-      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003@display.webp"
-    },
-    {
-      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004@thumb.webp",
-      "width": 5782,
-      "height": 3583,
-      "alt": "An ocean-themed mural on a building wall with the Pacific visible behind parked cars.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004.jpg",
-      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004@display.webp"
-    },
-    {
-      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005@thumb.webp",
       "width": 3724,
       "height": 5438,
-      "alt": "A narrow corridor framing a view of the ocean between stucco walls and plants.",
+      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001.jpg",
+      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@thumb.webp",
+      "alt": "A corridor between teal stucco walls and balconies opening onto the Pacific at dusk."
+    },
+    {
+      "width": 4965,
+      "height": 2926,
+      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002.jpg",
+      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002@thumb.webp",
+      "alt": "A red Camaro and motorcycles stopped at a Laguna Beach crosswalk in late-afternoon light."
+    },
+    {
+      "width": 6000,
+      "height": 3425,
+      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003.jpg",
+      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003@thumb.webp",
+      "alt": "Laguna Beach Transit trolley moving through an intersection against a warm evening sky."
+    },
+    {
+      "width": 5782,
+      "height": 3583,
+      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004.jpg",
+      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004@thumb.webp",
+      "alt": "A large ocean-themed mural covering a building wall with the Pacific and palm trees behind."
+    },
+    {
+      "width": 5327,
+      "height": 3635,
       "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005.jpg",
-      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005@display.webp"
+      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005@thumb.webp",
+      "alt": "Warm evening light on The Saloon and Pepper Tree facade with a rainbow flag in the foreground."
     }
   ]
 }
