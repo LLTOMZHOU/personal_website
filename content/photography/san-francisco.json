@@ -1,0 +1,19 @@
+{
+  "slug": "san-francisco",
+  "title": "San Francisco",
+  "description": "A short San Francisco diptych balancing Chinatown street density with a steep upward study of the Transamerica Pyramid.",
+  "cover": {
+    "src": "https://media.yuxingzhou.me/photography/san-francisco/cover.jpg",
+    "width": 4000,
+    "height": 6000,
+    "alt": "Transamerica Pyramid photographed from its base, rising into broken clouds."
+  },
+  "items": [
+    {
+      "src": "https://media.yuxingzhou.me/photography/san-francisco/001.jpg",
+      "width": 4000,
+      "height": 6000,
+      "alt": "Chinatown street lined with lanterns, storefronts, parked cars, and a centered do-not-enter sign."
+    }
+  ]
+}
