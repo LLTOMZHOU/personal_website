@@ -106,6 +106,134 @@ async function setupAssistant() {
   });
 }
 
+function setupPhotographyLightbox() {
+  const triggers = Array.from(document.querySelectorAll("[data-gallery-image-trigger]"));
+  const lightboxRoot = document.querySelector("[data-gallery-lightbox]");
+
+  if (
+    !(lightboxRoot instanceof HTMLElement) ||
+    triggers.length === 0
+  ) {
+    return;
+  }
+
+  const image = lightboxRoot.querySelector("[data-gallery-lightbox-image]");
+  const caption = lightboxRoot.querySelector("[data-gallery-lightbox-caption]");
+  const status = lightboxRoot.querySelector("[data-gallery-lightbox-status]");
+  const closeButtons = lightboxRoot.querySelectorAll("[data-gallery-lightbox-close], [data-gallery-lightbox-backdrop]");
+  const prevButton = lightboxRoot.querySelector("[data-gallery-lightbox-prev]");
+  const nextButton = lightboxRoot.querySelector("[data-gallery-lightbox-next]");
+
+  if (
+    !(image instanceof HTMLImageElement) ||
+    !(caption instanceof HTMLElement) ||
+    !(status instanceof HTMLElement)
+  ) {
+    return;
+  }
+
+  const lightbox = lightboxRoot;
+  const lightboxImage = image;
+  const lightboxCaption = caption;
+  const lightboxStatus = status;
+  const triggerButtons = triggers.filter((trigger): trigger is HTMLButtonElement => trigger instanceof HTMLButtonElement);
+  let activeIndex = -1;
+
+  function setActiveImage(index: number) {
+    const trigger = triggerButtons[index];
+
+    if (!trigger) {
+      return;
+    }
+
+    lightboxImage.src = trigger.dataset.galleryImageSrc ?? "";
+    lightboxImage.alt = trigger.dataset.galleryImageAlt ?? "";
+    lightboxCaption.textContent = trigger.dataset.galleryImageAlt ?? "";
+    lightboxStatus.textContent = `${index + 1} / ${triggerButtons.length}`;
+    activeIndex = index;
+  }
+
+  function openLightbox(index: number) {
+    setActiveImage(index);
+    lightbox.hidden = false;
+    lightbox.classList.remove("hidden");
+    lightbox.classList.add("flex");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightbox.classList.add("hidden");
+    lightbox.classList.remove("flex");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("overflow-hidden");
+
+    if (activeIndex >= 0) {
+      triggerButtons[activeIndex]?.focus();
+    }
+
+    activeIndex = -1;
+  }
+
+  function moveLightbox(direction: number) {
+    if (activeIndex < 0) {
+      return;
+    }
+
+    const nextIndex = (activeIndex + direction + triggerButtons.length) % triggerButtons.length;
+    setActiveImage(nextIndex);
+  }
+
+  triggerButtons.forEach((trigger, index) => {
+    trigger.addEventListener("click", () => {
+      openLightbox(index);
+    });
+  });
+
+  closeButtons?.forEach((button) => {
+    if (button instanceof HTMLButtonElement) {
+      button.addEventListener("click", () => {
+        closeLightbox();
+      });
+    }
+  });
+
+  if (prevButton instanceof HTMLButtonElement) {
+    prevButton.addEventListener("click", () => {
+      moveLightbox(-1);
+    });
+  }
+
+  if (nextButton instanceof HTMLButtonElement) {
+    nextButton.addEventListener("click", () => {
+      moveLightbox(1);
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (activeIndex < 0) {
+      return;
+    }
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeLightbox();
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      moveLightbox(1);
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      moveLightbox(-1);
+    }
+  });
+}
+
 setupNav();
 setupPlaceholderForms();
 setupAssistant();
+setupPhotographyLightbox();

@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { build as viteBuild } from "vite";
 import viteConfig from "../vite.config.mjs";
 import { cleanDir, fileExists, listFiles, readJson, writeText } from "./lib/fs-utils.mjs";
+import { getGeneratedPages, renderContentSource } from "./lib/content-renderers.mjs";
 import { renderPage } from "./lib/site-shell.mjs";
 
 const ROOT = process.cwd();
@@ -105,6 +106,7 @@ async function assemblePages(manifest) {
   const pageFiles = await listFiles(PAGES_DIR, ".html");
   const siteEntry = entryFilesFromManifest(manifest, "site");
   const assistantEntry = entryFilesFromManifest(manifest, "assistant");
+  const generatedPages = await getGeneratedPages();
 
   for (const pagePath of pageFiles) {
     const metadataPath = pagePath.replace(/\.html$/, ".meta.json");
@@ -113,10 +115,10 @@ async function assemblePages(manifest) {
       throw new Error(`Missing metadata sidecar for ${pagePath}`);
     }
 
-    const [bodyHtml, metadata] = await Promise.all([
-      readFile(pagePath, "utf8"),
-      readJson(metadataPath)
-    ]);
+    const [rawBodyHtml, metadata] = await Promise.all([readFile(pagePath, "utf8"), readJson(metadataPath)]);
+    const bodyHtml = metadata.contentRenderer
+      ? await renderContentSource(metadata.contentRenderer)
+      : rawBodyHtml;
 
     const route = normalizeRoute(metadata.path ?? routeFromPage(pagePath));
     const bundleEntries = metadata.bundles ?? [];
@@ -133,6 +135,30 @@ async function assemblePages(manifest) {
       siteUrl,
       metadata: { ...metadata, path: route },
       bodyHtml,
+      cssFiles: [...new Set(pageCss)],
+      scriptFiles: [...new Set(pageScripts)],
+      assistantSrc: assistantEntry.scripts[0] ?? null
+    });
+
+    await writeText(outputPathForRoute(route), html);
+  }
+
+  for (const generatedPage of generatedPages) {
+    const route = normalizeRoute(generatedPage.metadata.path);
+    const pageScripts = [...siteEntry.scripts];
+    const pageCss = [...siteEntry.css];
+    const bundleEntries = generatedPage.metadata.bundles ?? [];
+
+    for (const bundleName of bundleEntries) {
+      const bundle = entryFilesFromManifest(manifest, bundleName);
+      pageScripts.push(...bundle.scripts);
+      pageCss.push(...bundle.css);
+    }
+
+    const html = renderPage({
+      siteUrl,
+      metadata: { ...generatedPage.metadata, path: route },
+      bodyHtml: generatedPage.bodyHtml,
       cssFiles: [...new Set(pageCss)],
       scriptFiles: [...new Set(pageScripts)],
       assistantSrc: assistantEntry.scripts[0] ?? null

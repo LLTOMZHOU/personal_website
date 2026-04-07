@@ -66,6 +66,7 @@ Current expected fields are:
 - `ogImage`
 - `bundles`
 - `bodyClass`
+- optional `contentRenderer`
 - optional `canonicalUrl`
 - optional `noIndex`
 
@@ -105,6 +106,10 @@ Writing and project pages are authored directly as HTML.
 
 Photography and AI-media are expected to remain JSON-backed.
 
+Some pages may use a metadata-declared build renderer instead of taking their body directly from
+the authored HTML file. In those cases, the HTML file is only a stub entrypoint and the actual page
+body is assembled from structured content during the build.
+
 Treat these as different authoring models:
 
 - editorial pages: authored HTML
@@ -115,6 +120,7 @@ Do not force everything into one content format.
 ## Media Workflow
 
 The media ingestion workflow is documented in `media-ingestion-workflow.md`.
+The operational skill for agents is `skills/photo-ingestion-upload-serve/SKILL.md`.
 
 The intended long-term model is:
 
@@ -123,6 +129,8 @@ The intended long-term model is:
 - write canonical CDN references into JSON or authored HTML
 
 Avoid inventing ad hoc media URL patterns when working on media features.
+Do not default to rigid one-off ingestion scripts when the intake shape is messy or variable.
+Prefer the AI-first workflow in the skill document: inspect, infer, clarify minimally, upload canonically, verify, then write repo references.
 
 ## Build And Dev Commands
 
