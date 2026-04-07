@@ -177,17 +177,20 @@ Uploads should use deterministic object keys.
 
 Example patterns:
 
-- `photography/tokyo-2026/cover.avif`
-- `photography/tokyo-2026/001.avif`
-- `photography/tokyo-2026/001@thumb.avif`
+- `photography/tokyo-2026/cover@full.webp`
+- `photography/tokyo-2026/cover@display.webp`
+- `photography/tokyo-2026/cover@thumb.webp`
+- `photography/tokyo-2026/001@full.webp`
+- `photography/tokyo-2026/001@display.webp`
+- `photography/tokyo-2026/001@thumb.webp`
 - `ai-media/latent-series-03/cover.webp`
 - `ai-media/latent-series-03/frame-01.webp`
-- `projects/glitch-witch/cover.avif`
+- `projects/glitch-witch/cover.webp`
 - `projects/glitch-witch/telemetry-diagram.webp`
-- `writing/agent-ui-friction/header.avif`
+- `writing/agent-ui-friction/header.webp`
 - `writing/agent-ui-friction/figure-01.webp`
-- `site/home/hero-01.avif`
-- `site/shared/about-portrait.avif`
+- `site/home/hero-01.webp`
+- `site/shared/about-portrait.webp`
 
 Rules:
 
@@ -212,15 +215,16 @@ The workflow should support optional local derivative generation before upload.
 
 At minimum, we should plan for:
 
-- full-size web asset
-- smaller thumbnail asset
+- full-size lightbox asset
+- mid-size display asset for inline album rendering
+- smaller thumbnail asset for index and preview surfaces
 - cover asset when needed
 
 Possible output formats:
 
-- AVIF where it behaves well
-- WebP as a fallback or default when tooling is simpler
-- original retained only if necessary
+- WebP as the current default delivery format
+- AVIF as a possible later optimization path if we adopt a clean fallback strategy
+- original source retained for provenance and future derivative reruns
 
 This should remain configurable per collection.
 
@@ -238,15 +242,20 @@ Suggested shape:
   "title": "Tokyo 2026",
   "description": "Street and architectural studies from Tokyo.",
   "cover": {
-    "src": "https://media.example.com/photography/tokyo-2026/cover.avif",
+    "src": "https://media.example.com/photography/tokyo-2026/cover@full.webp",
+    "display": "https://media.example.com/photography/tokyo-2026/cover@display.webp",
+    "thumb": "https://media.example.com/photography/tokyo-2026/cover@thumb.webp",
+    "originalSrc": "https://media.example.com/photography/tokyo-2026/cover.jpg",
     "width": 1600,
     "height": 1067,
     "alt": "Night street with neon reflections."
   },
   "items": [
     {
-      "src": "https://media.example.com/photography/tokyo-2026/001.avif",
-      "thumb": "https://media.example.com/photography/tokyo-2026/001@thumb.avif",
+      "src": "https://media.example.com/photography/tokyo-2026/001@full.webp",
+      "display": "https://media.example.com/photography/tokyo-2026/001@display.webp",
+      "thumb": "https://media.example.com/photography/tokyo-2026/001@thumb.webp",
+      "originalSrc": "https://media.example.com/photography/tokyo-2026/001.jpg",
       "width": 2400,
       "height": 1600,
       "alt": "Concrete overpass and signage."
@@ -261,6 +270,7 @@ Rules:
 - dimensions should be recorded when practical
 - cover should be explicit rather than inferred at runtime
 - alt text should be supported even if some entries begin as placeholders
+- where derivative tiering exists, `src`, `display`, `thumb`, and `originalSrc` should be explicit rather than inferred later
 
 For inline editorial assets, the workflow should instead produce a URL mapping that can be written into HTML.
 

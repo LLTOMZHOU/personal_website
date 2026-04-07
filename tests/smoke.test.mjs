@@ -134,4 +134,13 @@ describe("static site smoke tests", () => {
     assert.match(scriptText, /aria-expanded/);
     assert.match(scriptText, /\.key\s*={2,3}\s*"\/"/);
   });
+
+  test("photography album pages use smaller inline images and preserve full-size lightbox sources", async () => {
+    const html = await readFile(path.join(DIST_DIR, "photography", "laguna-beach-july-2023", "index.html"), "utf8");
+
+    assert.match(html, /cover@display\.webp/);
+    assert.match(html, /001@display\.webp/);
+    assert.match(html, /data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/laguna-beach-july-2023\/cover@full\.webp"/);
+    assert.match(html, /data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/laguna-beach-july-2023\/001@full\.webp"/);
+  });
 });
