@@ -3,6 +3,7 @@
   "description": "About Yuxing Zhou, current work in harness engineering, and interests in agent memory and knowledge graphs.",
   "path": "/about/",
   "section": "about",
+  "ogImage": "",
   "bundles": [],
   "bodyClass": "page-about"
 }

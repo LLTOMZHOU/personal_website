@@ -3,5 +3,7 @@
   "description": "Photography collections by Yuxing Zhou.",
   "path": "/photography/",
   "section": "photography",
+  "ogImage": "",
+  "bundles": [],
   "bodyClass": "page-photography"
 }

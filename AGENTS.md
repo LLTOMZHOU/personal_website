@@ -131,6 +131,8 @@ Use:
 - `pnpm build` to produce the static site in `dist/`
 - `pnpm dev` for a local rebuild-and-preview loop
 - `pnpm preview` to serve `dist/`
+- `pnpm lint:repo` to validate page and metadata invariants
+- `pnpm test` to run the lightweight repo lint plus smoke coverage
 
 Before running `pnpm build`, set `SITE_URL`. The build requires it to generate canonical URLs and Open Graph metadata.
 
@@ -140,6 +142,17 @@ Typical `SITE_URL` values:
 - production build: the deployed site origin, for example `https://example.com`
 
 If you change page assembly, metadata handling, asset wiring, or bundles, set `SITE_URL` and run `pnpm build`.
+
+## Git Hooks
+
+This repo uses versioned git hooks in `.githooks/` through the local `core.hooksPath` setting.
+
+Current hooks:
+
+- `pre-commit`: runs `pnpm lint:repo` and `pnpm test:smoke`
+- `pre-push`: runs `pnpm build` with a local default `SITE_URL` if one is not already set
+
+Do not duplicate the same checks in ad hoc scripts when the hooks already cover them.
 
 ## Build System Notes
 
@@ -204,3 +217,15 @@ When creating a pull request for this repo:
 
 - create a ready-for-review PR, not a draft PR
 - after creating the PR, add a top-level comment with exactly `@codex review`
+
+## Git Workflow
+
+Before any `git push` from a feature branch:
+
+1. fetch the latest remote state
+2. update local `main`
+3. merge the latest `origin/main` into the working branch
+4. rerun the relevant checks
+5. push only after the branch includes the latest `main`
+
+Do not push stale feature branches when `main` has moved and has not been merged in yet.

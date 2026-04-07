@@ -2,5 +2,8 @@
   "title": "Symphonies in Silicon",
   "description": "Writing archive placeholder for Symphonies in Silicon.",
   "path": "/writing/symphonies-in-silicon/",
-  "section": "writing"
+  "section": "writing",
+  "ogImage": "",
+  "bundles": [],
+  "bodyClass": "page-essay page-essay-symphonies-in-silicon"
 }
