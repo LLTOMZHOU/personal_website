@@ -18,6 +18,28 @@ function imageAspect(image) {
   return width && height ? width / height : 1;
 }
 
+function displayImage(image) {
+  if (!image || typeof image !== "object") {
+    return image;
+  }
+
+  if (typeof image.display === "string" && image.display.trim() !== "") {
+    return {
+      ...image,
+      src: image.display.trim()
+    };
+  }
+
+  if (typeof image.thumb === "string" && image.thumb.trim() !== "") {
+    return {
+      ...image,
+      src: image.thumb.trim()
+    };
+  }
+
+  return image;
+}
+
 function renderImage(image, className, loading = "lazy") {
   const width = safeNumber(image.width);
   const height = safeNumber(image.height);
@@ -36,7 +58,9 @@ function renderImage(image, className, loading = "lazy") {
 
 function renderLightboxImage(image, index, loading = "lazy") {
   const alt = escapeAttr(image.alt ?? "");
-  const src = escapeAttr(image.src);
+  const lightboxSrc = escapeAttr(image.src);
+  const inlineImage = displayImage(image);
+  const inlineSrc = escapeAttr(inlineImage.src);
 
   return `
     <button
@@ -44,12 +68,13 @@ function renderLightboxImage(image, index, loading = "lazy") {
       type="button"
       data-gallery-image-trigger
       data-gallery-image-index="${index}"
-      data-gallery-image-src="${src}"
+      data-gallery-image-src="${lightboxSrc}"
+      data-gallery-image-preview-src="${inlineSrc}"
       data-gallery-image-alt="${alt}"
       aria-label="Open image ${index + 1} in larger view"
     >
       <figure class="min-w-0 overflow-hidden rounded-[2px] bg-white shadow-[0_1px_0_rgba(15,23,42,0.04)] transition-shadow duration-300 group-hover:shadow-[0_18px_40px_rgba(15,23,42,0.12)]">
-        ${renderImage(image, "block h-auto w-full", loading)}
+        ${renderImage(inlineImage, "block h-auto w-full", loading)}
       </figure>
       <span
         class="pointer-events-none absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/92 text-text-main opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:opacity-100"

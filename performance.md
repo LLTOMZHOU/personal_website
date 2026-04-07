@@ -54,3 +54,68 @@ Supporting repo findings:
 - images under `media.yuxingzhou.me/photography/` are edge cached and CDN-served
 - the image delivery path is in good shape
 - the HTML caching policy would need to be changed separately if we want edge-cached documents
+
+## Photography delivery update
+
+Checked on April 7, 2026 after the photography asset migration.
+
+### Delivery model
+
+Photography assets now use explicit WebP delivery tiers:
+
+- `@full.webp` for the larger lightbox view
+- `@display.webp` for inline album-page rendering
+- `@thumb.webp` for index and preview surfaces
+
+Photography JSON now records:
+
+- `src` as the `@full.webp` asset
+- `display` as the `@display.webp` asset
+- `thumb` as the `@thumb.webp` asset
+- `originalSrc` as the preserved source JPEG URL used for provenance and derivative reruns
+
+### Live CDN check
+
+Sample live responses on `media.yuxingzhou.me`:
+
+- `https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@full.webp`
+- `https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@display.webp`
+- `https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@thumb.webp`
+
+Observed on those responses:
+
+- `content-type: image/webp`
+- `cache-control: public, max-age=31536000, immutable`
+- `server: cloudflare`
+- `cf-cache-status: HIT`
+
+This confirms the new WebP tiers are live, cacheable, and being served from Cloudflare edge cache.
+
+### Loading strategy
+
+The photography album page now uses a tiered loading strategy:
+
+- initial inline rendering uses `@display.webp`
+- the lightbox uses `@full.webp`
+- the client warms the first full-size image after page idle
+- opening a lightbox image triggers adjacent full-size prefetch for smoother next/previous navigation
+
+Observed on local DevTools inspection of `/photography/laguna-beach-july-2023/`:
+
+- initial network image requests were `cover@display.webp`, `001@display.webp`, `002@display.webp`, `003@display.webp`, `004@display.webp`, and `005@display.webp`
+- `cover@full.webp` was fetched separately as the idle warmup path
+- opening image 2 loaded `001@full.webp` into the lightbox
+- the next adjacent full-size image `002@full.webp` was prefetched after lightbox open
+
+### Current interpretation
+
+The photography delivery path is now in a materially better place than the earlier JPEG/original-heavy model:
+
+- album pages no longer render full-size originals inline
+- preview and display tiers are explicitly modeled rather than inferred
+- full-size assets remain available for enlarged viewing without forcing that cost onto the initial page render
+
+The remaining HTML document caching observation above is still unchanged:
+
+- page HTML is dynamic at the Cloudflare edge
+- image/media delivery is strongly cached and CDN-served

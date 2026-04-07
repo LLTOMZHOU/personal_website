@@ -3,19 +3,23 @@
   "title": "San Francisco",
   "description": "A short San Francisco diptych balancing Chinatown street density with a steep upward study of the Transamerica Pyramid.",
   "cover": {
-    "src": "https://media.yuxingzhou.me/photography/san-francisco/cover.jpg",
-    "thumb": "https://media.yuxingzhou.me/photography/san-francisco/cover@thumb.jpg",
+    "src": "https://media.yuxingzhou.me/photography/san-francisco/cover@full.webp",
+    "thumb": "https://media.yuxingzhou.me/photography/san-francisco/cover@thumb.webp",
     "width": 4000,
     "height": 6000,
-    "alt": "Transamerica Pyramid photographed from its base, rising into broken clouds."
+    "alt": "Transamerica Pyramid photographed from its base, rising into broken clouds.",
+    "originalSrc": "https://media.yuxingzhou.me/photography/san-francisco/cover.jpg",
+    "display": "https://media.yuxingzhou.me/photography/san-francisco/cover@display.webp"
   },
   "items": [
     {
-      "src": "https://media.yuxingzhou.me/photography/san-francisco/001.jpg",
-      "thumb": "https://media.yuxingzhou.me/photography/san-francisco/001@thumb.jpg",
+      "src": "https://media.yuxingzhou.me/photography/san-francisco/001@full.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/san-francisco/001@thumb.webp",
       "width": 4000,
       "height": 6000,
-      "alt": "Chinatown street lined with lanterns, storefronts, parked cars, and a centered do-not-enter sign."
+      "alt": "Chinatown street lined with lanterns, storefronts, parked cars, and a centered do-not-enter sign.",
+      "originalSrc": "https://media.yuxingzhou.me/photography/san-francisco/001.jpg",
+      "display": "https://media.yuxingzhou.me/photography/san-francisco/001@display.webp"
     }
   ]
 }

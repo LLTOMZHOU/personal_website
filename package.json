@@ -9,6 +9,7 @@
     "build": "node scripts/build-site.mjs",
     "dev": "node scripts/dev.mjs",
     "lint:repo": "node scripts/lint-repo.mjs",
+    "migrate:photography:webp": "node scripts/migrate-photography-webp.mjs",
     "preview": "node scripts/preview.mjs",
     "test": "pnpm lint:repo && pnpm test:smoke",
     "test:smoke": "node --test tests/*.test.mjs",
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.2",
     "prettier": "^3.3.3",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.2.2",
     "typescript": "^6.0.2",
     "vite": "^6.2.0"

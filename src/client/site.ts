@@ -139,6 +139,39 @@ function setupPhotographyLightbox() {
   const lightboxStatus = status;
   const triggerButtons = triggers.filter((trigger): trigger is HTMLButtonElement => trigger instanceof HTMLButtonElement);
   let activeIndex = -1;
+  const prefetchedSources = new Set<string>();
+
+  const scheduleIdleWork =
+    "requestIdleCallback" in window
+      ? window.requestIdleCallback.bind(window)
+      : (callback: IdleRequestCallback) =>
+          window.setTimeout(() => callback({ didTimeout: false, timeRemaining: () => 0 } as IdleDeadline), 250);
+
+  function prefetchImageSource(source: string | null | undefined) {
+    if (!source || prefetchedSources.has(source)) {
+      return;
+    }
+
+    prefetchedSources.add(source);
+    const preload = new Image();
+    preload.decoding = "async";
+    preload.src = source;
+  }
+
+  function triggerSource(index: number) {
+    return triggerButtons[index]?.dataset.galleryImageSrc ?? "";
+  }
+
+  function prefetchAdjacentImages(index: number) {
+    if (triggerButtons.length < 2) {
+      return;
+    }
+
+    const nextIndex = (index + 1) % triggerButtons.length;
+    const previousIndex = (index - 1 + triggerButtons.length) % triggerButtons.length;
+    prefetchImageSource(triggerSource(nextIndex));
+    prefetchImageSource(triggerSource(previousIndex));
+  }
 
   function focusableLightboxElements() {
     return Array.from(
@@ -160,6 +193,7 @@ function setupPhotographyLightbox() {
     lightboxCaption.textContent = trigger.dataset.galleryImageAlt ?? "";
     lightboxStatus.textContent = `${index + 1} / ${triggerButtons.length}`;
     activeIndex = index;
+    prefetchAdjacentImages(index);
   }
 
   function openLightbox(index: number) {
@@ -203,9 +237,20 @@ function setupPhotographyLightbox() {
   }
 
   triggerButtons.forEach((trigger, index) => {
+    const prefetchCurrentImage = () => {
+      prefetchImageSource(trigger.dataset.galleryImageSrc);
+    };
+
+    trigger.addEventListener("pointerenter", prefetchCurrentImage, { passive: true });
+    trigger.addEventListener("focus", prefetchCurrentImage);
+    trigger.addEventListener("touchstart", prefetchCurrentImage, { passive: true });
     trigger.addEventListener("click", () => {
       openLightbox(index);
     });
+  });
+
+  scheduleIdleWork(() => {
+    prefetchImageSource(triggerSource(0));
   });
 
   closeButtons?.forEach((button) => {

@@ -27,9 +27,11 @@ As currently implemented:
 - the photography landing page is generated via `pages/photography.meta.json` with `contentRenderer: "photography-index"`
 - album detail pages are generated at `/photography/<slug>/` by `scripts/lib/content-renderers.mjs`
 - uploads currently happen through a locally authenticated `wrangler` CLI flow
-- `wrangler` is not installed as a repo dependency and there is no committed `pnpm` upload script yet
-- the photography index can use per-image `thumb` URLs when present, while album pages still use the original `src`
-- the current proven derivative pattern is JPEG thumbnails stored alongside originals using `@thumb` suffixes such as `cover@thumb.jpg` and `001@thumb.jpg`
+- `wrangler` is not installed as a repo dependency, but the repo now includes a committed `pnpm migrate:photography:webp` migration script for derivative generation and upload
+- photography JSON now supports `src`, `display`, `thumb`, and `originalSrc` fields for image assets
+- album detail pages render `display` assets inline and reserve `src` for the larger lightbox view
+- the current proven derivative pattern is WebP tiering with adjacent object keys such as `cover@full.webp`, `cover@display.webp`, and `cover@thumb.webp`
+- `originalSrc` preserves the source JPEG URL so later derivative reruns do not lose provenance
 
 Be explicit about those facts when operating this skill.
 
@@ -112,10 +114,12 @@ For a normal photography run, “done” means all of the following are true:
 
 Do not treat “JSON was written” as success if the upload path or delivery verification is still broken.
 
-When thumbnail derivatives are created for photography, the expected output also includes:
+When derivatives are created for photography, the expected output also includes:
 
-- preview assets under `https://media.yuxingzhou.me/photography/<slug>/*@thumb.jpg`
-- `thumb` fields in the photography JSON for the cover and any items that should render on the index
+- preview assets under `https://media.yuxingzhou.me/photography/<slug>/*@thumb.webp`
+- display assets under `https://media.yuxingzhou.me/photography/<slug>/*@display.webp`
+- full-size lightbox assets under `https://media.yuxingzhou.me/photography/<slug>/*@full.webp`
+- `thumb`, `display`, and `src` fields in the photography JSON for the cover and gallery items
 
 ## Operating Flow
 
@@ -187,16 +191,15 @@ Normalize the ingest plan, not necessarily the original source folder.
 
 Prefer deterministic object keys such as:
 
-- `photography/<slug>/cover.jpg`
-- `photography/<slug>/cover@thumb.jpg`
-- `photography/<slug>/001.jpg`
-- `photography/<slug>/001@thumb.jpg`
-- `photography/<slug>/002.jpg`
-- `projects/<slug>/cover.jpg`
-- `writing/<slug>/figure-01.jpg`
-- `site/shared/<name>.jpg`
-
-Optimized formats are allowed, but do not claim they are the current standard if the real ingest is uploading JPGs.
+- `photography/<slug>/cover@full.webp`
+- `photography/<slug>/cover@display.webp`
+- `photography/<slug>/cover@thumb.webp`
+- `photography/<slug>/001@full.webp`
+- `photography/<slug>/001@display.webp`
+- `photography/<slug>/001@thumb.webp`
+- `projects/<slug>/cover.webp`
+- `writing/<slug>/figure-01.webp`
+- `site/shared/<name>.webp`
 
 Rules:
 
@@ -243,10 +246,12 @@ Do not block the workflow on perfect optimization if the main need is to get a c
 
 Current repo note:
 
-- the working ingest path currently uploads original JPGs and records `width`, `height`, and `alt` in JSON
-- thumbnail derivatives are useful for `/photography/` and similar preview surfaces
-- when created, thumbnails should stay adjacent to originals and use stable `@thumb` naming
-- unless the user explicitly wants optimization work, treat original JPG upload as the current default path
+- the working photography path now generates WebP derivatives and records `width`, `height`, `alt`, `originalSrc`, `src`, `display`, and `thumb` in JSON
+- `src` should point at `@full.webp`
+- `display` should point at `@display.webp` for inline album rendering
+- `thumb` should point at `@thumb.webp` for index-like and preview surfaces
+- `originalSrc` should remain the stable source JPEG URL unless the repo deliberately changes its provenance model
+- unless the user explicitly wants a different format strategy, treat WebP tiering as the current default photography delivery path
 
 ### 8. Upload To Canonical Storage
 
@@ -274,11 +279,12 @@ Operational fallback order:
 
 Real key examples:
 
-- `photography/laguna-beach-july-2023/cover.jpg`
-- `photography/laguna-beach-july-2023/cover@thumb.jpg`
-- `photography/laguna-beach-july-2023/001.jpg`
-- `photography/laguna-beach-july-2023/001@thumb.jpg`
-- `photography/laguna-beach-july-2023/002.jpg`
+- `photography/laguna-beach-july-2023/cover@full.webp`
+- `photography/laguna-beach-july-2023/cover@display.webp`
+- `photography/laguna-beach-july-2023/cover@thumb.webp`
+- `photography/laguna-beach-july-2023/001@full.webp`
+- `photography/laguna-beach-july-2023/001@display.webp`
+- `photography/laguna-beach-july-2023/001@thumb.webp`
 
 Avoid:
 
@@ -340,8 +346,9 @@ Also do a quick editorial sanity check on the photography index:
 
 - no single album should dominate the page unintentionally
 - preview image counts should stay reasonable for the current layout
-- the photography index should use lighter thumbnail assets when thumbnails exist
-- album pages can continue using full-size originals
+- the photography index should use `thumb` assets
+- album pages should use `display` assets inline and `src` for the larger lightbox view
+- homepage or editorial photography callouts should generally use `display` assets rather than `full`
 - no repo-internal implementation notes should leak into user-facing copy
 
 ## JSON Guidance
@@ -354,16 +361,20 @@ For photography or AI-media collections, prefer a shape like:
   "title": "Laguna Beach, July 2023",
   "description": "Coastal studies and late-afternoon light in Laguna Beach.",
   "cover": {
-    "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover.jpg",
-    "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@thumb.jpg",
+    "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@full.webp",
+    "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@display.webp",
+    "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@thumb.webp",
+    "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover.jpg",
     "width": 1600,
     "height": 1067,
     "alt": "Waves breaking against dark rocks near sunset."
   },
   "items": [
     {
-      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001.jpg",
-      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@thumb.jpg",
+      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@thumb.webp",
+      "originalSrc": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001.jpg",
       "width": 2400,
       "height": 1600,
       "alt": "Foam patterns moving across wet sand."
@@ -388,11 +399,14 @@ The core rule is stable:
 For current photography albums, each image object should include at least:
 
 - `src`
+- `display`
+- `thumb`
+- `originalSrc`
 - `width`
 - `height`
 - `alt`
 
-`thumb` is optional, but when a real preview derivative exists it should be recorded explicitly and used for index-like surfaces rather than inferred later.
+`display` and `thumb` should be recorded explicitly when derivatives are generated so the runtime does not have to infer tiering later.
 
 ## Decision Heuristics
 
@@ -441,7 +455,7 @@ When reporting completion, include:
 Also include:
 
 - the exact R2 key prefix used
-- whether the upload used original JPGs or generated derivatives
+- whether the upload used preserved JPEG sources plus generated WebP derivatives
 - whether album order followed filename sort or a curated order
 - the JSON file created or updated
 - whether `/photography/` and `/photography/<slug>/` were verified
