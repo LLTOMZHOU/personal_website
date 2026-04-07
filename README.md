@@ -8,7 +8,7 @@ A GitHub Actions workflow is included at:
 
 - `.github/workflows/deploy-cloudflare-pages.yml`
 
-The workflow runs on pushes to `main` and on manual dispatch.
+The workflow runs on pull requests to `main` (build-only validation), pushes to `main`, and on manual dispatch.
 
 ### Required GitHub repository variables
 
