@@ -398,17 +398,13 @@ export async function renderPhotographyIndex() {
 
   return `
     ${intro}
-    <section class="mb-12 flex items-center justify-between gap-6">
+    <section class="mb-12">
       <div>
         <p class="font-label text-[0.72rem] uppercase tracking-[0.22em] text-on-surface-variant">
           Collections
         </p>
         <h2 class="mt-3 font-headline text-3xl font-bold">${albums.length} album${albums.length === 1 ? "" : "s"}</h2>
       </div>
-      <p class="max-w-lg text-sm leading-7 text-on-surface-variant">
-        Source of truth lives in <span class="font-medium text-text-main">content/photography/*.json</span>.
-        The page layout stays consistent in tone but intentionally varies album composition.
-      </p>
     </section>
     <div class="space-y-16 md:space-y-20">
       ${sections.join("\n")}
