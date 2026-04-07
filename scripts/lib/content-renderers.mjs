@@ -377,8 +377,8 @@ export async function renderPhotographyIndex() {
         </h1>
       </div>
       <p class="max-w-xl text-base leading-8 text-on-surface-variant">
-        The photography section is rendered from collection JSON. Each album keeps its own
-        sequence, cover, and metadata, while the page assembles them into a varied editorial flow.
+        A growing archive of city studies, interiors, coastlines, and architectural fragments,
+        organized as distinct albums rather than one flattened stream.
       </p>
     </section>
   `;
