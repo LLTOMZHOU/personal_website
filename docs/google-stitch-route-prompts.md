@@ -1,3 +1,6 @@
+> **Deprecated — historical archive only.**
+> Per-route prompts used for early design exploration in Google Stitch before the site was designed and built. No longer relevant.
+
 # Google Stitch Route Prompts
 
 Use these prompts to explore individual pages or sections after the main homepage exploration.

@@ -1,3 +1,6 @@
+> **Deprecated — historical archive only.**
+> Original build system design doc written before the site was built. The described assembly model is now implemented; current behavior is reflected in `scripts/build-site.mjs` and documented in `AGENTS.md`. Do not update this doc.
+
 # Site Assembly And Bundling Plan
 
 ## Document Status

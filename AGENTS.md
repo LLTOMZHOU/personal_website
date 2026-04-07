@@ -119,7 +119,7 @@ Do not force everything into one content format.
 
 ## Media Workflow
 
-The media ingestion workflow is documented in `media-ingestion-workflow.md`.
+The media ingestion workflow is documented in `docs/media-ingestion-workflow.md`.
 The operational skill for agents is `skills/photo-ingestion-upload-serve/SKILL.md`.
 
 The intended long-term model is:
