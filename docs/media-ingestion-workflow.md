@@ -1,3 +1,6 @@
+> **Deprecated — historical archive only.**
+> This document is a planning spec written before the media workflow was implemented. It proposed a script-based pipeline that was never built because the approach pivoted to AI-first. The operational source of truth is `skills/photo-ingestion-upload-serve/SKILL.md`. Do not update this doc; do not treat it as current guidance.
+
 # Media Ingestion Workflow Plan
 
 ## Document Status

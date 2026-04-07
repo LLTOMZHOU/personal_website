@@ -1,3 +1,6 @@
+> **Historical decision record — read-only.**
+> Documents how the architecture evolved and why key decisions were made. Useful for understanding past reasoning. Not a source of current operational guidance — see `AGENTS.md` and `CLAUDE.md` for that.
+
 # Repo Decision Journal
 
 ## Purpose

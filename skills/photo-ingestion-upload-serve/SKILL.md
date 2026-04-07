@@ -462,10 +462,8 @@ Also include:
 
 ## Relationship To Repo Docs
 
-This skill operationalizes:
+This skill is the operational source of truth for media ingestion.
 
-- `media-ingestion-workflow.md`
-- `image-delivery-plan.md`
-- the media workflow notes in `AGENTS.md`
+`docs/media-ingestion-workflow.md` and `docs/image-delivery-plan.md` are deprecated historical planning docs kept for archival context only. If they conflict with this skill, this skill wins.
 
-If those documents and this skill disagree, prefer the repo’s architectural constraints and update the documents together instead of letting them drift.
+The media workflow notes in `AGENTS.md` remain current. If this skill and `AGENTS.md` disagree, update both together rather than letting them drift.

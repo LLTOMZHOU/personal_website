@@ -1,3 +1,6 @@
+> **Historical observation log — not actively maintained.**
+> Point-in-time production measurements. Kept for reference; do not treat as current state.
+
 # Performance Notes
 
 ## Production caching check for photography

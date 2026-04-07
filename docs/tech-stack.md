@@ -1,3 +1,6 @@
+> **Deprecated — historical archive only.**
+> Original tech stack decision doc written before the site was built. Superseded by the implemented site and consolidated into `docs/repo-decision-journal.md`. Do not update this doc.
+
 # Tech Stack Decision
 
 ## Document Status

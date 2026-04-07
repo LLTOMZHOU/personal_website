@@ -1,3 +1,6 @@
+> **Deprecated — historical archive only.**
+> This document captured desired image delivery behavior before implementation. The described functionality (WebP tiers, lazy loading, eager LCP, R2 delivery) is now implemented. Current delivery reality is documented in `skills/photo-ingestion-upload-serve/SKILL.md` and reflected in the photography JSON schema. Do not update this doc.
+
 # Image Delivery Plan
 
 ## Purpose

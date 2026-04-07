@@ -1,3 +1,6 @@
+> **Deprecated — historical archive only.**
+> Prompt used for early design exploration in Google Stitch before the site was designed and built. No longer relevant.
+
 # Google Stitch Prompt
 
 Use this prompt in Google Stitch for early design exploration.

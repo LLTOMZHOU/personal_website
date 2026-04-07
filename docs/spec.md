@@ -1,3 +1,6 @@
+> **Deprecated — historical archive only.**
+> Original product specification written before the site was built. Superseded by the implemented site and consolidated into `docs/repo-decision-journal.md`. Do not update this doc.
+
 # Website Specification
 
 ## Document Status
