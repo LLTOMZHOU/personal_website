@@ -1,9 +1,12 @@
 import path from "node:path";
 import { escapeHtml, escapeAttr } from "./site-shell.mjs";
-import { listFiles, readJson } from "./fs-utils.mjs";
+import { fileExists, listFiles, readJson } from "./fs-utils.mjs";
 
 const ROOT = process.cwd();
 const PHOTOGRAPHY_DIR = path.resolve(ROOT, "content", "photography");
+export const CONTENT_RENDERERS = Object.freeze({
+  PHOTOGRAPHY_INDEX: "photography-index"
+});
 
 function safeNumber(value) {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
@@ -15,22 +18,23 @@ function imageAspect(image) {
   return width && height ? width / height : 1;
 }
 
-function renderImage(image, className) {
+function renderImage(image, className, loading = "lazy") {
   const width = safeNumber(image.width);
   const height = safeNumber(image.height);
   const widthAttr = width ? ` width="${width}"` : "";
   const heightAttr = height ? ` height="${height}"` : "";
+  const normalizedLoading = loading === "eager" || loading === "auto" ? loading : "lazy";
 
   return `<img
       alt="${escapeAttr(image.alt ?? "")}"
       class="${className}"
       src="${escapeAttr(image.src)}"${widthAttr}${heightAttr}
-      loading="lazy"
+      loading="${normalizedLoading}"
       decoding="async"
     >`;
 }
 
-function renderLightboxImage(image, index) {
+function renderLightboxImage(image, index, loading = "lazy") {
   const alt = escapeAttr(image.alt ?? "");
   const src = escapeAttr(image.src);
 
@@ -45,7 +49,7 @@ function renderLightboxImage(image, index) {
       aria-label="Open image ${index + 1} in larger view"
     >
       <figure class="min-w-0 overflow-hidden rounded-[2px] bg-white shadow-[0_1px_0_rgba(15,23,42,0.04)] transition-shadow duration-300 group-hover:shadow-[0_18px_40px_rgba(15,23,42,0.12)]">
-        ${renderImage(image, "block h-auto w-full")}
+        ${renderImage(image, "block h-auto w-full", loading)}
       </figure>
       <span
         class="pointer-events-none absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/92 text-text-main opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:opacity-100"
@@ -167,13 +171,14 @@ function renderJustifiedGallery(images) {
         const aspect = normalizedAspect(image);
         const currentIndex = imageIndex;
         imageIndex += 1;
+        const loading = currentIndex === 0 ? "eager" : "lazy";
         const style = singleImage
           ? ` style="max-width: min(100%, ${Math.max(24, Math.min(44, aspect * 18)).toFixed(2)}rem);"`
           : ` style="flex: ${aspect.toFixed(5)} ${aspect.toFixed(5)} 0%;"`;
 
         return `
           <div class="min-w-0"${style}>
-            ${renderLightboxImage(image, currentIndex)}
+            ${renderLightboxImage(image, currentIndex, loading)}
           </div>
         `;
       })
@@ -196,6 +201,7 @@ function renderJustifiedGallery(images) {
 function renderAlbumSequence(album, index) {
   const items = album.items ?? [];
   const patternIndex = index % 3;
+  const coverLoading = index === 0 ? "eager" : "lazy";
 
   if (patternIndex === 0) {
     return `
@@ -203,7 +209,7 @@ function renderAlbumSequence(album, index) {
         <figure class="group relative overflow-hidden rounded-[2px] md:col-span-7">
           ${renderAlbumLink(
             album,
-            renderImage(album.cover, "h-[32rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"),
+            renderImage(album.cover, "h-[32rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]", coverLoading),
             "block"
           )}
           <figcaption class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/75 via-black/20 to-transparent p-8">
@@ -312,17 +318,40 @@ function renderAlbumSequence(album, index) {
 }
 
 async function loadPhotographyAlbums() {
+  if (!(await fileExists(PHOTOGRAPHY_DIR))) {
+    return [];
+  }
+
   const files = await listFiles(PHOTOGRAPHY_DIR, ".json");
   const albums = [];
 
   for (const filePath of files) {
     const album = await readJson(filePath);
+    const slug = typeof album.slug === "string" ? album.slug.trim() : "";
+    const title = typeof album.title === "string" ? album.title.trim() : "";
+    const description = typeof album.description === "string" ? album.description.trim() : "";
+    const coverSrc = typeof album.cover?.src === "string" ? album.cover.src.trim() : "";
+    const items = Array.isArray(album.items)
+      ? album.items.filter(
+          (item) => item && typeof item === "object" && typeof item.src === "string" && item.src.trim() !== ""
+        )
+      : null;
 
-    if (album.slug === "placeholder" || !album.cover?.src || !Array.isArray(album.items)) {
+    if (slug === "" || slug === "placeholder" || title === "" || coverSrc === "" || items === null) {
       continue;
     }
 
-    albums.push(album);
+    albums.push({
+      ...album,
+      slug,
+      title,
+      description,
+      cover: {
+        ...album.cover,
+        src: coverSrc
+      },
+      items
+    });
   }
 
   return albums;
@@ -423,7 +452,11 @@ export function renderPhotographyAlbum(album) {
     <section
       class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/84 px-4 py-6 md:px-8"
       hidden
+      role="dialog"
+      aria-modal="true"
       aria-hidden="true"
+      aria-labelledby="gallery-lightbox-title"
+      aria-describedby="gallery-lightbox-status gallery-lightbox-caption"
       data-gallery-lightbox
     >
       <button
@@ -433,8 +466,13 @@ export function renderPhotographyAlbum(album) {
         data-gallery-lightbox-backdrop
       ></button>
       <div class="relative z-10 flex max-h-full w-full max-w-[min(96vw,88rem)] flex-col gap-4">
+        <h2 class="sr-only" id="gallery-lightbox-title">Image viewer</h2>
         <div class="flex items-center justify-between gap-4 text-white">
-          <p class="font-label text-[0.72rem] uppercase tracking-[0.24em] text-white/72" data-gallery-lightbox-status></p>
+          <p
+            class="font-label text-[0.72rem] uppercase tracking-[0.24em] text-white/72"
+            id="gallery-lightbox-status"
+            data-gallery-lightbox-status
+          ></p>
           <div class="flex items-center gap-2">
             <button
               class="inline-flex items-center gap-2 border border-white/18 bg-white/8 px-3 py-2 font-body text-[0.72rem] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-white/14"
@@ -466,12 +504,15 @@ export function renderPhotographyAlbum(album) {
           <img
             class="max-h-[78vh] w-auto max-w-full rounded-[2px] bg-white object-contain shadow-[0_24px_80px_rgba(0,0,0,0.34)]"
             alt=""
-            src=""
             decoding="async"
             data-gallery-lightbox-image
           >
         </div>
-        <p class="max-w-4xl font-body text-sm leading-7 text-white/84" data-gallery-lightbox-caption></p>
+        <p
+          class="max-w-4xl font-body text-sm leading-7 text-white/84"
+          id="gallery-lightbox-caption"
+          data-gallery-lightbox-caption
+        ></p>
       </div>
     </section>
   `;
@@ -482,8 +523,11 @@ export async function getGeneratedPages() {
 
   return albums.map((album) => ({
     metadata: {
-      title: album.title,
-      description: album.description,
+      title: typeof album.title === "string" && album.title.trim() ? album.title : "Photography Album",
+      description:
+        typeof album.description === "string" && album.description.trim()
+          ? album.description
+          : "Photography collection by Yuxing Zhou.",
       path: albumRoute(album),
       section: "photography",
       bodyClass: "page-photography-album",
@@ -494,7 +538,7 @@ export async function getGeneratedPages() {
 }
 
 export async function renderContentSource(source) {
-  if (source === "photography-index") {
+  if (source === CONTENT_RENDERERS.PHOTOGRAPHY_INDEX) {
     return renderPhotographyIndex();
   }
 

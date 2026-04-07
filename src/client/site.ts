@@ -123,6 +123,7 @@ function setupPhotographyLightbox() {
   const closeButtons = lightboxRoot.querySelectorAll("[data-gallery-lightbox-close], [data-gallery-lightbox-backdrop]");
   const prevButton = lightboxRoot.querySelector("[data-gallery-lightbox-prev]");
   const nextButton = lightboxRoot.querySelector("[data-gallery-lightbox-next]");
+  const closeButton = lightboxRoot.querySelector("[data-gallery-lightbox-close]");
 
   if (
     !(image instanceof HTMLImageElement) ||
@@ -138,6 +139,14 @@ function setupPhotographyLightbox() {
   const lightboxStatus = status;
   const triggerButtons = triggers.filter((trigger): trigger is HTMLButtonElement => trigger instanceof HTMLButtonElement);
   let activeIndex = -1;
+
+  function focusableLightboxElements() {
+    return Array.from(
+      lightbox.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((element) => !element.hidden && !element.hasAttribute("disabled"));
+  }
 
   function setActiveImage(index: number) {
     const trigger = triggerButtons[index];
@@ -160,6 +169,14 @@ function setupPhotographyLightbox() {
     lightbox.classList.add("flex");
     lightbox.setAttribute("aria-hidden", "false");
     document.body.classList.add("overflow-hidden");
+    window.requestAnimationFrame(() => {
+      if (closeButton instanceof HTMLButtonElement) {
+        closeButton.focus();
+        return;
+      }
+
+      focusableLightboxElements()[0]?.focus();
+    });
   }
 
   function closeLightbox() {
@@ -229,6 +246,25 @@ function setupPhotographyLightbox() {
     if (event.key === "ArrowLeft") {
       event.preventDefault();
       moveLightbox(-1);
+    }
+
+    if (event.key === "Tab") {
+      const focusableElements = focusableLightboxElements();
+
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
+      const direction = event.shiftKey ? -1 : 1;
+      const nextIndex =
+        currentIndex === -1
+          ? (event.shiftKey ? focusableElements.length - 1 : 0)
+          : (currentIndex + direction + focusableElements.length) % focusableElements.length;
+
+      event.preventDefault();
+      focusableElements[nextIndex]?.focus();
     }
   });
 }

@@ -1,5 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
+import { CONTENT_RENDERERS } from "./lib/content-renderers.mjs";
 import { fileExists, listFiles, readJson } from "./lib/fs-utils.mjs";
 
 const ROOT = process.cwd();
@@ -10,6 +11,7 @@ const REQUIRED_METADATA_KEYS = ["title", "description", "path", "section", "ogIm
 const OPTIONAL_METADATA_KEYS = ["canonicalUrl", "noIndex", "contentRenderer"];
 const ALLOWED_METADATA_KEYS = new Set([...REQUIRED_METADATA_KEYS, ...OPTIONAL_METADATA_KEYS]);
 const ALLOWED_SECTIONS = new Set(["home", "projects", "writing", "photography", "ai-media", "about"]);
+const ALLOWED_CONTENT_RENDERERS = new Set(Object.values(CONTENT_RENDERERS));
 const FORBIDDEN_PAGE_PATTERNS = [
   { pattern: /<html\b/i, message: "Authored pages must not include <html>." },
   { pattern: /<body\b/i, message: "Authored pages must not include <body>." },
@@ -106,8 +108,14 @@ function validateMetadataShape(metadata, metadataPath, errors) {
     errors.push(`${path.relative(ROOT, metadataPath)}: "noIndex" must be a boolean when present.`);
   }
 
-  if ("contentRenderer" in metadata && typeof metadata.contentRenderer !== "string") {
-    errors.push(`${path.relative(ROOT, metadataPath)}: "contentRenderer" must be a string when present.`);
+  if ("contentRenderer" in metadata) {
+    if (typeof metadata.contentRenderer !== "string" || metadata.contentRenderer.trim() === "") {
+      errors.push(`${path.relative(ROOT, metadataPath)}: "contentRenderer" must be a non-empty string when present.`);
+    } else if (!ALLOWED_CONTENT_RENDERERS.has(metadata.contentRenderer)) {
+      errors.push(
+        `${path.relative(ROOT, metadataPath)}: "contentRenderer" must be one of ${Array.from(ALLOWED_CONTENT_RENDERERS).join(", ")}.`
+      );
+    }
   }
 }
 

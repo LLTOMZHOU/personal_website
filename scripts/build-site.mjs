@@ -77,6 +77,16 @@ function outputPathForRoute(route) {
   return resolveInsideDist(cleanRoute, "index.html");
 }
 
+function registerEmittedRoute(route, sourceLabel, emittedRoutes) {
+  const existingSource = emittedRoutes.get(route);
+
+  if (existingSource) {
+    throw new Error(`Duplicate emitted route "${route}" from ${sourceLabel}; already emitted by ${existingSource}`);
+  }
+
+  emittedRoutes.set(route, sourceLabel);
+}
+
 function entryFilesFromManifest(manifest, entryName) {
   const entry = Object.values(manifest).find(
     (item) =>
@@ -107,6 +117,7 @@ async function assemblePages(manifest) {
   const siteEntry = entryFilesFromManifest(manifest, "site");
   const assistantEntry = entryFilesFromManifest(manifest, "assistant");
   const generatedPages = await getGeneratedPages();
+  const emittedRoutes = new Map();
 
   for (const pagePath of pageFiles) {
     const metadataPath = pagePath.replace(/\.html$/, ".meta.json");
@@ -121,6 +132,7 @@ async function assemblePages(manifest) {
       : rawBodyHtml;
 
     const route = normalizeRoute(metadata.path ?? routeFromPage(pagePath));
+    registerEmittedRoute(route, path.relative(ROOT, pagePath), emittedRoutes);
     const bundleEntries = metadata.bundles ?? [];
     const pageScripts = [...siteEntry.scripts];
     const pageCss = [...siteEntry.css];
@@ -145,6 +157,7 @@ async function assemblePages(manifest) {
 
   for (const generatedPage of generatedPages) {
     const route = normalizeRoute(generatedPage.metadata.path);
+    registerEmittedRoute(route, `generated:${generatedPage.metadata.path}`, emittedRoutes);
     const pageScripts = [...siteEntry.scripts];
     const pageCss = [...siteEntry.css];
     const bundleEntries = generatedPage.metadata.bundles ?? [];
