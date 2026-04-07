@@ -61,16 +61,27 @@ function renderLightboxImage(image, index, loading = "lazy") {
   `;
 }
 
+function previewImage(image) {
+  if (!image?.thumb) {
+    return image;
+  }
+
+  return {
+    ...image,
+    src: image.thumb
+  };
+}
+
 function inferLabel(album) {
   const title = album.title ?? "";
   const match = title.match(/\b(19|20)\d{2}\b/);
   return match ? match[0] : "Archive";
 }
 
-function renderAlbumFigure(image, className) {
+function renderAlbumFigure(image, className, loading = "lazy") {
   return `
     <figure class="group overflow-hidden rounded-[2px]">
-      ${renderImage(image, className)}
+      ${renderImage(image, className, loading)}
     </figure>
   `;
 }
@@ -199,20 +210,20 @@ function renderJustifiedGallery(images) {
 }
 
 function renderAlbumSequence(album, index) {
-  const items = album.items ?? [];
+  const previewImages = [album.cover, ...(album.items ?? []).filter(Boolean)].slice(0, 4).map(previewImage);
   const patternIndex = index % 3;
   const coverLoading = index === 0 ? "eager" : "lazy";
 
   if (patternIndex === 0) {
     return `
-      <section class="grid grid-cols-1 gap-8 md:grid-cols-12">
+      <section class="grid grid-cols-1 gap-6 md:grid-cols-12">
         <figure class="group relative overflow-hidden rounded-[2px] md:col-span-7">
           ${renderAlbumLink(
             album,
-            renderImage(album.cover, "h-[32rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]", coverLoading),
+            renderImage(previewImages[0], "h-[23rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] md:h-[25rem]", coverLoading),
             "block"
           )}
-          <figcaption class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/75 via-black/20 to-transparent p-8">
+          <figcaption class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/75 via-black/20 to-transparent p-6">
             <div>
               <p class="mb-2 font-label text-[0.7rem] uppercase tracking-[0.24em] text-white/70">
                 ${escapeHtml(inferLabel(album))}
@@ -222,8 +233,10 @@ function renderAlbumSequence(album, index) {
             <p class="font-body text-sm text-white/70">${albumFrameCount(album)} frames</p>
           </figcaption>
         </figure>
-        <div class="grid gap-8 md:col-span-5">
-          ${items[0] ? renderAlbumFigure(items[0], "h-[15rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]") : ""}
+        <div class="grid gap-6 md:col-span-5">
+          ${previewImages[1]
+            ? renderAlbumFigure(previewImages[1], "h-[11rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[13rem]")
+            : ""}
           <div class="px-1 py-2">
             <p class="text-sm leading-7 text-on-surface-variant">${escapeHtml(album.description ?? "")}</p>
             <p class="mt-5">
@@ -235,23 +248,18 @@ function renderAlbumSequence(album, index) {
             </p>
           </div>
         </div>
-        ${items.slice(1, 4).map((item) => `
+        ${previewImages.slice(2, 4).map((item) => `
           <figure class="group overflow-hidden rounded-[2px] md:col-span-4">
-            ${renderImage(item, "h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]")}
+            ${renderImage(item, "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]")}
           </figure>
         `).join("")}
-        ${items[4] ? `
-          <figure class="group overflow-hidden rounded-[2px] md:col-span-5">
-            ${renderImage(items[4], "h-[36rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]")}
-          </figure>
-        ` : ""}
       </section>
     `;
   }
 
   if (patternIndex === 1) {
     return `
-      <section class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <section class="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div class="lg:col-span-4">
           <p class="mb-4 font-label text-[0.72rem] uppercase tracking-[0.22em] text-on-surface-variant">
             ${escapeHtml(inferLabel(album))}
@@ -268,11 +276,16 @@ function renderAlbumSequence(album, index) {
             )}
           </p>
         </div>
-        <div class="grid gap-8 lg:col-span-8 lg:grid-cols-2">
-          ${[album.cover, ...items.slice(0, 3)].filter(Boolean).map((item, itemIndex) =>
+        <div class="grid gap-6 lg:col-span-8 lg:grid-cols-2">
+          ${previewImages.map((item, itemIndex) =>
             renderAlbumLink(
               album,
-              renderAlbumFigure(item, itemIndex === 0 ? "h-[24rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" : "h-[20rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"),
+              renderAlbumFigure(
+                item,
+                itemIndex === 0
+                  ? "h-[19rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[21rem]"
+                  : "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]"
+              ),
               "block"
             )
           ).join("")}
@@ -282,7 +295,7 @@ function renderAlbumSequence(album, index) {
   }
 
   return `
-    <section class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+    <section class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
       <div class="px-1 py-2">
         <p class="mb-4 font-label text-[0.72rem] uppercase tracking-[0.22em] text-primary">
           ${escapeHtml(inferLabel(album))}
@@ -296,18 +309,18 @@ function renderAlbumSequence(album, index) {
             album,
             "Open album",
             "border-b border-primary pb-1 font-body text-[0.72rem] font-bold uppercase tracking-[0.2em] text-primary"
-          )}
+            )}
         </p>
       </div>
-      <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-        ${[album.cover, ...items.slice(0, 3)].filter(Boolean).map((item, itemIndex) =>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        ${previewImages.map((item, itemIndex) =>
           renderAlbumLink(
             album,
             renderAlbumFigure(
               item,
               itemIndex === 0
-                ? "h-[28rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                : "h-[20rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                ? "h-[19rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[21rem]"
+                : "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]"
             ),
             "block"
           )
@@ -375,8 +388,8 @@ export async function renderPhotographyIndex() {
         </h1>
       </div>
       <p class="max-w-xl text-base leading-8 text-on-surface-variant">
-        The photography section is rendered from collection JSON. Each album keeps its own
-        sequence, cover, and metadata, while the page assembles them into a varied editorial flow.
+        A growing archive of city studies, interiors, coastlines, and architectural fragments,
+        organized as distinct albums rather than one flattened stream.
       </p>
     </section>
   `;
@@ -396,19 +409,15 @@ export async function renderPhotographyIndex() {
 
   return `
     ${intro}
-    <section class="mb-12 flex items-center justify-between gap-6">
+    <section class="mb-12">
       <div>
         <p class="font-label text-[0.72rem] uppercase tracking-[0.22em] text-on-surface-variant">
           Collections
         </p>
         <h2 class="mt-3 font-headline text-3xl font-bold">${albums.length} album${albums.length === 1 ? "" : "s"}</h2>
       </div>
-      <p class="max-w-lg text-sm leading-7 text-on-surface-variant">
-        Source of truth lives in <span class="font-medium text-text-main">content/photography/*.json</span>.
-        The page layout stays consistent in tone but intentionally varies album composition.
-      </p>
     </section>
-    <div class="space-y-24">
+    <div class="space-y-16 md:space-y-20">
       ${sections.join("\n")}
     </div>
   `;

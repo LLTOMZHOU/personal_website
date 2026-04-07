@@ -1,0 +1,84 @@
+{
+  "slug": "los-angeles",
+  "title": "Los Angeles",
+  "description": "A Los Angeles sequence moving between downtown towers, sculptural facades, terraced podiums, and a Pacific sunset.",
+  "cover": {
+    "src": "https://media.yuxingzhou.me/photography/los-angeles/cover.jpg",
+    "thumb": "https://media.yuxingzhou.me/photography/los-angeles/cover@thumb.jpg",
+    "width": 6000,
+    "height": 4000,
+    "alt": "Orange sunset over the Pacific with dark rocks, breaking surf, and stacked stone cairns."
+  },
+  "items": [
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/001.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/001@thumb.jpg",
+      "width": 4969,
+      "height": 3604,
+      "alt": "Angular rooftop observation structure catching late sun above palms."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/002.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/002@thumb.jpg",
+      "width": 6000,
+      "height": 4000,
+      "alt": "Pink concrete facade with a glowing lantern-like window at dusk."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/003.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/003@thumb.jpg",
+      "width": 5721,
+      "height": 3573,
+      "alt": "Blurred pastel sunset over a calm shoreline and dark trees."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/004.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/004@thumb.jpg",
+      "width": 6000,
+      "height": 4000,
+      "alt": "Glass residential tower lit by golden-hour sun at a downtown intersection."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/005.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/005@thumb.jpg",
+      "width": 1682,
+      "height": 2492,
+      "alt": "Black-and-white view of the Walt Disney Concert Hall facade across an empty street."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/006.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/006@thumb.jpg",
+      "width": 2425,
+      "height": 1518,
+      "alt": "Black-and-white view of sharp concrete volumes and bright rooflines."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/007.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/007@thumb.jpg",
+      "width": 2560,
+      "height": 1703,
+      "alt": "Terraced beige podium with trees, glass canopies, and a blue leasing banner."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/008.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/008@thumb.jpg",
+      "width": 2560,
+      "height": 1707,
+      "alt": "Twilight city intersection with illuminated residential towers and traffic lights."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/009.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/009@thumb.jpg",
+      "width": 2175,
+      "height": 1321,
+      "alt": "Midday view of a tiered facade with trees, glass canopies, and leasing signage."
+    },
+    {
+      "src": "https://media.yuxingzhou.me/photography/los-angeles/010.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/010@thumb.jpg",
+      "width": 6000,
+      "height": 4000,
+      "alt": "Black-and-white concrete building geometry with bright sunlit edges against a blank sky."
+    }
+  ]
+}

@@ -4,6 +4,7 @@
   "description": "A dusk sequence through Laguna Beach: storefronts, transit, murals, corridors, and the Pacific at sunset.",
   "cover": {
     "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover.jpg",
+    "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover@thumb.jpg",
     "width": 4382,
     "height": 3549,
     "alt": "Golden sunset over the Pacific seen past utility lines and the edge of a coastal street in Laguna Beach."
@@ -11,30 +12,35 @@
   "items": [
     {
       "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001@thumb.jpg",
       "width": 4965,
       "height": 2926,
       "alt": "Motorcycles and a red Camaro paused at a Laguna Beach intersection in late-afternoon light."
     },
     {
       "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/002@thumb.jpg",
       "width": 6000,
       "height": 3425,
       "alt": "A Laguna Beach transit trolley passing storefronts under warm evening light."
     },
     {
       "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/003@thumb.jpg",
       "width": 5327,
       "height": 3635,
       "alt": "Sunlit facade and signage for The Saloon and Pepper Tree in Laguna Beach."
     },
     {
       "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/004@thumb.jpg",
       "width": 5782,
       "height": 3583,
       "alt": "An ocean-themed mural on a building wall with the Pacific visible behind parked cars."
     },
     {
       "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005.jpg",
+      "thumb": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/005@thumb.jpg",
       "width": 3724,
       "height": 5438,
       "alt": "A narrow corridor framing a view of the ocean between stucco walls and plants."
