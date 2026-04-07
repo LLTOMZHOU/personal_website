@@ -15,6 +15,23 @@ The source folders may arrive in inconsistent shapes, naming schemes, or levels 
 - verifies delivery
 - writes the resulting references into the repo
 
+This skill should describe the current operational reality of the repo, not an imaginary future pipeline.
+
+## Current Repo Reality
+
+As currently implemented:
+
+- canonical media bucket: `yuxingzhou-media`
+- canonical media domain: `https://media.yuxingzhou.me`
+- photography albums live in `content/photography/*.json`
+- the photography landing page is generated via `pages/photography.meta.json` with `contentRenderer: "photography-index"`
+- album detail pages are generated at `/photography/<slug>/` by `scripts/lib/content-renderers.mjs`
+- uploads currently happen through a locally authenticated `wrangler` CLI flow
+- `wrangler` is not installed as a repo dependency and there is no committed `pnpm` upload script yet
+- the proven upload path currently uses original JPGs, not a standardized derivative pipeline
+
+Be explicit about those facts when operating this skill.
+
 ## When To Use It
 
 Use this skill for:
@@ -78,6 +95,13 @@ Depending on the media type, that means:
 - authored HTML under `pages/**/*.html`
 - related metadata sidecars if needed
 
+For a normal photography album ingest in the current repo, the expected output is:
+
+- uploaded assets under `https://media.yuxingzhou.me/photography/<slug>/`
+- one JSON file at `content/photography/<slug>.json`
+- a generated landing-page card on `/photography/`
+- a generated album page at `/photography/<slug>/`
+
 ## Operating Flow
 
 ### 1. Inspect First
@@ -132,12 +156,14 @@ Normalize the ingest plan, not necessarily the original source folder.
 
 Prefer deterministic object keys such as:
 
-- `photography/<slug>/cover.avif`
-- `photography/<slug>/001.avif`
-- `photography/<slug>/001@thumb.avif`
-- `projects/<slug>/cover.avif`
-- `writing/<slug>/figure-01.webp`
-- `site/shared/<name>.avif`
+- `photography/<slug>/cover.jpg`
+- `photography/<slug>/001.jpg`
+- `photography/<slug>/002.jpg`
+- `projects/<slug>/cover.jpg`
+- `writing/<slug>/figure-01.jpg`
+- `site/shared/<name>.jpg`
+
+Optimized formats are allowed, but do not claim they are the current standard if the real ingest is uploading JPGs.
 
 Rules:
 
@@ -167,16 +193,41 @@ Derivative generation is allowed, but it is not the defining step of the workflo
 
 When preparing assets:
 
-- prefer modern delivery formats such as `AVIF` or `WebP`
+- consider modern delivery formats such as `AVIF` or `WebP` when the workflow has a real derivative step
 - keep originals locally if that is operationally useful
 - create thumbnails or smaller derivatives when the target surface needs them
 - preserve enough metadata to emit width, height, and alt text later
 
 Do not block the workflow on perfect optimization if the main need is to get a clean, canonical media path into the site.
 
+Current repo note:
+
+- the working ingest path currently uploads original JPGs and records `width`, `height`, and `alt` in JSON
+- derivative generation is still optional and not yet codified into the repo workflow
+- unless the user explicitly wants optimization work, treat original JPG upload as the current default path
+
 ### 7. Upload To Canonical Storage
 
 Upload to Cloudflare R2 using deterministic keys.
+
+Current canonical target:
+
+- bucket: `yuxingzhou-media`
+- public domain: `https://media.yuxingzhou.me`
+
+Current working operational path:
+
+- authenticate `wrangler` locally on the machine being used
+- use Wrangler to upload objects to R2
+- do not assume there is a repo-local `wrangler` package or checked-in upload script
+
+If the machine still has an `npx`/Node mismatch, use the already-working local Wrangler path rather than installing random new tooling mid-ingest.
+
+Real key examples:
+
+- `photography/laguna-beach-july-2023/cover.jpg`
+- `photography/laguna-beach-july-2023/001.jpg`
+- `photography/laguna-beach-july-2023/002.jpg`
 
 Avoid:
 
@@ -212,6 +263,13 @@ For editorial media:
 
 Do not store local absolute filesystem paths in repo content.
 
+Current photography rule:
+
+- the album source of truth is JSON
+- the landing page is renderer-driven
+- the album page is generated from shared build logic
+- do not hand-author a normal album page under `pages/photography/`
+
 ### 10. Validate The Site
 
 After content updates:
@@ -219,6 +277,11 @@ After content updates:
 - run the site build with `SITE_URL` set
 - confirm the affected page renders correctly
 - check for broken references introduced by the ingestion
+
+For photography albums, verify at least:
+
+- `/photography/`
+- `/photography/<slug>/`
 
 ## JSON Guidance
 
@@ -230,15 +293,14 @@ For photography or AI-media collections, prefer a shape like:
   "title": "Laguna Beach, July 2023",
   "description": "Coastal studies and late-afternoon light in Laguna Beach.",
   "cover": {
-    "src": "https://media.example.com/photography/laguna-beach-july-2023/cover.avif",
+    "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/cover.jpg",
     "width": 1600,
     "height": 1067,
     "alt": "Waves breaking against dark rocks near sunset."
   },
   "items": [
     {
-      "src": "https://media.example.com/photography/laguna-beach-july-2023/001.avif",
-      "thumb": "https://media.example.com/photography/laguna-beach-july-2023/001@thumb.avif",
+      "src": "https://media.yuxingzhou.me/photography/laguna-beach-july-2023/001.jpg",
       "width": 2400,
       "height": 1600,
       "alt": "Foam patterns moving across wet sand."
@@ -251,6 +313,15 @@ The exact schema can evolve, but the core rule is stable:
 
 - repo content stores canonical delivery references and useful metadata
 
+For current photography albums, each image object should include at least:
+
+- `src`
+- `width`
+- `height`
+- `alt`
+
+Do not invent `thumb` fields unless a real thumbnail object exists.
+
 ## Decision Heuristics
 
 Prefer these defaults unless the user says otherwise:
@@ -260,6 +331,7 @@ Prefer these defaults unless the user says otherwise:
 - the strongest horizontal or most representative frame is a reasonable cover candidate
 - `photography` and `ai-media` should remain JSON-backed
 - editorial page images should stay embedded in authored HTML
+- new photography albums should be rendered through the shared renderer and generated routes, not custom page markup
 
 Escalate when:
 
@@ -287,6 +359,13 @@ When reporting completion, include:
 - which repo files were updated
 - any assumptions made
 - any unresolved metadata that still needs human review
+
+Also include:
+
+- the exact R2 key prefix used
+- whether the upload used original JPGs or generated derivatives
+- the JSON file created or updated
+- whether `/photography/` and `/photography/<slug>/` were verified
 
 ## Relationship To Repo Docs
 
