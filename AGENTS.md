@@ -197,3 +197,10 @@ When addressing PR review comments:
 - reply `good point, done` when the review caught something genuinely useful
 - when replying `good point, done`, resolve the thread if the fix is complete and the thread is actionable
 - if the right action is ambiguous or needs product judgment, leave the thread for the user instead of guessing
+
+## PR Creation
+
+When creating a pull request for this repo:
+
+- create a ready-for-review PR, not a draft PR
+- after creating the PR, add a top-level comment with exactly `@codex review`
