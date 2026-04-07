@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+
+SITE_URL="${SITE_URL:-http://127.0.0.1:4173}" pnpm build

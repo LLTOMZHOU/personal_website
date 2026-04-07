@@ -3,5 +3,7 @@
   "description": "Writing and essays by Yuxing Zhou.",
   "path": "/writing/",
   "section": "writing",
+  "ogImage": "",
+  "bundles": [],
   "bodyClass": "page-writing"
 }
