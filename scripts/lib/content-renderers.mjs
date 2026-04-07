@@ -61,6 +61,17 @@ function renderLightboxImage(image, index, loading = "lazy") {
   `;
 }
 
+function previewImage(image) {
+  if (!image?.thumb) {
+    return image;
+  }
+
+  return {
+    ...image,
+    src: image.thumb
+  };
+}
+
 function inferLabel(album) {
   const title = album.title ?? "";
   const match = title.match(/\b(19|20)\d{2}\b/);
@@ -171,7 +182,7 @@ function renderJustifiedGallery(images) {
         const aspect = normalizedAspect(image);
         const currentIndex = imageIndex;
         imageIndex += 1;
-        const loading = "eager";
+        const loading = currentIndex === 0 ? "eager" : "lazy";
         const style = singleImage
           ? ` style="max-width: min(100%, ${Math.max(24, Math.min(44, aspect * 18)).toFixed(2)}rem);"`
           : ` style="flex: ${aspect.toFixed(5)} ${aspect.toFixed(5)} 0%;"`;
@@ -199,9 +210,9 @@ function renderJustifiedGallery(images) {
 }
 
 function renderAlbumSequence(album, index) {
-  const previewImages = [album.cover, ...(album.items ?? []).filter(Boolean)].slice(0, 4);
+  const previewImages = [album.cover, ...(album.items ?? []).filter(Boolean)].slice(0, 4).map(previewImage);
   const patternIndex = index % 3;
-  const previewLoading = "eager";
+  const coverLoading = index === 0 ? "eager" : "lazy";
 
   if (patternIndex === 0) {
     return `
@@ -209,7 +220,7 @@ function renderAlbumSequence(album, index) {
         <figure class="group relative overflow-hidden rounded-[2px] md:col-span-7">
           ${renderAlbumLink(
             album,
-            renderImage(previewImages[0], "h-[23rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] md:h-[25rem]", previewLoading),
+            renderImage(previewImages[0], "h-[23rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] md:h-[25rem]", coverLoading),
             "block"
           )}
           <figcaption class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/75 via-black/20 to-transparent p-6">
@@ -224,7 +235,7 @@ function renderAlbumSequence(album, index) {
         </figure>
         <div class="grid gap-6 md:col-span-5">
           ${previewImages[1]
-            ? renderAlbumFigure(previewImages[1], "h-[11rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[13rem]", previewLoading)
+            ? renderAlbumFigure(previewImages[1], "h-[11rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[13rem]")
             : ""}
           <div class="px-1 py-2">
             <p class="text-sm leading-7 text-on-surface-variant">${escapeHtml(album.description ?? "")}</p>
@@ -239,7 +250,7 @@ function renderAlbumSequence(album, index) {
         </div>
         ${previewImages.slice(2, 4).map((item) => `
           <figure class="group overflow-hidden rounded-[2px] md:col-span-4">
-            ${renderImage(item, "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]", previewLoading)}
+            ${renderImage(item, "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]")}
           </figure>
         `).join("")}
       </section>
@@ -273,8 +284,7 @@ function renderAlbumSequence(album, index) {
                 item,
                 itemIndex === 0
                   ? "h-[19rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[21rem]"
-                  : "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]",
-                previewLoading
+                  : "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]"
               ),
               "block"
             )
@@ -310,8 +320,7 @@ function renderAlbumSequence(album, index) {
               item,
               itemIndex === 0
                 ? "h-[19rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[21rem]"
-                : "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]",
-              previewLoading
+                : "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]"
             ),
             "block"
           )
