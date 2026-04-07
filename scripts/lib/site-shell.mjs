@@ -132,7 +132,7 @@ function renderAssistantShell(assistantSrc) {
         <p class="mb-4 font-body text-[0.7rem] font-bold uppercase tracking-[0.2em] text-primary">Assistant</p>
         <div id="assistant-root">
           <p class="font-body text-sm leading-7 text-text-muted">
-            Ask about projects, writing, photography, or where to navigate next.
+            Ask about projects, writing, agent memory, harness engineering, knowledge graphs, or where to navigate next.
           </p>
         </div>
       </div>
