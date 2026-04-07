@@ -217,3 +217,15 @@ When creating a pull request for this repo:
 
 - create a ready-for-review PR, not a draft PR
 - after creating the PR, add a top-level comment with exactly `@codex review`
+
+## Git Workflow
+
+Before any `git push` from a feature branch:
+
+1. fetch the latest remote state
+2. update local `main`
+3. merge the latest `origin/main` into the working branch
+4. rerun the relevant checks
+5. push only after the branch includes the latest `main`
+
+Do not push stale feature branches when `main` has moved and has not been merged in yet.
