@@ -548,7 +548,7 @@ export function renderPhotographyAlbum(album) {
         </div>
         <div class="relative flex min-h-0 flex-1 items-center justify-center overflow-auto">
           <img
-            class="max-h-[84vh] w-auto max-w-full rounded-[2px] bg-white object-contain shadow-[0_24px_80px_rgba(0,0,0,0.34)]"
+            class="max-h-[84vh] w-auto max-w-full rounded-[6px] bg-black/20 object-contain shadow-[0_24px_80px_rgba(0,0,0,0.34)] transition-opacity duration-150"
             alt=""
             decoding="async"
             data-gallery-lightbox-image

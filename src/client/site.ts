@@ -139,7 +139,8 @@ function setupPhotographyLightbox() {
   const lightboxStatus = status;
   const triggerButtons = triggers.filter((trigger): trigger is HTMLButtonElement => trigger instanceof HTMLButtonElement);
   let activeIndex = -1;
-  const prefetchedSources = new Set<string>();
+  let activeRequestId = 0;
+  const imageLoadPromises = new Map<string, Promise<void>>();
 
   const scheduleIdleWork =
     "requestIdleCallback" in window
@@ -147,15 +148,63 @@ function setupPhotographyLightbox() {
       : (callback: IdleRequestCallback) =>
           window.setTimeout(() => callback({ didTimeout: false, timeRemaining: () => 0 } as IdleDeadline), 250);
 
-  function prefetchImageSource(source: string | null | undefined) {
-    if (!source || prefetchedSources.has(source)) {
-      return;
+  function loadImageSource(source: string | null | undefined) {
+    if (!source) {
+      return Promise.resolve();
     }
 
-    prefetchedSources.add(source);
-    const preload = new Image();
-    preload.decoding = "async";
-    preload.src = source;
+    const existingPromise = imageLoadPromises.get(source);
+
+    if (existingPromise) {
+      return existingPromise;
+    }
+
+    const loadPromise = new Promise<void>((resolve, reject) => {
+      const preload = new Image();
+      preload.decoding = "async";
+
+      const finalize = async () => {
+        try {
+          if (typeof preload.decode === "function") {
+            await preload.decode();
+          }
+        } catch {
+          // Ignore decode races for already-loaded images.
+        }
+
+        resolve();
+      };
+
+      preload.addEventListener(
+        "load",
+        () => {
+          void finalize();
+        },
+        { once: true }
+      );
+      preload.addEventListener(
+        "error",
+        () => {
+          imageLoadPromises.delete(source);
+          reject(new Error(`Failed to load gallery image: ${source}`));
+        },
+        { once: true }
+      );
+      preload.src = source;
+
+      if (preload.complete && preload.naturalWidth > 0) {
+        void finalize();
+      }
+    });
+
+    imageLoadPromises.set(source, loadPromise);
+    return loadPromise;
+  }
+
+  function prefetchImageSource(source: string | null | undefined) {
+    void loadImageSource(source).catch(() => {
+      // Ignore background prefetch failures; the lightbox will retry on demand.
+    });
   }
 
   function triggerSource(index: number) {
@@ -181,25 +230,59 @@ function setupPhotographyLightbox() {
     ).filter((element) => !element.hidden && !element.hasAttribute("disabled"));
   }
 
-  function setActiveImage(index: number) {
+  async function setActiveImage(index: number, options: { preferPreview?: boolean } = {}) {
     const trigger = triggerButtons[index];
 
     if (!trigger) {
       return;
     }
 
-    lightboxImage.src = trigger.dataset.galleryImageSrc ?? "";
-    lightboxImage.alt = trigger.dataset.galleryImageAlt ?? "";
+    const fullSource = trigger.dataset.galleryImageSrc ?? "";
+    const previewSource = trigger.dataset.galleryImagePreviewSrc ?? fullSource;
+    const alt = trigger.dataset.galleryImageAlt ?? "";
+    const requestId = ++activeRequestId;
+
+    if (options.preferPreview && previewSource) {
+      lightboxImage.src = previewSource;
+    }
+
+    lightboxImage.alt = alt;
     lightboxStatus.textContent = `${index + 1} / ${triggerButtons.length}`;
 
     lightboxCaption.textContent = "";
     lightboxCaption.hidden = true;
     activeIndex = index;
     prefetchAdjacentImages(index);
+
+    if (!fullSource) {
+      lightbox.setAttribute("aria-busy", "false");
+      return;
+    }
+
+    lightbox.setAttribute("aria-busy", "true");
+
+    try {
+      await loadImageSource(fullSource);
+    } catch (error) {
+      if (requestId === activeRequestId) {
+        lightbox.setAttribute("aria-busy", "false");
+      }
+
+      console.error(error);
+      return;
+    }
+
+    if (requestId !== activeRequestId) {
+      return;
+    }
+
+    lightboxImage.src = fullSource;
+    lightboxImage.alt = alt;
+    lightbox.setAttribute("aria-busy", "false");
   }
 
   function openLightbox(index: number) {
-    setActiveImage(index);
+    void setActiveImage(index, { preferPreview: true });
     lightbox.hidden = false;
     lightbox.classList.remove("hidden");
     lightbox.classList.add("flex");
@@ -235,7 +318,7 @@ function setupPhotographyLightbox() {
     }
 
     const nextIndex = (activeIndex + direction + triggerButtons.length) % triggerButtons.length;
-    setActiveImage(nextIndex);
+    void setActiveImage(nextIndex);
   }
 
   triggerButtons.forEach((trigger, index) => {
