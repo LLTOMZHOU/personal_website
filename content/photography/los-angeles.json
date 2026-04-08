@@ -2,6 +2,7 @@
   "slug": "los-angeles",
   "title": "Los Angeles",
   "description": "A Los Angeles sequence moving between brutalist landmarks, The Grand by Frank Gehry at golden hour, the Walt Disney Concert Hall and Cathedral of Our Lady of the Angels in monochrome, a Pacific sunset, and stone cairns at dusk.",
+  "indexPattern": 1,
   "indexPreviewItems": [0, 1, 4],
   "cover": {
     "width": 6000,

@@ -155,5 +155,6 @@ describe("static site smoke tests", () => {
     assert.match(html, /photography\/los-angeles\/003@thumb\.webp/);
     assert.match(html, /photography\/los-angeles\/005@thumb\.webp/);
     assert.doesNotMatch(html, /photography\/los-angeles\/001@thumb\.webp/);
+    assert.match(html, /Los Angeles[\s\S]*lg:grid-cols-2/);
   });
 });

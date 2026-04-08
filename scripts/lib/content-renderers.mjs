@@ -265,7 +265,11 @@ function renderJustifiedGallery(images) {
 
 function renderAlbumSequence(album, index) {
   const previewImages = albumPreviewImages(album);
-  const patternIndex = index % 3;
+  const configuredPatternIndex = Number.isInteger(album.indexPattern) ? album.indexPattern : null;
+  const patternIndex =
+    configuredPatternIndex !== null && configuredPatternIndex >= 0
+      ? configuredPatternIndex % 3
+      : index % 3;
   const coverLoading = index === 0 ? "eager" : "lazy";
 
   if (patternIndex === 0) {
