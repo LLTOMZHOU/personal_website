@@ -1,7 +1,10 @@
-<article class="mb-32">
+<article
+  class="mb-32"
+  style="--color-primary:#FD7060; --color-primary-container:#FFE2DE; --convoice-accent-rgb:253 112 96; --convoice-accent-soft-rgb:255 226 222; --convoice-glow-rgb:255 192 178;"
+>
   <section class="mb-28 grid grid-cols-1 gap-12 border-b border-text-main/10 pb-14 lg:grid-cols-12">
     <div class="flex flex-col justify-end lg:col-span-7">
-      <p class="mb-4 font-body text-[0.68rem] font-bold uppercase tracking-[0.24em] text-[#FD7060]">
+      <p class="mb-4 font-body text-[0.68rem] font-bold uppercase tracking-[0.24em] text-primary">
         Case Study No. 002
       </p>
       <h1 class="max-w-4xl font-headline text-[3.5rem] font-bold leading-[0.98] tracking-tight text-text-main lg:text-[4.5rem]">
@@ -17,8 +20,8 @@
 
     <div class="lg:col-span-5">
       <div class="overflow-hidden border border-text-main/10 bg-surface-container-low shadow-[0_40px_40px_-15px_rgba(28,27,27,0.04)]">
-        <div class="relative aspect-[4/5] overflow-hidden text-white bg-[radial-gradient(circle_at_16%_18%,rgba(255,192,178,0.28),transparent_24%),radial-gradient(circle_at_88%_22%,rgba(255,255,255,0.12),transparent_18%),linear-gradient(150deg,#221017_0%,#47202b_38%,#b74c56_68%,#fd7060_84%,#ffe2de_100%)]">
-          <div class="pointer-events-none absolute -left-[8%] top-[58%] h-48 w-48 rounded-full bg-[rgba(253,112,96,0.32)] blur-[28px]"></div>
+        <div class="relative aspect-[4/5] overflow-hidden text-white bg-[radial-gradient(circle_at_16%_18%,rgb(var(--convoice-glow-rgb)/0.28),transparent_24%),radial-gradient(circle_at_88%_22%,rgb(255_255_255/0.12),transparent_18%),linear-gradient(150deg,#221017_0%,#47202b_38%,#b74c56_68%,var(--color-primary)_84%,var(--color-primary-container)_100%)]">
+          <div class="pointer-events-none absolute -left-[8%] top-[58%] h-48 w-48 rounded-full bg-[rgb(var(--convoice-accent-rgb)/0.32)] blur-[28px]"></div>
           <div class="pointer-events-none absolute -right-[10%] -top-[6%] h-36 w-36 rounded-full border border-white/20"></div>
           <div class="relative z-10 flex h-full min-h-0 flex-col gap-4 p-4 sm:gap-[1.1rem] sm:p-5">
             <div class="flex flex-wrap items-center justify-between gap-2.5">
@@ -53,9 +56,9 @@
                   <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Calls</p>
                   <p class="font-headline text-[1.05rem] font-bold leading-[1.05] text-white/90">History and routing</p>
                   <div class="mt-auto grid gap-2" aria-hidden="true">
-                    <span class="block h-1.5 w-[86%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgba(255,205,197,0.24))]"></span>
-                    <span class="block h-1.5 w-[67%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgba(255,205,197,0.24))]"></span>
-                    <span class="block h-1.5 w-[48%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgba(255,205,197,0.24))]"></span>
+                    <span class="block h-1.5 w-[86%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
+                    <span class="block h-1.5 w-[67%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
+                    <span class="block h-1.5 w-[48%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
                   </div>
                 </div>
                 <div class="col-span-2 flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
@@ -64,7 +67,7 @@
                     <div class="max-w-[85%] border border-white/15 bg-white/10 px-3 py-2 text-[0.73rem] leading-[1.4] text-white/80">
                       Caller: can you move Friday&apos;s table for four to 7:30?
                     </div>
-                    <div class="max-w-[85%] self-end border border-white/15 bg-[rgba(253,112,96,0.22)] px-3 py-2 text-[0.73rem] leading-[1.4] text-white/90">
+                    <div class="max-w-[85%] self-end border border-white/15 bg-[rgb(var(--convoice-accent-rgb)/0.22)] px-3 py-2 text-[0.73rem] leading-[1.4] text-white/90">
                       Bot: updated, confirmed, and logged for follow-up.
                     </div>
                   </div>
@@ -90,9 +93,9 @@
 
   <section class="grid grid-cols-1 gap-16 lg:grid-cols-12">
     <div class="space-y-24 lg:col-span-8">
-      <section class="bg-[#fff4f2] p-12">
+      <section class="bg-primary-container/25 p-12">
         <h2 class="mb-8 flex items-center gap-4 font-headline text-3xl font-bold text-text-main">
-          <span class="text-5xl text-[#FD7060]/30">01</span>
+          <span class="text-5xl text-primary/30">01</span>
           The Problem
         </h2>
         <div class="space-y-6">
@@ -102,17 +105,17 @@
             rigid IVR trees or scripted bots that fell apart as soon as the conversation moved off
             the happy path.
           </p>
-          <ul class="space-y-4 border-l-2 border-[#FD7060]/25 pl-6 font-body text-sm leading-7 text-text-muted">
+          <ul class="space-y-4 border-l-2 border-primary/25 pl-6 font-body text-sm leading-7 text-text-muted">
             <li class="flex items-start gap-3">
-              <span class="material-symbols-outlined mt-1 text-[14px] text-[#FD7060]">arrow_forward</span>
+              <span class="material-symbols-outlined mt-1 text-[14px] text-primary">arrow_forward</span>
               <span>Customer-facing calls were expensive to staff and easy to miss.</span>
             </li>
             <li class="flex items-start gap-3">
-              <span class="material-symbols-outlined mt-1 text-[14px] text-[#FD7060]">arrow_forward</span>
+              <span class="material-symbols-outlined mt-1 text-[14px] text-primary">arrow_forward</span>
               <span>Existing IVR-style systems were brittle and poor at complex queries.</span>
             </li>
             <li class="flex items-start gap-3">
-              <span class="material-symbols-outlined mt-1 text-[14px] text-[#FD7060]">arrow_forward</span>
+              <span class="material-symbols-outlined mt-1 text-[14px] text-primary">arrow_forward</span>
               <span>Setup had to stay simple enough for non-technical operators to actually use.</span>
             </li>
           </ul>
@@ -124,7 +127,7 @@
           <h2 class="mb-4 font-headline text-3xl font-bold italic text-text-main">
             What We Built
           </h2>
-          <div class="h-1 w-12 bg-[#FD7060]"></div>
+          <div class="h-1 w-12 bg-primary"></div>
         </div>
         <div class="space-y-8 lg:w-2/3">
           <p class="font-body text-[1.05rem] leading-8 text-text-main">
@@ -133,7 +136,7 @@
           </p>
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div class="bg-surface-container p-6">
-              <p class="mb-2 font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-[#FD7060]">
+              <p class="mb-2 font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-primary">
                 Build And Launch
               </p>
               <p class="font-body text-sm leading-7 text-text-main">
@@ -142,7 +145,7 @@
               </p>
             </div>
             <div class="bg-surface-container p-6">
-              <p class="mb-2 font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-[#FD7060]">
+              <p class="mb-2 font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-primary">
                 Knowledge Ingestion
               </p>
               <p class="font-body text-sm leading-7 text-text-main">
@@ -151,7 +154,7 @@
               </p>
             </div>
             <div class="bg-surface-container p-6">
-              <p class="mb-2 font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-[#FD7060]">
+              <p class="mb-2 font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-primary">
                 Calls And Review
               </p>
               <p class="font-body text-sm leading-7 text-text-main">
@@ -160,7 +163,7 @@
               </p>
             </div>
             <div class="bg-surface-container p-6">
-              <p class="mb-2 font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-[#FD7060]">
+              <p class="mb-2 font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-primary">
                 Operations
               </p>
               <p class="font-body text-sm leading-7 text-text-main">
@@ -173,8 +176,8 @@
       </section>
 
       <section class="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <div class="border border-[#FD7060]/18 bg-[#fff4f2] p-8">
-          <p class="font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-[#FD7060]">
+        <div class="border border-primary/20 bg-primary-container/25 p-8">
+          <p class="font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-primary">
             Operating Target
           </p>
           <p class="mt-4 font-headline text-4xl font-bold text-text-main">~2s</p>
@@ -183,8 +186,8 @@
             fast when a voice system hesitates.
           </p>
         </div>
-        <div class="border border-[#FD7060]/18 bg-[#fff4f2] p-8">
-          <p class="font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-[#FD7060]">
+        <div class="border border-primary/20 bg-primary-container/25 p-8">
+          <p class="font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-primary">
             Cost Target
           </p>
           <p class="mt-4 font-headline text-4xl font-bold text-text-main">~$0.10</p>
@@ -193,8 +196,8 @@
             the neighborhood of ten cents per minute.
           </p>
         </div>
-        <div class="border border-[#FD7060]/18 bg-[#fff4f2] p-8">
-          <p class="font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-[#FD7060]">
+        <div class="border border-primary/20 bg-primary-container/25 p-8">
+          <p class="font-body text-[0.64rem] font-bold uppercase tracking-[0.22em] text-primary">
             Scale Target
           </p>
           <p class="mt-4 font-headline text-4xl font-bold text-text-main">0 to ~200</p>
@@ -232,21 +235,21 @@
 
       <section class="grid grid-cols-1 gap-8 md:grid-cols-3">
         <div class="bg-surface-container p-8">
-          <span class="material-symbols-outlined text-4xl text-[#FD7060]">call</span>
+          <span class="material-symbols-outlined text-4xl text-primary">call</span>
           <p class="mt-6 font-body text-sm leading-7 text-text-muted">
             The product claim stayed attached to phone calls, reservations, and customer support
             workflows instead of drifting into generic AI theater.
           </p>
         </div>
         <div class="bg-surface-container p-8">
-          <span class="material-symbols-outlined text-4xl text-[#FD7060]">bolt</span>
+          <span class="material-symbols-outlined text-4xl text-primary">bolt</span>
           <p class="mt-6 font-body text-sm leading-7 text-text-muted">
             Performance mattered because slow turn-taking breaks trust much faster in voice than it
             does in text.
           </p>
         </div>
         <div class="bg-surface-container p-8">
-          <span class="material-symbols-outlined text-4xl text-[#FD7060]">schema</span>
+          <span class="material-symbols-outlined text-4xl text-primary">schema</span>
           <p class="mt-6 font-body text-sm leading-7 text-text-muted">
             The interesting part was aligning product claims, infrastructure cost, and the actual
             interface people had to operate.
@@ -257,7 +260,7 @@
 
     <aside class="lg:col-span-4">
       <div class="space-y-12 lg:sticky lg:top-32">
-        <section class="border-t-4 border-[#FD7060] bg-surface-container-lowest p-8 shadow-[0_40px_40px_-15px_rgba(28,27,27,0.04)]">
+        <section class="border-t-4 border-primary bg-surface-container-lowest p-8 shadow-[0_40px_40px_-15px_rgba(28,27,27,0.04)]">
           <h3 class="mb-8 font-body text-[0.64rem] font-bold uppercase tracking-[0.24em] text-text-muted">
             Snapshot
           </h3>
@@ -303,17 +306,17 @@
           </h3>
           <ul class="space-y-3 font-body text-sm leading-7 text-text-muted">
             <li>
-              <a class="text-[#FD7060] underline decoration-text-main/20 underline-offset-4" href="https://github.com/convoice/convoice_landing_page">
+              <a class="text-primary underline decoration-text-main/20 underline-offset-4" href="https://github.com/convoice/convoice_landing_page">
                 Landing page code
               </a>
             </li>
             <li>
-              <a class="text-[#FD7060] underline decoration-text-main/20 underline-offset-4" href="https://medium.com/@baluja/convoice-serverless-llm-to-voice-c11b05a3af32">
+              <a class="text-primary underline decoration-text-main/20 underline-offset-4" href="https://medium.com/@baluja/convoice-serverless-llm-to-voice-c11b05a3af32">
                 Ashwin Baluja, architecture writeup
               </a>
             </li>
             <li>
-              <a class="text-[#FD7060] underline decoration-text-main/20 underline-offset-4" href="https://medium.com/@fanga/convoice-meet-the-team-briefly-61b03d291d76">
+              <a class="text-primary underline decoration-text-main/20 underline-offset-4" href="https://medium.com/@fanga/convoice-meet-the-team-briefly-61b03d291d76">
                 Annie Fang, team intro
               </a>
             </li>
