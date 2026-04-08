@@ -1,61 +1,61 @@
 {
   "slug": "palm-springs-nov-2023",
   "title": "Palm Springs, November 2023",
-  "description": "An interior sequence from Palm Springs, centered on museum rooms and installation details under warm modernist light.",
+  "description": "Interior studies at the Palm Springs Art Museum: wide gallery rooms, a spider sculpture under a curved skylight, a starburst chandelier, a geometric illuminated sphere, and a Kali Artographer retrospective.",
   "cover": {
-    "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/cover@full.webp",
-    "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/cover@thumb.webp",
     "width": 6000,
     "height": 3912,
-    "alt": "Wide gallery room with framed works, a central column, and a lone visitor beneath a gridded wood ceiling.",
     "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/cover.jpg",
-    "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/cover@display.webp"
+    "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/cover@full.webp",
+    "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/cover@display.webp",
+    "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/cover@thumb.webp",
+    "alt": "A symmetric gallery room at the Palm Springs Art Museum with a gridded industrial ceiling and colorful works on white walls."
   },
   "items": [
     {
-      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/001@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/001@thumb.webp",
-      "width": 4000,
-      "height": 6000,
-      "alt": "Illuminated geometric sphere sculpture glowing in a dark gallery.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/001.jpg",
-      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/001@display.webp"
-    },
-    {
-      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/002@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/002@thumb.webp",
-      "width": 5545,
-      "height": 2422,
-      "alt": "Gallery wall labeled 'Kali Artographer 1932–2019' with a portrait and a blurred visitor beyond the doorway.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/002.jpg",
-      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/002@display.webp"
-    },
-    {
-      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/003@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/003@thumb.webp",
       "width": 5748,
       "height": 3221,
-      "alt": "Large spider sculpture silhouetted against a bright curved skylight inside the museum.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/003.jpg",
-      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/003@display.webp"
+      "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/001.jpg",
+      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/001@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/001@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/001@thumb.webp",
+      "alt": "A large spider sculpture mounted on a curved white wall beneath an arched skylight grid, in black and white."
     },
     {
-      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/004@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/004@thumb.webp",
       "width": 6000,
       "height": 4000,
-      "alt": "Starburst chandelier suspended in a circular alcove with ribbed walls.",
-      "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/004.jpg",
-      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/004@display.webp"
+      "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/002.jpg",
+      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/002@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/002@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/002@thumb.webp",
+      "alt": "A starburst chandelier suspended in a warm circular alcove with ribbed walls."
     },
     {
-      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/005@full.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/005@thumb.webp",
       "width": 4000,
       "height": 6000,
-      "alt": "Scattered red rose petals on dim concrete steps.",
+      "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/003.jpg",
+      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/003@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/003@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/003@thumb.webp",
+      "alt": "A geometric illuminated sphere made of interlocking polyhedra glowing in a dark gallery."
+    },
+    {
+      "width": 5545,
+      "height": 2422,
+      "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/004.jpg",
+      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/004@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/004@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/004@thumb.webp",
+      "alt": "Wide black-and-white shot of the Kali Artographer 1932–2019 retrospective entrance wall with a gallery visitor beyond."
+    },
+    {
+      "width": 4000,
+      "height": 6000,
       "originalSrc": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/005.jpg",
-      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/005@display.webp"
+      "src": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/005@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/005@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/palm-springs-nov-2023/005@thumb.webp",
+      "alt": "A few red rose petals scattered across dark concrete steps in near darkness."
     }
   ]
 }

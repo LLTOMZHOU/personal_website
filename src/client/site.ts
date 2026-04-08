@@ -190,8 +190,10 @@ function setupPhotographyLightbox() {
 
     lightboxImage.src = trigger.dataset.galleryImageSrc ?? "";
     lightboxImage.alt = trigger.dataset.galleryImageAlt ?? "";
-    lightboxCaption.textContent = trigger.dataset.galleryImageAlt ?? "";
     lightboxStatus.textContent = `${index + 1} / ${triggerButtons.length}`;
+
+    lightboxCaption.textContent = "";
+    lightboxCaption.hidden = true;
     activeIndex = index;
     prefetchAdjacentImages(index);
   }

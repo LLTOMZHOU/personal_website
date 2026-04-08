@@ -1,0 +1,43 @@
+{
+  "slug": "chicago",
+  "title": "Chicago",
+  "description": "Architectural studies in Chicago: the Marina City towers from street level and sky, the Chicago Architecture Center, and a structural model on display.",
+  "cover": {
+    "width": 7953,
+    "height": 6666,
+    "originalSrc": "https://media.yuxingzhou.me/photography/chicago/cover.jpg",
+    "src": "https://media.yuxingzhou.me/photography/chicago/cover@full.webp",
+    "display": "https://media.yuxingzhou.me/photography/chicago/cover@display.webp",
+    "thumb": "https://media.yuxingzhou.me/photography/chicago/cover@thumb.webp",
+    "alt": "Twin Marina City towers rising into a clear blue sky, their circular balconies stacked in a honeycomb pattern."
+  },
+  "items": [
+    {
+      "width": 2135,
+      "height": 2910,
+      "originalSrc": "https://media.yuxingzhou.me/photography/chicago/001.jpg",
+      "src": "https://media.yuxingzhou.me/photography/chicago/001@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/chicago/001@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/chicago/001@thumb.webp",
+      "alt": "Marina City towers and an adjacent dark glass skyscraper against a sky of breaking storm clouds."
+    },
+    {
+      "width": 5993,
+      "height": 3995,
+      "originalSrc": "https://media.yuxingzhou.me/photography/chicago/002.jpg",
+      "src": "https://media.yuxingzhou.me/photography/chicago/002@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/chicago/002@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/chicago/002@thumb.webp",
+      "alt": "Chicago Architecture Center facade framed by a colorful street banner, curtain-wall tower reflections behind."
+    },
+    {
+      "width": 5275,
+      "height": 3936,
+      "originalSrc": "https://media.yuxingzhou.me/photography/chicago/003.jpg",
+      "src": "https://media.yuxingzhou.me/photography/chicago/003@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/chicago/003@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/chicago/003@thumb.webp",
+      "alt": "A wooden cross-beam structural model at the Chicago Architecture Center with a tower facade in the background."
+    }
+  ]
+}

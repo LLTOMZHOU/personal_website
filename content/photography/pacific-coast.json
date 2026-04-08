@@ -1,0 +1,79 @@
+{
+  "slug": "pacific-coast",
+  "title": "Pacific Coast",
+  "description": "Pacific Coast studies across multiple visits: Big Sur sea cliffs, beach sunsets, a pier at blue hour, palm trees at dusk, and Highway 1.",
+  "cover": {
+    "width": 4000,
+    "height": 6000,
+    "originalSrc": "https://media.yuxingzhou.me/photography/pacific-coast/cover.jpg",
+    "src": "https://media.yuxingzhou.me/photography/pacific-coast/cover@full.webp",
+    "display": "https://media.yuxingzhou.me/photography/pacific-coast/cover@display.webp",
+    "thumb": "https://media.yuxingzhou.me/photography/pacific-coast/cover@thumb.webp",
+    "alt": "Sunlit sea cliffs at Big Sur dropping to deep blue water with a rocky islet below."
+  },
+  "items": [
+    {
+      "width": 6000,
+      "height": 4000,
+      "originalSrc": "https://media.yuxingzhou.me/photography/pacific-coast/001.jpg",
+      "src": "https://media.yuxingzhou.me/photography/pacific-coast/001@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/pacific-coast/001@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/pacific-coast/001@thumb.webp",
+      "alt": "Stone cairns silhouetted against a vivid orange and gold Pacific sunset over a rocky beach."
+    },
+    {
+      "width": 3636,
+      "height": 2447,
+      "originalSrc": "https://media.yuxingzhou.me/photography/pacific-coast/002.jpg",
+      "src": "https://media.yuxingzhou.me/photography/pacific-coast/002@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/pacific-coast/002@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/pacific-coast/002@thumb.webp",
+      "alt": "A long pier extending over blue-grey water at dusk, pink and blue gradient sky above, palm trees at its end."
+    },
+    {
+      "width": 5210,
+      "height": 3223,
+      "originalSrc": "https://media.yuxingzhou.me/photography/pacific-coast/003.jpg",
+      "src": "https://media.yuxingzhou.me/photography/pacific-coast/003@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/pacific-coast/003@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/pacific-coast/003@thumb.webp",
+      "alt": "A wave crashing white against a rock jetty with a dark mountain headland rising along the coast."
+    },
+    {
+      "width": 3836,
+      "height": 5647,
+      "originalSrc": "https://media.yuxingzhou.me/photography/pacific-coast/004.jpg",
+      "src": "https://media.yuxingzhou.me/photography/pacific-coast/004@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/pacific-coast/004@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/pacific-coast/004@thumb.webp",
+      "alt": "Two tall fan palms against a fading blue sky at dusk, the ocean visible to the right."
+    },
+    {
+      "width": 4430,
+      "height": 3282,
+      "originalSrc": "https://media.yuxingzhou.me/photography/pacific-coast/005.jpg",
+      "src": "https://media.yuxingzhou.me/photography/pacific-coast/005@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/pacific-coast/005@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/pacific-coast/005@thumb.webp",
+      "alt": "A white pickup truck on Highway 1 with the Pacific and a coastal mountain headland behind."
+    },
+    {
+      "width": 3987,
+      "height": 1681,
+      "originalSrc": "https://media.yuxingzhou.me/photography/pacific-coast/006.jpg",
+      "src": "https://media.yuxingzhou.me/photography/pacific-coast/006@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/pacific-coast/006@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/pacific-coast/006@thumb.webp",
+      "alt": "A rose-and-violet afterglow over the ocean with island silhouettes, framed by a chain-link fence."
+    },
+    {
+      "width": 3162,
+      "height": 1240,
+      "originalSrc": "https://media.yuxingzhou.me/photography/pacific-coast/007.jpg",
+      "src": "https://media.yuxingzhou.me/photography/pacific-coast/007@full.webp",
+      "display": "https://media.yuxingzhou.me/photography/pacific-coast/007@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/pacific-coast/007@thumb.webp",
+      "alt": "A closed pier gate at blue hour, the long pier lit and stretching into a still-dark ocean beyond."
+    }
+  ]
+}
