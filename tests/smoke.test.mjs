@@ -147,4 +147,13 @@ describe("static site smoke tests", () => {
     const homepage = await readFile(path.join(DIST_DIR, "index.html"), "utf8");
     assert.doesNotMatch(homepage, /assets\/gallery-[^"]+\.js/);
   });
+
+  test("photography index can curate album preview selections independently of album order", async () => {
+    const html = await readFile(path.join(DIST_DIR, "photography", "index.html"), "utf8");
+
+    assert.match(html, /photography\/los-angeles\/002@thumb\.webp/);
+    assert.match(html, /photography\/los-angeles\/003@thumb\.webp/);
+    assert.match(html, /photography\/los-angeles\/005@thumb\.webp/);
+    assert.doesNotMatch(html, /photography\/los-angeles\/001@thumb\.webp/);
+  });
 });

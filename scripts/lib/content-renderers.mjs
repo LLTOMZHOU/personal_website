@@ -97,6 +97,20 @@ function previewImage(image) {
   };
 }
 
+function albumPreviewImages(album) {
+  const items = (album.items ?? []).filter(Boolean);
+  const configuredPreviewIndices = Array.isArray(album.indexPreviewItems)
+    ? album.indexPreviewItems.filter((value) => Number.isInteger(value) && value >= 0 && value < items.length)
+    : [];
+
+  const previewItems =
+    configuredPreviewIndices.length > 0
+      ? configuredPreviewIndices.map((index) => items[index]).filter(Boolean)
+      : items.slice(0, 3);
+
+  return [album.cover, ...previewItems].filter(Boolean).slice(0, 4).map(previewImage);
+}
+
 function inferLabel(album) {
   const title = album.title ?? "";
   const match = title.match(/\b(19|20)\d{2}\b/);
@@ -250,7 +264,7 @@ function renderJustifiedGallery(images) {
 }
 
 function renderAlbumSequence(album, index) {
-  const previewImages = [album.cover, ...(album.items ?? []).filter(Boolean)].slice(0, 4).map(previewImage);
+  const previewImages = albumPreviewImages(album);
   const patternIndex = index % 3;
   const coverLoading = index === 0 ? "eager" : "lazy";
 
