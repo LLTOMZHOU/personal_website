@@ -198,6 +198,9 @@ When making changes:
 - preserve the static-first architecture
 - preserve authored HTML as a first-class source format
 - keep global JS light
+- keep `src/styles/global.css` for truly global styling only
+- do not add page-specific or project-specific presentation skins to `src/styles/global.css`
+- for one-off page visuals, keep the styling in the authored page HTML with Tailwind utilities or isolate it in a page-scoped asset if that becomes necessary
 - avoid introducing SSR, middleware, or framework-specific server assumptions
 - avoid editing generated files
 - avoid expanding the runtime cost of pages that do not need interactivity
