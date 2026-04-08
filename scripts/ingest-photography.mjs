@@ -27,10 +27,13 @@ const execFile = promisify(execFileCallback);
 
 const ROOT = process.cwd();
 const PHOTOGRAPHY_DIR = path.resolve(ROOT, "content", "photography");
-const PHOTOS_BASE = "/Users/yuxingzhou/Local_Projects/personal_website_photos";
+// Override via env vars for portability across machines.
+const PHOTOS_BASE = process.env.PHOTOS_BASE ?? "/Users/yuxingzhou/Local_Projects/personal_website_photos";
 const MEDIA_ORIGIN = "https://media.yuxingzhou.me";
 const BUCKET = "yuxingzhou-media";
-const NODE_20_BIN = "/Users/yuxingzhou/.nvm/versions/node/v20.19.4/bin";
+// Wrangler requires Node 20+. Use NODE_20_BIN env var to point at a compatible
+// node/npx binary when the repo's local Node version is older.
+const NODE_20_BIN = process.env.NODE_20_BIN ?? "/Users/yuxingzhou/.nvm/versions/node/v20.19.4/bin";
 
 const VARIANTS = [
   { field: "src",     suffix: "@full.webp",    maxLongEdge: null, quality: 92, cacheControl: "public, max-age=31536000, immutable" },
@@ -132,7 +135,7 @@ const ALBUMS = [
     slug: "san-francisco",
     title: "San Francisco",
     description: "San Francisco: the Transamerica Pyramid from its base, a downtown street canyon with the Bay Bridge in the distance, Chinatown lanterns and street life, and the Gold Mountain Sagely Monastery sign.",
-    folder: "San Francisco ",
+    folder: "San Francisco ", // trailing space matches the actual directory name on disk
     cover: { file: "IMG_2624.jpg", alt: "Looking straight up the Transamerica Pyramid from its base, its textured concrete taper rising into broken clouds." },
     items: [
       { file: "IMG_2323.jpg", alt: "A downtown San Francisco street canyon with the Bay Bridge visible between towers at the far end." },
@@ -195,19 +198,20 @@ async function uploadToR2(objectKeyPath, filePath, contentType, cacheControl) {
   await execFile("npx", args, {
     cwd: "/tmp",
     env: { ...process.env, PATH: `${NODE_20_BIN}:${process.env.PATH}` },
-    maxBuffer: 1024 * 1024 * 16
+    maxBuffer: 1024 * 1024 * 16,
+    timeout: 120_000
   });
 }
 
-async function verifyUrl(url, maxAttempts = 8) {
+async function verifyUrl(url, expectedContentType, maxAttempts = 8) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const response = await fetch(`${url}?v=${Date.now()}-${attempt}`, { method: "HEAD" });
 
     if (response.ok) {
       const contentType = response.headers.get("content-type") ?? "";
 
-      if (!contentType.startsWith("image/")) {
-        throw new Error(`Unexpected content-type for ${url}: ${contentType}`);
+      if (!contentType.startsWith(expectedContentType)) {
+        throw new Error(`Unexpected content-type for ${url}: ${contentType} (expected ${expectedContentType})`);
       }
 
       return;
@@ -229,13 +233,10 @@ async function processImage(slug, stem, filePath, workingDir) {
   const { width, height } = await getDimensions(filePath);
   const result = { width, height, originalSrc: publicUrl(objectKey(slug, stem, ".jpg")) };
 
-  // Upload original JPEG
-  await uploadToR2(
-    objectKey(slug, stem, ".jpg"),
-    filePath,
-    "image/jpeg",
-    "public, max-age=31536000, immutable"
-  );
+  // Upload original JPEG and verify
+  const jpegKey = objectKey(slug, stem, ".jpg");
+  await uploadToR2(jpegKey, filePath, "image/jpeg", "public, max-age=31536000, immutable");
+  await verifyUrl(publicUrl(jpegKey), "image/jpeg");
 
   // Generate, upload, and verify each WebP variant
   for (const variant of VARIANTS) {
@@ -243,7 +244,7 @@ async function processImage(slug, stem, filePath, workingDir) {
     await generateWebp(filePath, outFile, variant.maxLongEdge, variant.quality);
     const key = objectKey(slug, stem, variant.suffix);
     await uploadToR2(key, outFile, "image/webp", variant.cacheControl);
-    await verifyUrl(publicUrl(key));
+    await verifyUrl(publicUrl(key), "image/webp");
     result[variant.field] = publicUrl(key);
   }
 

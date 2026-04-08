@@ -14,10 +14,10 @@ import sharp from "sharp";
 
 const execFile = promisify(execFileCallback);
 
-const PHOTOS_BASE = "/Users/yuxingzhou/Local_Projects/personal_website_photos";
+const PHOTOS_BASE = process.env.PHOTOS_BASE ?? "/Users/yuxingzhou/Local_Projects/personal_website_photos";
 const MEDIA_ORIGIN = "https://media.yuxingzhou.me";
 const BUCKET = "yuxingzhou-media";
-const NODE_20_BIN = "/Users/yuxingzhou/.nvm/versions/node/v20.19.4/bin";
+const NODE_20_BIN = process.env.NODE_20_BIN ?? "/Users/yuxingzhou/.nvm/versions/node/v20.19.4/bin";
 
 const THUMB = { maxLongEdge: 1080, quality: 85, cacheControl: "public, max-age=31536000, immutable" };
 
