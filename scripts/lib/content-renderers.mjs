@@ -130,7 +130,7 @@ function normalizedAspect(image) {
 
 function partitionJustifiedRows(images, options = {}) {
   const maxPerRow = options.maxPerRow ?? 3;
-  const minPerRow = options.minPerRow ?? 2;
+  const minPerRow = options.minPerRow ?? 1;
   const targetRowAspect = options.targetRowAspect ?? 3.4;
 
   if (images.length === 0) {
@@ -158,11 +158,26 @@ function partitionJustifiedRows(images, options = {}) {
       let penalty = Math.pow(rowAspect - targetAspect, 2);
 
       if (rowSize === 1) {
-        penalty += rowAspect < targetRowAspect ? 4 : 1.5;
+        // Portrait images (aspect < 0.85) look intentional alone — don't penalize them.
+        // Landscape singles still get penalized to encourage grouping.
+        if (rowAspect >= 0.85) {
+          penalty += rowAspect < targetRowAspect ? 4 : 1.5;
+        }
       }
 
       if (rowSize === maxPerRow && rowAspect < targetRowAspect * 0.7) {
         penalty += 1.5;
+      }
+
+      // Discourage mixing portrait images (aspect < 0.85) with landscape images
+      // (aspect > 1.1) in the same row — the portrait gets squeezed unacceptably.
+      if (rowSize > 1) {
+        const rowSlice = images.slice(start, end + 1);
+        const hasPortrait = rowSlice.some(img => normalizedAspect(img) < 0.85);
+        const hasLandscape = rowSlice.some(img => normalizedAspect(img) > 1.1);
+        if (hasPortrait && hasLandscape) {
+          penalty += 12;
+        }
       }
 
       const totalCost = penalty + costs[end + 1];
@@ -260,10 +275,10 @@ function renderAlbumSequence(album, index) {
         </figure>
         <div class="grid gap-6 md:col-span-5">
           ${previewImages[1]
-            ? renderAlbumFigure(previewImages[1], "h-[11rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[13rem]")
+            ? renderAlbumLink(album, renderAlbumFigure(previewImages[1], "h-[11rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[13rem]"), "block")
             : ""}
           <div class="px-1 py-2">
-            <p class="text-sm leading-7 text-on-surface-variant">${escapeHtml(album.description ?? "")}</p>
+            <p class="text-base leading-6 text-on-surface-variant">${escapeHtml(album.description ?? "")}</p>
             <p class="mt-5">
               ${renderAlbumLink(
                 album,
@@ -273,11 +288,15 @@ function renderAlbumSequence(album, index) {
             </p>
           </div>
         </div>
-        ${previewImages.slice(2, 4).map((item) => `
-          <figure class="group overflow-hidden rounded-[2px] md:col-span-4">
-            ${renderImage(item, "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]")}
-          </figure>
-        `).join("")}
+        ${previewImages.slice(2, 4).map((item) =>
+          renderAlbumLink(
+            album,
+            `<figure class="group overflow-hidden rounded-[2px]">
+              ${renderImage(item, "h-[14rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[16rem]")}
+            </figure>`,
+            "block md:col-span-4"
+          )
+        ).join("")}
       </section>
     `;
   }
@@ -290,7 +309,7 @@ function renderAlbumSequence(album, index) {
             ${escapeHtml(inferLabel(album))}
           </p>
           <h3 class="font-headline text-4xl font-bold">${renderAlbumLink(album, escapeHtml(album.title), "transition-opacity hover:opacity-80")}</h3>
-          <p class="mt-6 max-w-lg text-base leading-8 text-on-surface-variant">
+          <p class="mt-6 max-w-lg text-base leading-6 text-on-surface-variant">
             ${escapeHtml(album.description ?? "")}
           </p>
           <p class="mt-6">
@@ -326,7 +345,7 @@ function renderAlbumSequence(album, index) {
           ${escapeHtml(inferLabel(album))}
         </p>
         <h3 class="font-headline text-4xl font-bold">${renderAlbumLink(album, escapeHtml(album.title), "transition-opacity hover:opacity-80")}</h3>
-        <p class="mt-6 text-base leading-8 text-on-surface-variant">
+        <p class="mt-6 text-base leading-6 text-on-surface-variant">
           ${escapeHtml(album.description ?? "")}
         </p>
         <p class="mt-6">
@@ -402,20 +421,21 @@ export async function renderPhotographyIndex() {
   const rest = albums.slice(1);
 
   const intro = `
-    <section class="mb-20 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)] lg:items-end">
+    <section class="mb-12 flex items-end justify-between gap-8">
       <div>
-        <p class="mb-5 font-label text-[0.75rem] uppercase tracking-[0.24em] text-on-surface-variant">
-          Photography Archive
+        <p class="mb-4 font-label text-[0.75rem] uppercase tracking-[0.24em] text-on-surface-variant">
+          Photography
         </p>
-        <h1 class="max-w-4xl font-headline text-[3.5rem] leading-[1.02] font-bold md:text-[4.5rem]">
-          Image-led work,
-          <span class="font-normal italic">structured by albums</span>
+        <h1 class="font-headline text-[3rem] leading-[1.05] font-bold md:text-[3.75rem]">
+          Studies in light and form
         </h1>
       </div>
-      <p class="max-w-xl text-base leading-8 text-on-surface-variant">
-        A growing archive of city studies, interiors, coastlines, and architectural fragments,
-        organized as distinct albums rather than one flattened stream.
-      </p>
+      <div class="shrink-0 text-right">
+        <p class="font-label text-[0.72rem] uppercase tracking-[0.22em] text-on-surface-variant">
+          Collections
+        </p>
+        <p class="mt-2 font-headline text-xl font-bold">${albums.length} album${albums.length === 1 ? "" : "s"}</p>
+      </div>
     </section>
   `;
 
@@ -423,7 +443,7 @@ export async function renderPhotographyIndex() {
     return `${intro}
       <section class="px-1 py-2">
         <p class="font-headline text-3xl font-bold">No photography albums yet.</p>
-        <p class="mt-4 max-w-2xl text-base leading-8 text-on-surface-variant">
+        <p class="mt-4 max-w-2xl text-base leading-6 text-on-surface-variant">
           Add collection JSON under <code>content/photography/</code> and the build will render it here.
         </p>
       </section>
@@ -434,14 +454,6 @@ export async function renderPhotographyIndex() {
 
   return `
     ${intro}
-    <section class="mb-12">
-      <div>
-        <p class="font-label text-[0.72rem] uppercase tracking-[0.22em] text-on-surface-variant">
-          Collections
-        </p>
-        <h2 class="mt-3 font-headline text-3xl font-bold">${albums.length} album${albums.length === 1 ? "" : "s"}</h2>
-      </div>
-    </section>
     <div class="space-y-16 md:space-y-20">
       ${sections.join("\n")}
     </div>
@@ -453,7 +465,7 @@ export function renderPhotographyAlbum(album) {
   const galleryHtml = renderJustifiedGallery(images);
 
   return `
-    <section class="mb-16 flex items-start justify-between gap-8">
+    <section class="mb-8 flex items-start justify-between gap-8">
       <a
         class="font-body text-[0.72rem] font-bold uppercase tracking-[0.2em] text-primary transition-opacity hover:opacity-70"
         href="/photography/"
@@ -465,7 +477,7 @@ export function renderPhotographyAlbum(album) {
       </span>
     </section>
 
-    <section class="mb-20 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)] lg:items-end">
+    <section class="mb-10 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)] lg:items-end">
       <div>
         <p class="mb-5 font-label text-[0.75rem] uppercase tracking-[0.24em] text-on-surface-variant">
           ${escapeHtml(inferLabel(album))}
@@ -474,7 +486,7 @@ export function renderPhotographyAlbum(album) {
           ${escapeHtml(album.title)}
         </h1>
       </div>
-      <p class="max-w-xl text-base leading-8 text-on-surface-variant">
+      <p class="max-w-xl text-base leading-6 text-on-surface-variant">
         ${escapeHtml(album.description ?? "")}
       </p>
     </section>
@@ -484,7 +496,7 @@ export function renderPhotographyAlbum(album) {
     </section>
 
     <section
-      class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/84 px-4 py-6 md:px-8"
+      class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/84 px-4 py-3 md:px-8"
       hidden
       role="dialog"
       aria-modal="true"
@@ -536,7 +548,7 @@ export function renderPhotographyAlbum(album) {
         </div>
         <div class="relative flex min-h-0 flex-1 items-center justify-center overflow-auto">
           <img
-            class="max-h-[78vh] w-auto max-w-full rounded-[2px] bg-white object-contain shadow-[0_24px_80px_rgba(0,0,0,0.34)]"
+            class="max-h-[84vh] w-auto max-w-full rounded-[2px] bg-white object-contain shadow-[0_24px_80px_rgba(0,0,0,0.34)]"
             alt=""
             decoding="async"
             data-gallery-lightbox-image

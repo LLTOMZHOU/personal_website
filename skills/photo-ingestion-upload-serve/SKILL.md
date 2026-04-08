@@ -27,7 +27,10 @@ As currently implemented:
 - the photography landing page is generated via `pages/photography.meta.json` with `contentRenderer: "photography-index"`
 - album detail pages are generated at `/photography/<slug>/` by `scripts/lib/content-renderers.mjs`
 - uploads currently happen through a locally authenticated `wrangler` CLI flow
-- `wrangler` is not installed as a repo dependency, but the repo now includes a committed `pnpm migrate:photography:webp` migration script for derivative generation and upload
+- `wrangler` is not installed as a repo dependency; uploads use `npx wrangler` from `/tmp` with an explicit Node 20 PATH prefix to avoid the repo-local Node version conflict
+- `scripts/ingest-photography.mjs` is the primary ingestion tool — add album configs and run it for new albums or full replacements
+- `scripts/rethumb-photography.mjs` re-uploads only the `@thumb.webp` variant for all albums from local source files (use when thumb quality settings change)
+- `scripts/migrate-photography-webp.mjs` was a one-off migration script for re-deriving WebP from already-uploaded JPEGs; no longer the primary tool
 - photography JSON now supports `src`, `display`, `thumb`, and `originalSrc` fields for image assets
 - album detail pages render `display` assets inline and reserve `src` for the larger lightbox view
 - the current proven derivative pattern is WebP tiering with adjacent object keys such as `cover@full.webp`, `cover@display.webp`, and `cover@thumb.webp`
@@ -247,11 +250,12 @@ Do not block the workflow on perfect optimization if the main need is to get a c
 Current repo note:
 
 - the working photography path now generates WebP derivatives and records `width`, `height`, `alt`, `originalSrc`, `src`, `display`, and `thumb` in JSON
-- `src` should point at `@full.webp`
-- `display` should point at `@display.webp` for inline album rendering
-- `thumb` should point at `@thumb.webp` for index-like and preview surfaces
+- `src` should point at `@full.webp` — full resolution, quality 92
+- `display` should point at `@display.webp` — max long edge 1800px, quality 86, used inline on album pages
+- `thumb` should point at `@thumb.webp` — max long edge 1080px, quality 85, used on the photography index and preview surfaces
 - `originalSrc` should remain the stable source JPEG URL unless the repo deliberately changes its provenance model
 - unless the user explicitly wants a different format strategy, treat WebP tiering as the current default photography delivery path
+- the canonical settings live in `scripts/ingest-photography.mjs` in the `VARIANTS` array; use `scripts/rethumb-photography.mjs` to re-upload only thumbs if quality settings change
 
 ### 8. Upload To Canonical Storage
 
@@ -350,6 +354,22 @@ Also do a quick editorial sanity check on the photography index:
 - album pages should use `display` assets inline and `src` for the larger lightbox view
 - homepage or editorial photography callouts should generally use `display` assets rather than `full`
 - no repo-internal implementation notes should leak into user-facing copy
+
+### 12. Update The Homepage Visual Archive
+
+After a new album is ingested and verified, review the Visual Archive section on the homepage (`pages/index.html`).
+
+The homepage currently shows two photography cards in a 3-column grid (the third is the AI Media placeholder). Each card is a manually authored `<article>` with a cover image and label.
+
+After ingestion, decide whether any new album is strong enough to replace an existing homepage card:
+
+- prefer albums with visually distinct covers that contrast well with each other (e.g. one urban/architectural, one landscape or coastal)
+- use `@display.webp` variants for homepage cards, never `@full.webp` or `@thumb.webp`
+- link the card directly to `/photography/<slug>/`
+- keep the label text simple — the album title or a short descriptor, not a description paragraph
+- if the new album is not a strong fit for the homepage, leave the existing cards in place and note the decision
+
+The homepage cards are hand-authored and intentional — do not automate them or generate them from the album list. They represent a curated editorial choice, not an index.
 
 ## JSON Guidance
 

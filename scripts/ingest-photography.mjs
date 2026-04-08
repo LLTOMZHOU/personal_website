@@ -35,7 +35,7 @@ const NODE_20_BIN = "/Users/yuxingzhou/.nvm/versions/node/v20.19.4/bin";
 const VARIANTS = [
   { field: "src",     suffix: "@full.webp",    maxLongEdge: null, quality: 92, cacheControl: "public, max-age=31536000, immutable" },
   { field: "display", suffix: "@display.webp", maxLongEdge: 1800, quality: 86, cacheControl: "public, max-age=31536000, immutable" },
-  { field: "thumb",   suffix: "@thumb.webp",   maxLongEdge: 720,  quality: 78, cacheControl: "public, max-age=31536000, immutable" }
+  { field: "thumb",   suffix: "@thumb.webp",   maxLongEdge: 1080, quality: 85, cacheControl: "public, max-age=31536000, immutable" }
 ];
 
 // ---------------------------------------------------------------------------
@@ -101,15 +101,15 @@ const ALBUMS = [
   {
     slug: "los-angeles",
     title: "Los Angeles",
-    description: "A Los Angeles sequence moving between brutalist landmarks, stacked-glass towers at golden hour, the Walt Disney Concert Hall in monochrome, a Pacific sunset, and stone cairns at dusk.",
+    description: "A Los Angeles sequence moving between brutalist landmarks, The Grand by Frank Gehry at golden hour, the Walt Disney Concert Hall and Cathedral of Our Lady of the Angels in monochrome, a Pacific sunset, and stone cairns at dusk.",
     folder: "los angeles",
-    cover: { file: "IMG_0650-Edit.jpg", alt: "The Grand LA tower at golden hour, its stacked glass volumes catching sunlight against a deep blue sky." },
+    cover: { file: "IMG_0180.jpg",     alt: "Sharp concrete skylights and angular rooflines in monochrome against a flat sky." },
     items: [
-      { file: "IMG_0155.jpg",     alt: "A brutalist tower with a helical ramp wrapped around a perforated concrete shaft, palm trees below in golden light." },
+      { file: "IMG_0650-Edit.jpg", alt: "The Grand LA tower at golden hour, its stacked glass volumes catching sunlight against a deep blue sky." },
       { file: "IMG_0904.jpg",     alt: "The Grand LA tower at twilight, lit windows glowing purple-gold against a darkening sky." },
       { file: "IMG_0713_4_5.jpg", alt: "Walt Disney Concert Hall in black and white, its billowing stainless steel curves across an empty street." },
       { file: "IMG_0223.jpg",     alt: "A glowing lantern-like window cube suspended in a stone facade at the Cathedral of Our Lady of the Angels." },
-      { file: "IMG_0180.jpg",     alt: "Sharp concrete skylights and angular rooflines in monochrome against a flat sky." },
+      { file: "IMG_0155.jpg",     alt: "A brutalist tower with a helical ramp wrapped around a perforated concrete shaft, palm trees below in golden light." },
       { file: "IMG_0365-2.jpg",   alt: "A still Pacific inlet at dusk under a gradient sky from coral to deep blue." },
       { file: "IMG_1018.jpg",     alt: "Two stone cairns silhouetted in sharp relief against a deep orange and red Pacific sunset." }
     ]
