@@ -142,5 +142,9 @@ describe("static site smoke tests", () => {
     assert.match(html, /001@display\.webp/);
     assert.match(html, /data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/laguna-beach-july-2023\/cover@full\.webp"/);
     assert.match(html, /data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/laguna-beach-july-2023\/001@full\.webp"/);
+    assert.match(html, /assets\/gallery-[^"]+\.js/);
+
+    const homepage = await readFile(path.join(DIST_DIR, "index.html"), "utf8");
+    assert.doesNotMatch(homepage, /assets\/gallery-[^"]+\.js/);
   });
 });

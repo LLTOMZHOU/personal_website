@@ -576,6 +576,7 @@ export async function getGeneratedPages() {
           : "Photography collection by Yuxing Zhou.",
       path: albumRoute(album),
       section: "photography",
+      bundles: ["gallery"],
       bodyClass: "page-photography-album",
       ogImage: album.cover?.src ?? ""
     },
