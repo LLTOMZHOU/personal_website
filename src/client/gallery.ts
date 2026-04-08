@@ -197,6 +197,7 @@ function setupPhotographyLightbox() {
   }
 
   function closeLightbox() {
+    activeRequestId += 1;
     lightbox.hidden = true;
     lightbox.classList.add("hidden");
     lightbox.classList.remove("flex");

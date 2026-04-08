@@ -142,10 +142,79 @@ function normalizedAspect(image) {
   return Math.max(imageAspect(image), 0.45);
 }
 
-function partitionJustifiedRows(images, options = {}) {
+function classifyOrientation(image) {
+  const aspect = normalizedAspect(image);
+
+  if (aspect < 0.85) {
+    return "portrait";
+  }
+
+  if (aspect > 1.15) {
+    return "landscape";
+  }
+
+  return "neutral";
+}
+
+function estimateRowHeight(images, gap, containerWidth) {
+  const rowAspect = images.reduce((sum, image) => sum + normalizedAspect(image), 0);
+  const availableWidth = Math.max(containerWidth - gap * Math.max(0, images.length - 1), 1);
+  return availableWidth / Math.max(rowAspect, 0.45);
+}
+
+function scoreJustifiedRow(rowImages, options) {
+  const rowSize = rowImages.length;
+  const isFinalRow = Boolean(options.isFinalRow);
+  const targetRowHeight = isFinalRow ? options.targetRowHeight * 0.92 : options.targetRowHeight;
+  const rowHeight = estimateRowHeight(rowImages, options.gap, options.containerWidth);
+  let penalty = Math.pow((rowHeight - targetRowHeight) / 42, 2);
+
+  if (rowHeight > options.maxRowHeight) {
+    penalty += Math.pow((rowHeight - options.maxRowHeight) / 28, 2) * 7;
+  }
+
+  if (rowHeight < options.minRowHeight) {
+    penalty += Math.pow((options.minRowHeight - rowHeight) / 22, 2) * 2.5;
+  }
+
+  const orientations = rowImages.map(classifyOrientation);
+  const portraitCount = orientations.filter((orientation) => orientation === "portrait").length;
+  const landscapeCount = orientations.filter((orientation) => orientation === "landscape").length;
+
+  if (rowSize === 1) {
+    penalty += 16;
+
+    if (portraitCount === 1) {
+      penalty += 22;
+    }
+
+    if (!isFinalRow) {
+      penalty += 8;
+    }
+  }
+
+  if (rowSize === options.maxPerRow && rowHeight < options.minRowHeight * 0.95) {
+    penalty += 2.5;
+  }
+
+  if (portraitCount > 0 && landscapeCount > 0) {
+    penalty += 1.75;
+  }
+
+  // Taller rows consume page height quickly; keep pressure on underfilled rows.
+  penalty += Math.max(0, rowHeight - targetRowHeight) / 18;
+
+  return penalty;
+}
+
+export function partitionJustifiedRows(images, options = {}) {
   const maxPerRow = options.maxPerRow ?? 3;
   const minPerRow = options.minPerRow ?? 1;
-  const targetRowAspect = options.targetRowAspect ?? 3.4;
+  const containerWidth = options.containerWidth ?? 1200;
+  const gap = options.gap ?? 24;
+  const targetRowHeight = options.targetRowHeight ?? 300;
+  const minRowHeight = options.minRowHeight ?? 180;
+  const maxRowHeight = options.maxRowHeight ?? 420;
 
   if (images.length === 0) {
     return [];
@@ -156,44 +225,23 @@ function partitionJustifiedRows(images, options = {}) {
   costs[images.length] = 0;
 
   for (let start = images.length - 1; start >= 0; start -= 1) {
-    let rowAspect = 0;
-
     for (let end = start; end < Math.min(images.length, start + maxPerRow); end += 1) {
-      const rowSize = end - start + 1;
       const remaining = images.length - (end + 1);
-      rowAspect += normalizedAspect(images[end]);
 
       if (remaining > 0 && remaining < minPerRow) {
         continue;
       }
 
-      const isFinalRow = end === images.length - 1;
-      const targetAspect = isFinalRow ? targetRowAspect * 0.9 : targetRowAspect;
-      let penalty = Math.pow(rowAspect - targetAspect, 2);
-
-      if (rowSize === 1) {
-        // Portrait images (aspect < 0.85) look intentional alone — don't penalize them.
-        // Landscape singles still get penalized to encourage grouping.
-        if (rowAspect >= 0.85) {
-          penalty += rowAspect < targetRowAspect ? 4 : 1.5;
-        }
-      }
-
-      if (rowSize === maxPerRow && rowAspect < targetRowAspect * 0.7) {
-        penalty += 1.5;
-      }
-
-      // Discourage mixing portrait images (aspect < 0.85) with landscape images
-      // (aspect > 1.1) in the same row — the portrait gets squeezed unacceptably.
-      if (rowSize > 1) {
-        const rowSlice = images.slice(start, end + 1);
-        const hasPortrait = rowSlice.some(img => normalizedAspect(img) < 0.85);
-        const hasLandscape = rowSlice.some(img => normalizedAspect(img) > 1.1);
-        if (hasPortrait && hasLandscape) {
-          penalty += 12;
-        }
-      }
-
+      const rowSlice = images.slice(start, end + 1);
+      const penalty = scoreJustifiedRow(rowSlice, {
+        containerWidth,
+        gap,
+        targetRowHeight,
+        minRowHeight,
+        maxRowHeight,
+        maxPerRow,
+        isFinalRow: end === images.length - 1
+      });
       const totalCost = penalty + costs[end + 1];
 
       if (totalCost < costs[start]) {
@@ -228,7 +276,7 @@ function renderJustifiedGallery(images) {
   const renderedRows = rows.map((rowImages) => {
     const singleImage = rowImages.length === 1;
     const rowClass = singleImage
-      ? "flex flex-col gap-6 md:flex-row md:justify-center"
+      ? "flex flex-col gap-6 md:flex-row md:justify-start"
       : "flex flex-col gap-6 md:flex-row md:items-start";
 
     const figures = rowImages
@@ -238,7 +286,7 @@ function renderJustifiedGallery(images) {
         imageIndex += 1;
         const loading = currentIndex === 0 ? "eager" : "lazy";
         const style = singleImage
-          ? ` style="max-width: min(100%, ${Math.max(24, Math.min(44, aspect * 18)).toFixed(2)}rem);"`
+          ? ` style="max-width: min(100%, ${Math.max(20, Math.min(34, aspect * 16)).toFixed(2)}rem);"`
           : ` style="flex: ${aspect.toFixed(5)} ${aspect.toFixed(5)} 0%;"`;
 
         return `

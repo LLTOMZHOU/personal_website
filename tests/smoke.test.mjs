@@ -3,6 +3,7 @@ import path from "node:path";
 import { before, describe, test } from "node:test";
 import { spawn } from "node:child_process";
 import { readFile, stat } from "node:fs/promises";
+import { partitionJustifiedRows } from "../scripts/lib/content-renderers.mjs";
 import { listFiles, readJson } from "../scripts/lib/fs-utils.mjs";
 import { renderDocumentTitle } from "../scripts/lib/site-shell.mjs";
 
@@ -148,13 +149,36 @@ describe("static site smoke tests", () => {
     assert.doesNotMatch(homepage, /assets\/gallery-[^"]+\.js/);
   });
 
+  test("los angeles album preview assets stay aligned with the intended full-size images", async () => {
+    const html = await readFile(path.join(DIST_DIR, "photography", "los-angeles", "index.html"), "utf8");
+
+    assert.match(html, /data-gallery-image-index="0"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@display\.webp"/);
+    assert.match(html, /data-gallery-image-index="2"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@display\.webp"/);
+    assert.match(html, /data-gallery-image-index="4"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@display\.webp"/);
+    assert.doesNotMatch(html, /los-angeles\/002@full\.webp/);
+  });
+
   test("photography index can curate album preview selections independently of album order", async () => {
     const html = await readFile(path.join(DIST_DIR, "photography", "index.html"), "utf8");
 
-    assert.match(html, /photography\/los-angeles\/002@thumb\.webp/);
-    assert.match(html, /photography\/los-angeles\/003@thumb\.webp/);
-    assert.match(html, /photography\/los-angeles\/005@thumb\.webp/);
-    assert.doesNotMatch(html, /photography\/los-angeles\/001@thumb\.webp/);
+    assert.match(html, /Walt Disney Concert Hall in black and white/);
+    assert.match(html, /A glowing lantern-like window cube suspended/);
+    assert.match(html, /A brutalist tower with a helical ramp/);
+    assert.doesNotMatch(html, /The Grand LA tower at twilight/);
+    assert.doesNotMatch(html, /The Grand LA tower at golden hour/);
     assert.match(html, /Los Angeles[\s\S]*lg:grid-cols-2/);
+  });
+
+  test("photography album row partition avoids isolating portrait images in known mixed-aspect albums", async () => {
+    for (const slug of ["getty-villa-sep-2022", "los-angeles", "pacific-coast", "san-francisco"]) {
+      const album = await readJson(path.join(ROOT, "content", "photography", `${slug}.json`));
+      const images = [album.cover, ...(album.items ?? [])].filter(Boolean);
+      const rows = partitionJustifiedRows(images);
+
+      assert.ok(
+        rows.every((row) => row.length !== 1 || (row[0].width ?? 1) / Math.max(row[0].height ?? 1, 1) >= 0.85),
+        `${slug} should not leave a portrait image alone in its own row`
+      );
+    }
   });
 });
