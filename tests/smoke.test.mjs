@@ -152,9 +152,9 @@ describe("static site smoke tests", () => {
   test("los angeles album preview assets stay aligned with the intended full-size images", async () => {
     const html = await readFile(path.join(DIST_DIR, "photography", "los-angeles", "index.html"), "utf8");
 
-    assert.match(html, /data-gallery-image-index="0"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@display\.webp"/);
-    assert.match(html, /data-gallery-image-index="2"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@display\.webp"/);
-    assert.match(html, /data-gallery-image-index="4"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@display\.webp"/);
+    assert.match(html, /data-gallery-image-index="0"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@full\.webp"/);
+    assert.match(html, /data-gallery-image-index="2"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@full\.webp"/);
+    assert.match(html, /data-gallery-image-index="4"[\s\S]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@full\.webp"[\s\S]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@full\.webp"/);
     assert.doesNotMatch(html, /los-angeles\/002@full\.webp/);
   });
 
