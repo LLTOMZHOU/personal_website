@@ -91,14 +91,21 @@ async function upload(objectKeyPath, filePath) {
   ], {
     cwd: "/tmp",
     env: { ...process.env, PATH: `${NODE_20_BIN}:${process.env.PATH}` },
-    maxBuffer: 1024 * 1024 * 16
+    maxBuffer: 1024 * 1024 * 16,
+    timeout: 120_000
   });
 }
 
 async function verify(url) {
   for (let i = 1; i <= 8; i++) {
     const res = await fetch(`${url}?v=${Date.now()}-${i}`, { method: "HEAD" });
-    if (res.ok) return;
+    if (res.ok) {
+      const contentType = res.headers.get("content-type") ?? "";
+      if (!contentType.startsWith("image/webp")) {
+        throw new Error(`Unexpected content-type for ${url}: ${contentType}`);
+      }
+      return;
+    }
     if (i < 8) await new Promise(r => setTimeout(r, 1500));
     else throw new Error(`Verification failed for ${url}: ${res.status}`);
   }

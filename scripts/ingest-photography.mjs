@@ -153,10 +153,6 @@ function localFilePath(folder, file) {
   return path.join(PHOTOS_BASE, folder, file);
 }
 
-function stemFromFile(file) {
-  return path.basename(file, path.extname(file));
-}
-
 function objectKey(slug, stem, suffix) {
   return `photography/${slug}/${stem}${suffix}`;
 }

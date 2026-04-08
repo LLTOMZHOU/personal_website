@@ -359,7 +359,7 @@ Also do a quick editorial sanity check on the photography index:
 
 After a new album is ingested and verified, review the Visual Archive section on the homepage (`pages/index.html`).
 
-The homepage currently shows two photography cards in a 3-column grid (the third is the AI Media placeholder). Each card is a manually authored `<article>` with a cover image and label.
+The homepage currently shows three photography cards in a 3-column grid (Los Angeles, Pacific Coast, Getty Villa). Each card is a manually authored `<article>` with a cover image and label.
 
 After ingestion, decide whether any new album is strong enough to replace an existing homepage card:
 
