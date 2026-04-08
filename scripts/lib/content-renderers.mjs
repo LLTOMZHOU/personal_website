@@ -18,19 +18,36 @@ function imageAspect(image) {
   return width && height ? width / height : 1;
 }
 
+function assetId(source) {
+  if (typeof source !== "string" || source.trim() === "") {
+    return null;
+  }
+
+  const normalizedSource = source.trim();
+  const fileName = normalizedSource.split("/").pop() ?? normalizedSource;
+  const [id] = fileName.split("@");
+  return id || null;
+}
+
+function matchesPrimaryAsset(image, candidateSource) {
+  const primaryAssetId = assetId(image?.src);
+  const candidateAssetId = assetId(candidateSource);
+  return primaryAssetId !== null && primaryAssetId === candidateAssetId;
+}
+
 function displayImage(image) {
   if (!image || typeof image !== "object") {
     return image;
   }
 
-  if (typeof image.display === "string" && image.display.trim() !== "") {
+  if (typeof image.display === "string" && image.display.trim() !== "" && matchesPrimaryAsset(image, image.display)) {
     return {
       ...image,
       src: image.display.trim()
     };
   }
 
-  if (typeof image.thumb === "string" && image.thumb.trim() !== "") {
+  if (typeof image.thumb === "string" && image.thumb.trim() !== "" && matchesPrimaryAsset(image, image.thumb)) {
     return {
       ...image,
       src: image.thumb.trim()
@@ -87,14 +104,25 @@ function renderLightboxImage(image, index, loading = "lazy") {
 }
 
 function previewImage(image) {
-  if (!image?.thumb) {
+  if (!image || typeof image !== "object") {
     return image;
   }
 
-  return {
-    ...image,
-    src: image.thumb
-  };
+  if (typeof image.thumb === "string" && image.thumb.trim() !== "" && matchesPrimaryAsset(image, image.thumb)) {
+    return {
+      ...image,
+      src: image.thumb.trim()
+    };
+  }
+
+  if (typeof image.display === "string" && image.display.trim() !== "" && matchesPrimaryAsset(image, image.display)) {
+    return {
+      ...image,
+      src: image.display.trim()
+    };
+  }
+
+  return image;
 }
 
 function albumPreviewImages(album) {
