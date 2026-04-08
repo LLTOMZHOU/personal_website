@@ -14,24 +14,71 @@
 <section class="grid grid-cols-1 gap-12 lg:grid-cols-12">
   <article class="group lg:col-span-7">
     <a href="/projects/convoice/">
-      <div class="overflow-hidden rounded-[2px] border border-text-main/10 bg-surface-container-low transition-transform duration-500 hover:scale-[1.01]">
-        <div class="relative aspect-[16/9] overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(236,122,9,0.28),_transparent_35%),linear-gradient(135deg,_#1d1714_0%,_#2d211a_52%,_#f6eee8_100%)] px-8 py-7">
-          <div class="absolute -right-8 top-6 h-28 w-28 rounded-full border border-white/20"></div>
-          <div class="absolute right-10 top-16 h-16 w-16 rounded-full border border-white/15"></div>
-          <div class="absolute bottom-6 right-8 text-right">
-            <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.28em] text-white/55">
-              Voice Automation
-            </p>
-            <p class="mt-2 font-headline text-3xl font-bold italic text-white/90">Convoice</p>
-          </div>
-          <div class="relative z-10 max-w-[13rem]">
-            <span class="inline-block border border-white/15 px-3 py-1 text-[0.66rem] font-bold uppercase tracking-[0.22em] text-white/70">
-              Inbound / Outbound
-            </span>
-            <div class="mt-8 space-y-3">
-              <div class="h-2 w-24 bg-white/80"></div>
-              <div class="h-2 w-36 bg-white/30"></div>
-              <div class="h-2 w-20 bg-white/20"></div>
+      <div class="relative overflow-hidden rounded-[2px] border border-text-main/10 bg-surface-container-low text-white transition-transform duration-500 hover:scale-[1.01]">
+        <div class="relative aspect-[16/9] overflow-hidden bg-[radial-gradient(circle_at_16%_18%,rgba(255,192,178,0.28),transparent_24%),radial-gradient(circle_at_88%_22%,rgba(255,255,255,0.12),transparent_18%),linear-gradient(150deg,#221017_0%,#47202b_38%,#b74c56_68%,#fd7060_84%,#ffe2de_100%)]">
+          <div class="pointer-events-none absolute -left-[8%] top-[58%] h-48 w-48 rounded-full bg-[rgba(253,112,96,0.32)] blur-[28px]"></div>
+          <div class="pointer-events-none absolute -right-[10%] -top-[6%] h-36 w-36 rounded-full border border-white/20"></div>
+          <div class="relative z-10 flex h-full min-h-0 flex-col gap-4 p-4 sm:gap-[1.1rem] sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2.5">
+              <span class="border border-white/20 bg-white/10 px-3 py-2 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">Inbound / Outbound</span>
+              <span class="border border-white/20 bg-white/10 px-3 py-2 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">Knowledge + Analytics</span>
+            </div>
+            <div class="flex min-h-0 flex-1 flex-col border border-white/15 bg-[linear-gradient(180deg,rgba(24,10,15,0.54),rgba(48,20,29,0.28))] shadow-[0_26px_60px_-28px_rgba(17,6,10,0.72)] backdrop-blur-[20px]">
+              <div class="flex items-center gap-3 border-b border-white/10 px-4 py-3">
+                <div class="flex gap-1.5" aria-hidden="true">
+                  <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
+                  <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
+                  <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
+                </div>
+                <p class="min-w-0 font-body text-[0.7rem] font-bold uppercase tracking-[0.12em] text-white/65">
+                  Convoice workspace
+                </p>
+                <span class="ml-auto rounded-full border border-white/15 bg-white/10 px-2 py-1 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-white/75">
+                  Live
+                </span>
+              </div>
+              <div class="grid min-h-0 flex-1 grid-cols-2 gap-3 p-4">
+                <div class="flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
+                  <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Knowledge</p>
+                  <p class="font-headline text-[1.05rem] font-bold leading-[1.05] text-white/90">Websites, PDFs, call notes</p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">website</span>
+                    <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">faq.pdf</span>
+                    <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">reviews</span>
+                  </div>
+                </div>
+                <div class="flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
+                  <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Calls</p>
+                  <p class="font-headline text-[1.05rem] font-bold leading-[1.05] text-white/90">History and routing</p>
+                  <div class="mt-auto grid gap-2" aria-hidden="true">
+                    <span class="block h-1.5 w-[84%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgba(255,205,197,0.24))]"></span>
+                    <span class="block h-1.5 w-[68%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgba(255,205,197,0.24))]"></span>
+                    <span class="block h-1.5 w-[52%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgba(255,205,197,0.24))]"></span>
+                  </div>
+                </div>
+                <div class="col-span-2 flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
+                  <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Conversation Review</p>
+                  <div class="flex flex-col gap-2">
+                    <div class="max-w-[85%] border border-white/15 bg-white/10 px-3 py-2 text-[0.73rem] leading-[1.4] text-white/80">
+                      Caller: can you confirm today&apos;s appointment window?
+                    </div>
+                    <div class="max-w-[85%] self-end border border-white/15 bg-[rgba(253,112,96,0.22)] px-3 py-2 text-[0.73rem] leading-[1.4] text-white/90">
+                      Bot: confirmed and summarized for the team.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2 px-4 pb-4">
+                <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Voices</span>
+                <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Summaries</span>
+                <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Reservations</span>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2.5">
+              <div>
+                <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.24em] text-white/60">AI voice agents for business calls</p>
+                <p class="mt-1 font-headline text-[clamp(1.9rem,4vw,2.6rem)] font-bold italic leading-[0.96] text-white/90">Convoice</p>
+              </div>
             </div>
           </div>
         </div>
@@ -39,7 +86,7 @@
     </a>
     <div class="mt-8 flex flex-col gap-6 md:flex-row">
       <div class="md:w-1/3">
-        <span class="text-[0.75rem] font-bold uppercase tracking-widest text-[#ff8000]">
+        <span class="text-[0.75rem] font-bold uppercase tracking-widest text-[#FD7060]">
           STARTUP / VOICE AI
         </span>
         <h2 class="mt-2 font-headline text-2xl font-bold">
@@ -48,19 +95,19 @@
       </div>
       <div class="md:w-2/3">
         <p class="mb-6 leading-relaxed text-[#444654]">
-          I co-founded Convoice and led software engineering. It was a voice automation product
-          shaped around low latency, system clarity, and the harder business question of how to
-          make AI useful enough to earn adoption.
+          I co-founded Convoice and led software engineering. The product centered on business
+          voice agents with knowledge uploads, call review, analytics, and appointment-oriented
+          workflows rather than a one-off demo.
         </p>
         <div class="flex gap-4">
           <span class="rounded-[2px] bg-surface-container-low px-3 py-1 text-[0.7rem] font-bold uppercase text-[#444654]">
-            Voice
+            Voice Agents
           </span>
           <span class="rounded-[2px] bg-surface-container-low px-3 py-1 text-[0.7rem] font-bold uppercase text-[#444654]">
-            Product
+            Telephony
           </span>
           <span class="rounded-[2px] bg-surface-container-low px-3 py-1 text-[0.7rem] font-bold uppercase text-[#444654]">
-            Systems
+            Analytics
           </span>
         </div>
       </div>
