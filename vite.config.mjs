@@ -11,6 +11,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         site: "src/client/site.ts",
+        gallery: "src/client/gallery.ts",
         assistant: "src/client/assistant/entry.ts"
       }
     }

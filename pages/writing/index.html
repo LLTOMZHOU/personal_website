@@ -1,5 +1,5 @@
 <section class="mb-32">
-  <h1 class="mb-8 max-w-2xl font-headline text-[3.5rem] leading-[1.1] font-bold">
+  <h1 class="mb-8 max-w-2xl font-headline text-[3rem] leading-[1.1] font-bold md:text-[3.5rem]">
     The Archive of Speculative Thoughts
   </h1>
   <p class="max-w-xl font-body leading-relaxed text-[#444654]">
@@ -94,18 +94,18 @@
   </article>
 </section>
 
-<section class="mt-48 flex flex-col items-center justify-between gap-8 rounded-lg bg-surface-container-low p-16 md:flex-row">
+<section class="mt-24 flex flex-col items-start justify-between gap-8 rounded-lg bg-surface-container-low p-8 md:mt-48 md:flex-row md:items-center md:p-16">
   <div class="max-w-md">
     <h3 class="mb-4 font-headline text-2xl font-bold italic">Subscribe to the Archive</h3>
     <p class="font-body text-[#444654]">
       Monthly digests of research and writing delivered directly to your inbox.
     </p>
   </div>
-  <form class="flex w-full gap-4 md:w-auto" data-placeholder-form method="post">
+  <form class="flex w-full flex-col gap-4 sm:flex-row md:w-auto" data-placeholder-form method="post">
     <label class="sr-only" for="archive-email">Email Address</label>
     <input
       id="archive-email"
-      class="min-w-[280px] border-b border-[#c5c5d6]/40 bg-transparent px-4 py-2 focus:border-primary focus:outline-none transition-colors"
+      class="w-full min-w-0 border-b border-[#c5c5d6]/40 bg-transparent px-4 py-2 transition-colors focus:border-primary focus:outline-none sm:min-w-[280px]"
       name="email"
       placeholder="Email Address"
       required

@@ -2,25 +2,18 @@
   "slug": "los-angeles",
   "title": "Los Angeles",
   "description": "A Los Angeles sequence moving between brutalist landmarks, The Grand by Frank Gehry at golden hour, the Walt Disney Concert Hall and Cathedral of Our Lady of the Angels in monochrome, a Pacific sunset, and stone cairns at dusk.",
+  "indexPattern": 1,
+  "indexPreviewItems": [0, 2, 3],
   "cover": {
     "width": 6000,
     "height": 4000,
     "originalSrc": "https://media.yuxingzhou.me/photography/los-angeles/cover.jpg",
     "src": "https://media.yuxingzhou.me/photography/los-angeles/cover@full.webp",
-    "display": "https://media.yuxingzhou.me/photography/los-angeles/cover@display.webp",
-    "thumb": "https://media.yuxingzhou.me/photography/los-angeles/cover@thumb.webp",
+    "display": "https://media.yuxingzhou.me/photography/los-angeles/005@display.webp",
+    "thumb": "https://media.yuxingzhou.me/photography/los-angeles/005@thumb.webp",
     "alt": "Sharp concrete skylights and angular rooflines in monochrome against a flat sky."
   },
   "items": [
-    {
-      "width": 2560,
-      "height": 1707,
-      "originalSrc": "https://media.yuxingzhou.me/photography/los-angeles/002.jpg",
-      "src": "https://media.yuxingzhou.me/photography/los-angeles/002@full.webp",
-      "display": "https://media.yuxingzhou.me/photography/los-angeles/002@display.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/002@thumb.webp",
-      "alt": "The Grand LA tower at twilight, lit windows glowing purple-gold against a darkening sky."
-    },
     {
       "width": 2425,
       "height": 1518,
@@ -35,8 +28,8 @@
       "height": 2492,
       "originalSrc": "https://media.yuxingzhou.me/photography/los-angeles/001.jpg",
       "src": "https://media.yuxingzhou.me/photography/los-angeles/001@full.webp",
-      "display": "https://media.yuxingzhou.me/photography/los-angeles/001@display.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/001@thumb.webp",
+      "display": "https://media.yuxingzhou.me/photography/los-angeles/cover@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/cover@thumb.webp",
       "alt": "The Grand LA tower at golden hour, its stacked glass volumes catching sunlight against a deep blue sky."
     },
     {
@@ -53,8 +46,8 @@
       "height": 3604,
       "originalSrc": "https://media.yuxingzhou.me/photography/los-angeles/005.jpg",
       "src": "https://media.yuxingzhou.me/photography/los-angeles/005@full.webp",
-      "display": "https://media.yuxingzhou.me/photography/los-angeles/005@display.webp",
-      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/005@thumb.webp",
+      "display": "https://media.yuxingzhou.me/photography/los-angeles/001@display.webp",
+      "thumb": "https://media.yuxingzhou.me/photography/los-angeles/001@thumb.webp",
       "alt": "A brutalist tower with a helical ramp wrapped around a perforated concrete shaft, palm trees below in golden light."
     },
     {

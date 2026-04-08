@@ -39,8 +39,8 @@ function renderNav(section) {
       aria-label="Primary"
       data-site-nav
     >
-      <div class="mx-auto flex max-w-screen-2xl items-center justify-between px-8 py-6 md:flex md:items-center md:gap-10 md:px-16">
-        <a class="headline-bold inline-flex h-10 shrink-0 items-center text-2xl text-text-main" href="/">Yuxing Zhou</a>
+      <div class="mx-auto flex max-w-screen-2xl items-center justify-between px-5 py-4 md:flex md:items-center md:gap-10 md:px-16 md:py-6">
+        <a class="headline-bold inline-flex h-10 shrink-0 items-center text-[1.7rem] text-text-main md:text-2xl" href="/">Yuxing Zhou</a>
         <button
           class="font-body text-[0.7rem] font-bold uppercase tracking-[0.2em] text-text-main md:hidden"
           type="button"
@@ -51,7 +51,7 @@ function renderNav(section) {
           Menu
         </button>
         <div
-          class="absolute left-8 right-8 top-full hidden flex-col gap-5 border-b border-text-main/5 bg-surface/95 py-5 font-headline text-[0.8rem] font-bold uppercase tracking-[0.2em] md:static md:flex md:h-10 md:flex-1 md:flex-row md:items-center md:justify-center md:gap-10 md:border-0 md:bg-transparent md:py-0"
+          class="absolute left-5 right-5 top-full hidden flex-col gap-5 border-b border-text-main/5 bg-surface/95 py-5 font-headline text-[0.8rem] font-bold uppercase tracking-[0.2em] md:static md:flex md:h-10 md:flex-1 md:flex-row md:items-center md:justify-center md:gap-10 md:border-0 md:bg-transparent md:py-0"
           id="primary-nav"
         >
           ${links}
@@ -97,19 +97,19 @@ function renderFooter() {
 
 function renderFloatingAssistant() {
   return `
-    <div class="fixed bottom-12 right-12 z-50 group">
+    <div class="fixed bottom-5 right-5 z-50 group md:bottom-12 md:right-12">
       <button
-        class="flex h-16 w-16 cursor-pointer items-center justify-center bg-text-main text-white shadow-2xl transition-all hover:bg-primary"
+        class="flex h-14 w-14 cursor-pointer items-center justify-center bg-text-main text-white shadow-2xl transition-all hover:bg-primary md:h-16 md:w-16"
         type="button"
         aria-label="Open assistant"
         aria-expanded="false"
         aria-controls="assistant-panel"
         data-assistant-trigger
       >
-        <span aria-hidden="true" class="material-symbols-outlined text-3xl">terminal</span>
+        <span aria-hidden="true" class="material-symbols-outlined text-[1.65rem] md:text-3xl">terminal</span>
       </button>
       <div
-        class="assistant-tooltip pointer-events-none absolute bottom-full right-0 mb-6 whitespace-nowrap px-5 py-3 text-[0.7rem] font-bold uppercase tracking-widest opacity-0 shadow-xl transition-opacity group-hover:opacity-100"
+        class="assistant-tooltip pointer-events-none absolute bottom-full right-0 mb-6 hidden whitespace-nowrap px-5 py-3 text-[0.7rem] font-bold uppercase tracking-widest opacity-0 shadow-xl transition-opacity group-hover:opacity-100 md:block"
       >
         Press <span>/</span> to command assistant
       </div>
@@ -122,7 +122,7 @@ function renderAssistantShell(assistantSrc) {
 
   return `
     <section
-      class="fixed inset-x-6 top-28 z-40 mx-auto hidden max-w-3xl"
+      class="fixed inset-x-4 top-24 z-40 mx-auto hidden max-w-3xl md:inset-x-6 md:top-28"
       id="assistant-panel"
       hidden
       aria-live="polite"
@@ -147,6 +147,15 @@ function renderCssLinks(cssFiles) {
 
 function renderScriptTags(scriptFiles) {
   return scriptFiles.map((src) => `<script type="module" src="${src}"></script>`).join("\n");
+}
+
+function renderAppIcons() {
+  return `
+    <link rel="icon" href="/favicon.png" sizes="512x512" type="image/png">
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+  `;
 }
 
 export function renderDocumentTitle(pageTitle) {
@@ -176,6 +185,7 @@ export function renderPage({
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${title}</title>
     <meta name="description" content="${description}">
+    <meta name="theme-color" content="#fcf9f8">
     <link rel="canonical" href="${escapedCanonicalUrl}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -183,6 +193,7 @@ export function renderPage({
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Newsreader:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     >
+    ${renderAppIcons()}
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${description}">
     <meta property="og:type" content="website">
@@ -194,7 +205,7 @@ export function renderPage({
   <body class="bg-surface text-text-main antialiased${bodyClass}" data-section="${section}">
     ${renderNav(metadata.section)}
     ${renderAssistantShell(assistantSrc)}
-    <main class="mx-auto max-w-screen-2xl px-6 pt-48 md:px-12 lg:px-24">
+    <main class="mx-auto max-w-screen-2xl px-5 pt-36 md:px-12 md:pt-48 lg:px-24">
       ${bodyHtml}
     </main>
     ${renderFooter()}
