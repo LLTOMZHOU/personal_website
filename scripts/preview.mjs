@@ -56,8 +56,15 @@ export async function startPreviewServer() {
       response.writeHead(200, { "content-type": MIME_TYPES[extension] ?? "application/octet-stream" });
       response.end(content);
     } catch {
-      response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
-      response.end("Not found");
+      try {
+        const fallbackPath = resolveInsideDist("/404.html");
+        const content = await readFile(fallbackPath);
+        response.writeHead(404, { "content-type": MIME_TYPES[".html"] });
+        response.end(content);
+      } catch {
+        response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
+        response.end("Not found");
+      }
     }
   });
 

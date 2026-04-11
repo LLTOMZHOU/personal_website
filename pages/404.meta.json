@@ -1,0 +1,10 @@
+{
+  "title": "404",
+  "description": "Location not found. The requested document has been misfiled, de-indexed, or removed from the permanent collection.",
+  "path": "/404/",
+  "section": "home",
+  "ogImage": "",
+  "bundles": [],
+  "bodyClass": "page-404",
+  "noIndex": true
+}

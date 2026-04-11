@@ -97,6 +97,16 @@ describe("static site smoke tests", () => {
     assert.match(homepage, /data-site-nav/);
   });
 
+  test("custom 404 page is emitted both as a routed page and fallback file", async () => {
+    const routed404 = await readFile(path.join(DIST_DIR, "404", "index.html"), "utf8");
+    const fallback404 = await readFile(path.join(DIST_DIR, "404.html"), "utf8");
+
+    assert.equal(fallback404, routed404);
+    assert.match(fallback404, /The Missing Entry/);
+    assert.match(fallback404, /Report a cataloguing error/);
+    assert.match(fallback404, /noindex, nofollow/);
+  });
+
   test("each declared route serves core metadata and local assets", async () => {
     for (const fixture of routeFixtures) {
       const outputPath = outputPathForRoute(fixture.route);
@@ -111,12 +121,18 @@ describe("static site smoke tests", () => {
       assert.match(html, /data-assistant-trigger/);
 
       const assetPaths = collectAssetPaths(html);
-      assert.ok(assetPaths.length > 0, `${fixture.route} should include built assets`);
+      assert.ok(
+        assetPaths.length > 0,
+        `${fixture.route} should include built assets`
+      );
 
       for (const assetPath of assetPaths) {
         const assetFilePath = path.join(DIST_DIR, assetPath.slice(1));
         const assetStat = await stat(assetFilePath);
-        assert.ok(assetStat.isFile(), `${fixture.route} asset ${assetPath} should exist in dist`);
+        assert.ok(
+          assetStat.isFile(),
+          `${fixture.route} asset ${assetPath} should exist in dist`
+        );
       }
     }
   });
@@ -124,25 +140,51 @@ describe("static site smoke tests", () => {
   test("homepage wires assistant shell and lazy assistant bundle", async () => {
     const html = await readFile(path.join(DIST_DIR, "index.html"), "utf8");
 
-    const assistantPanel = getCaptureGroup(html, /data-assistant-src="([^"]+)"/);
-    assert.ok(assistantPanel, "assistant panel should include a lazy bundle source");
+    const assistantPanel = getCaptureGroup(
+      html,
+      /data-assistant-src="([^"]+)"/
+    );
+    assert.ok(
+      assistantPanel,
+      "assistant panel should include a lazy bundle source"
+    );
 
-    const siteScript = getCaptureGroup(html, /<script[^>]+src="([^"]+)"[^>]*><\/script>/);
+    const siteScript = getCaptureGroup(
+      html,
+      /<script[^>]+src="([^"]+)"[^>]*><\/script>/
+    );
     assert.ok(siteScript, "homepage should include the site bundle");
 
-    const scriptText = await readFile(path.join(DIST_DIR, siteScript.slice(1)), "utf8");
+    const scriptText = await readFile(
+      path.join(DIST_DIR, siteScript.slice(1)),
+      "utf8"
+    );
     assert.match(scriptText, /data-assistant-trigger/);
     assert.match(scriptText, /aria-expanded/);
     assert.match(scriptText, /\.key\s*={2,3}\s*"\/"/);
   });
 
   test("photography album pages use smaller inline images and preserve full-size lightbox sources", async () => {
-    const html = await readFile(path.join(DIST_DIR, "photography", "laguna-beach-july-2023", "index.html"), "utf8");
+    const html = await readFile(
+      path.join(
+        DIST_DIR,
+        "photography",
+        "laguna-beach-july-2023",
+        "index.html"
+      ),
+      "utf8"
+    );
 
     assert.match(html, /cover@display\.webp/);
     assert.match(html, /001@display\.webp/);
-    assert.match(html, /data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/laguna-beach-july-2023\/cover@full\.webp"/);
-    assert.match(html, /data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/laguna-beach-july-2023\/001@full\.webp"/);
+    assert.match(
+      html,
+      /data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/laguna-beach-july-2023\/cover@full\.webp"/
+    );
+    assert.match(
+      html,
+      /data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/laguna-beach-july-2023\/001@full\.webp"/
+    );
     assert.match(html, /assets\/gallery-[^"]+\.js/);
 
     const homepage = await readFile(path.join(DIST_DIR, "index.html"), "utf8");
@@ -150,16 +192,31 @@ describe("static site smoke tests", () => {
   });
 
   test("los angeles album preview assets stay aligned with the intended full-size images", async () => {
-    const html = await readFile(path.join(DIST_DIR, "photography", "los-angeles", "index.html"), "utf8");
+    const html = await readFile(
+      path.join(DIST_DIR, "photography", "los-angeles", "index.html"),
+      "utf8"
+    );
 
-    assert.match(html, /<button[^>]*data-gallery-image-index="0"[^>]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@full\.webp"[^>]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@full\.webp"[^>]*>/);
-    assert.match(html, /<button[^>]*data-gallery-image-index="2"[^>]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@full\.webp"[^>]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@full\.webp"[^>]*>/);
-    assert.match(html, /<button[^>]*data-gallery-image-index="4"[^>]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@full\.webp"[^>]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@full\.webp"[^>]*>/);
+    assert.match(
+      html,
+      /<button[^>]*data-gallery-image-index="0"[^>]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@full\.webp"[^>]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/cover@full\.webp"[^>]*>/
+    );
+    assert.match(
+      html,
+      /<button[^>]*data-gallery-image-index="2"[^>]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@full\.webp"[^>]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/001@full\.webp"[^>]*>/
+    );
+    assert.match(
+      html,
+      /<button[^>]*data-gallery-image-index="4"[^>]*data-gallery-image-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@full\.webp"[^>]*data-gallery-image-preview-src="https:\/\/media\.yuxingzhou\.me\/photography\/los-angeles\/005@full\.webp"[^>]*>/
+    );
     assert.doesNotMatch(html, /los-angeles\/002@full\.webp/);
   });
 
   test("photography index can curate album preview selections independently of album order", async () => {
-    const html = await readFile(path.join(DIST_DIR, "photography", "index.html"), "utf8");
+    const html = await readFile(
+      path.join(DIST_DIR, "photography", "index.html"),
+      "utf8"
+    );
 
     assert.match(html, /Walt Disney Concert Hall in black and white/);
     assert.match(html, /A glowing lantern-like window cube suspended/);
@@ -170,13 +227,24 @@ describe("static site smoke tests", () => {
   });
 
   test("photography album row partition avoids isolating portrait images in known mixed-aspect albums", async () => {
-    for (const slug of ["getty-villa-sep-2022", "los-angeles", "pacific-coast", "san-francisco"]) {
-      const album = await readJson(path.join(ROOT, "content", "photography", `${slug}.json`));
+    for (const slug of [
+      "getty-villa-sep-2022",
+      "los-angeles",
+      "pacific-coast",
+      "san-francisco",
+    ]) {
+      const album = await readJson(
+        path.join(ROOT, "content", "photography", `${slug}.json`)
+      );
       const images = [album.cover, ...(album.items ?? [])].filter(Boolean);
       const rows = partitionJustifiedRows(images);
 
       assert.ok(
-        rows.every((row) => row.length !== 1 || (row[0].width ?? 1) / Math.max(row[0].height ?? 1, 1) >= 0.85),
+        rows.every(
+          (row) =>
+            row.length !== 1 ||
+            (row[0].width ?? 1) / Math.max(row[0].height ?? 1, 1) >= 0.85
+        ),
         `${slug} should not leave a portrait image alone in its own row`
       );
     }
