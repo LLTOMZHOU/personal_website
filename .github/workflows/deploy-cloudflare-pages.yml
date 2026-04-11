@@ -146,4 +146,4 @@ jobs:
 
       - name: Delete old Cloudflare Pages deployments
         if: github.ref_name == 'main'
-        run: node scripts/cleanup-cloudflare-pages-previews.mjs
+        run: node scripts/cleanup-cloudflare-pages-deployments.mjs

@@ -281,9 +281,6 @@ async function main() {
   requireEnv("CLOUDFLARE_ACCOUNT_ID", CLOUDFLARE_ACCOUNT_ID);
   requireEnv("CLOUDFLARE_PAGES_PROJECT", CLOUDFLARE_PAGES_PROJECT);
 
-  requireEnv("GITHUB_TOKEN", GITHUB_TOKEN);
-  requireEnv("GITHUB_REPOSITORY", GITHUB_REPOSITORY);
-
   const previewDeployments = await listDeployments("preview");
   const productionDeployments = await listDeployments("production");
   if (previewDeployments.length === 0 && productionDeployments.length === 0) {
@@ -291,23 +288,53 @@ async function main() {
     return;
   }
 
-  const openPullRequestBranches = await listOpenPullRequestBranches();
-  const previewDeploymentsToDelete = selectPreviewDeploymentsToDelete(
-    previewDeployments,
-    openPullRequestBranches
-  );
+  let previewError = null;
+  const previewDeploymentsToDelete = [];
+
+  if (previewDeployments.length > 0) {
+    requireEnv("GITHUB_TOKEN", GITHUB_TOKEN);
+    requireEnv("GITHUB_REPOSITORY", GITHUB_REPOSITORY);
+
+    const openPullRequestBranches = await listOpenPullRequestBranches();
+    previewDeploymentsToDelete.push(
+      ...selectPreviewDeploymentsToDelete(previewDeployments, openPullRequestBranches)
+    );
+  }
+
   const previewPreservedCount = previewDeployments.length - previewDeploymentsToDelete.length;
   console.log(
     `Found ${previewDeployments.length} preview deployment${previewDeployments.length === 1 ? "" : "s"} in ${CLOUDFLARE_PAGES_PROJECT}; deleting ${previewDeploymentsToDelete.length} and preserving ${previewPreservedCount}.`
   );
-  await deleteDeployments(previewDeploymentsToDelete, "preview");
+  try {
+    await deleteDeployments(previewDeploymentsToDelete, "preview");
+  } catch (error) {
+    previewError = error;
+    console.warn(
+      `Preview cleanup failed after selecting ${previewDeploymentsToDelete.length} deployment${previewDeploymentsToDelete.length === 1 ? "" : "s"} for deletion.`
+    );
+  }
 
   const productionDeploymentsToDelete = selectProductionDeploymentsToDelete(productionDeployments);
   const productionPreservedCount = productionDeployments.length - productionDeploymentsToDelete.length;
   console.log(
     `Found ${productionDeployments.length} production deployment${productionDeployments.length === 1 ? "" : "s"} in ${CLOUDFLARE_PAGES_PROJECT}; deleting ${productionDeploymentsToDelete.length} and preserving ${productionPreservedCount}.`
   );
-  await deleteDeployments(productionDeploymentsToDelete, "production");
+  let productionError = null;
+  try {
+    await deleteDeployments(productionDeploymentsToDelete, "production");
+  } catch (error) {
+    productionError = error;
+    console.warn(
+      `Production cleanup failed after selecting ${productionDeploymentsToDelete.length} deployment${productionDeploymentsToDelete.length === 1 ? "" : "s"} for deletion.`
+    );
+  }
+
+  if (previewError || productionError) {
+    const messages = [previewError, productionError]
+      .filter(Boolean)
+      .map((error) => (error instanceof Error ? error.message : String(error)));
+    throw new Error(messages.join(" "));
+  }
 }
 
 main().catch((error) => {
