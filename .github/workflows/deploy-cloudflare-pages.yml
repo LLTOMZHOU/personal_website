@@ -144,6 +144,6 @@ jobs:
           PREVIEW_URL: ${{ steps.deploy_pages.outputs.pages-deployment-alias-url }}
         run: node scripts/sync-cloudflare-pages-preview-pr.mjs
 
-      - name: Delete old Cloudflare Pages previews
+      - name: Delete old Cloudflare Pages deployments
         if: github.ref_name == 'main'
         run: node scripts/cleanup-cloudflare-pages-previews.mjs
