@@ -7,15 +7,20 @@ on:
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - reopened
+      - synchronize
   workflow_dispatch:
 
 permissions:
   contents: read
   deployments: write
+  pull-requests: write
 
 jobs:
   build:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     env:
       SITE_URL: ${{ vars.SITE_URL }}
@@ -47,17 +52,24 @@ jobs:
         run: pnpm build
 
   deploy:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     env:
       SITE_URL: ${{ vars.SITE_URL }}
       CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
       CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      GITHUB_TOKEN: ${{ github.token }}
+      GITHUB_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
       BUILD_OUTPUT: dist
+      DEPLOY_BRANCH: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
+      PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+      PR_BRANCH: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.DEPLOY_BRANCH }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -114,6 +126,7 @@ jobs:
           fi
 
       - name: Deploy to Cloudflare Pages
+        id: deploy_pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ env.CLOUDFLARE_API_TOKEN }}
@@ -121,5 +134,16 @@ jobs:
           command: >-
             pages deploy ${{ env.BUILD_OUTPUT }}
             --project-name=${{ env.CLOUDFLARE_PAGES_PROJECT }}
-            --branch=${{ github.ref_name }}
+            --branch=${{ env.DEPLOY_BRANCH }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync preview URL into PR body
+        if: github.event_name == 'pull_request'
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy_pages.outputs.deployment-url }}
+          PREVIEW_URL: ${{ steps.deploy_pages.outputs.pages-deployment-alias-url }}
+        run: node scripts/sync-cloudflare-pages-preview-pr.mjs
+
+      - name: Delete old Cloudflare Pages previews
+        if: github.ref_name == 'main'
+        run: node scripts/cleanup-cloudflare-pages-previews.mjs
