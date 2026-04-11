@@ -76,63 +76,7 @@ function setupPhotographyReveal() {
 }
 
 function setupGalleryLightboxMotion() {
-  const lightbox = document.querySelector<HTMLElement>("[data-gallery-lightbox]");
-  const panel = lightbox?.querySelector<HTMLElement>("[data-gallery-lightbox-panel]");
-  const image = lightbox?.querySelector<HTMLImageElement>("[data-gallery-lightbox-image]");
-
-  if (!(lightbox instanceof HTMLElement) || !(panel instanceof HTMLElement)) {
-    return;
-  }
-
-  if (prefersReducedMotion()) {
-    return;
-  }
-
-  let lastAnimatedImageSrc = "";
-
-  lightbox.addEventListener("gallery-lightbox-open", () => {
-    animate(lightbox, { opacity: [0, 1], duration: 180, ease: "out(2)" });
-    animate(panel, { opacity: [0, 1], y: [10, 0], duration: 260, ease: "out(3)" });
-  });
-
-  lightbox.addEventListener("gallery-lightbox-before-close", (event) => {
-    const customEvent = event as CustomEvent<{ waitUntil: (promise: Promise<unknown>) => void }>;
-    const fadeOut = Promise.allSettled([
-      lightbox
-        .animate([{ opacity: 1 }, { opacity: 0 }], {
-          duration: 140,
-          easing: "ease-out",
-          fill: "forwards"
-        })
-        .finished,
-      panel
-        .animate([{ opacity: 1, transform: "translateY(0px)" }, { opacity: 0, transform: "translateY(12px)" }], {
-          duration: 200,
-          easing: "cubic-bezier(0.33, 1, 0.68, 1)",
-          fill: "forwards"
-        })
-        .finished
-    ]).then(() => {
-      lightbox.style.opacity = "";
-      panel.style.opacity = "";
-      panel.style.transform = "";
-    });
-
-    customEvent.detail.waitUntil(fadeOut);
-  });
-
-  if (image instanceof HTMLImageElement) {
-    image.addEventListener("load", () => {
-      const currentImageSrc = image.currentSrc || image.src;
-
-      if (!currentImageSrc || currentImageSrc === lastAnimatedImageSrc) {
-        return;
-      }
-
-      lastAnimatedImageSrc = currentImageSrc;
-      animate(image, { opacity: [0.1, 1], scale: [0.992, 1], duration: 200, ease: "out(2)" });
-    });
-  }
+  return;
 }
 
 setupPhotographyReveal();

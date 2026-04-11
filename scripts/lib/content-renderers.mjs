@@ -326,7 +326,7 @@ function renderJustifiedGallery(images) {
       .join("");
 
   return `
-      <div class="${rowClass}" data-photography-item>
+      <div class="${rowClass}">
         ${figures}
       </div>
     `;
@@ -351,7 +351,7 @@ function renderAlbumSequence(album, index) {
   if (patternIndex === 0) {
     return `
       <section class="grid grid-cols-1 gap-6 md:grid-cols-12" data-photography-reveal>
-        <figure class="group relative overflow-hidden rounded-[2px] md:col-span-7" data-photography-item>
+        <figure class="group relative overflow-hidden rounded-[2px] md:col-span-7">
           ${renderAlbumLink(
             album,
             renderImage(previewImages[0], "h-[23rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] md:h-[25rem]", coverLoading),
@@ -367,11 +367,11 @@ function renderAlbumSequence(album, index) {
             <p class="font-body text-sm text-white/70">${albumFrameCount(album)} frames</p>
           </figcaption>
         </figure>
-        <div class="grid gap-6 md:col-span-5" data-photography-item>
+        <div class="grid gap-6 md:col-span-5">
           ${previewImages[1]
             ? renderAlbumLink(album, renderAlbumFigure(previewImages[1], "h-[11rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[13rem]"), "block")
             : ""}
-          <div class="px-1 py-2">
+          <div class="px-1 py-2" data-photography-item>
             <p class="text-base leading-6 text-on-surface-variant">${escapeHtml(album.description ?? "")}</p>
             <p class="mt-5">
               ${renderAlbumLink(
@@ -414,7 +414,7 @@ function renderAlbumSequence(album, index) {
             )}
           </p>
         </div>
-        <div class="grid gap-6 lg:col-span-8 lg:grid-cols-2" data-photography-item>
+        <div class="grid gap-6 lg:col-span-8 lg:grid-cols-2">
           ${previewImages.map((item, itemIndex) =>
             renderAlbumLink(
               album,
@@ -450,7 +450,7 @@ function renderAlbumSequence(album, index) {
             )}
         </p>
       </div>
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2" data-photography-item>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         ${previewImages.map((item, itemIndex) =>
           renderAlbumLink(
             album,
@@ -563,10 +563,11 @@ export function renderPhotographyAlbum(album) {
       <a
         class="font-body text-[0.72rem] font-bold uppercase tracking-[0.2em] text-primary transition-opacity hover:opacity-70"
         href="/photography/"
+        data-photography-item
       >
         Back to Photography
       </a>
-      <span class="font-label text-[0.72rem] uppercase tracking-[0.2em] text-on-surface-variant">
+      <span class="font-label text-[0.72rem] uppercase tracking-[0.2em] text-on-surface-variant" data-photography-item>
         ${albumFrameCount(album)} frames
       </span>
     </section>
@@ -585,7 +586,7 @@ export function renderPhotographyAlbum(album) {
       </p>
     </section>
 
-    <section class="space-y-8" data-photography-reveal>
+    <section class="space-y-8">
       ${galleryHtml}
     </section>
 
