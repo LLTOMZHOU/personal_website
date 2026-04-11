@@ -5,6 +5,7 @@ const MAX_ATTEMPTS = 5;
 const RETRY_BASE_DELAY_MS = 1000;
 const DEPLOYMENT_LOOKUP_ATTEMPTS = 12;
 const DEPLOYMENT_LOOKUP_DELAY_MS = 5000;
+const REQUEST_TIMEOUT_MS = 15000;
 const PREVIEW_BLOCK_START = "<!-- codex-preview-link:start -->";
 const PREVIEW_BLOCK_END = "<!-- codex-preview-link:end -->";
 
@@ -16,6 +17,7 @@ const CLOUDFLARE_PAGES_PROJECT =
   process.env.CLOUDFLARE_PAGES_PROJECT ?? process.env.CF_PAGES_PROJECT_NAME;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
+const GITHUB_SHA = process.env.GITHUB_SHA;
 const PR_NUMBER = process.env.PR_NUMBER;
 const PR_BRANCH = process.env.PR_BRANCH;
 
@@ -34,11 +36,32 @@ function isRetryableStatus(status) {
   return status === 429 || status >= 500;
 }
 
+async function fetchWithTimeout(url, init = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const upstreamSignal = init.signal;
+
+  if (upstreamSignal?.aborted) {
+    controller.abort();
+  } else if (upstreamSignal) {
+    upstreamSignal.addEventListener("abort", () => controller.abort(), { once: true });
+  }
+
+  try {
+    return await fetch(url, {
+      ...init,
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function cloudflareRequest(path, init = {}, attempt = 1) {
   let response;
 
   try {
-    response = await fetch(`${API_ROOT}${path}`, {
+    response = await fetchWithTimeout(`${API_ROOT}${path}`, {
       ...init,
       headers: {
         Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
@@ -87,7 +110,7 @@ async function cloudflareRequest(path, init = {}, attempt = 1) {
 }
 
 async function githubRequest(path, init = {}) {
-  const response = await fetch(`${GITHUB_API_ROOT}${path}`, {
+  const response = await fetchWithTimeout(`${GITHUB_API_ROOT}${path}`, {
     ...init,
     headers: {
       Accept: "application/vnd.github+json",
@@ -115,6 +138,10 @@ function ensureHttps(url) {
   return url.startsWith("http") ? url : `https://${url}`;
 }
 
+function getHost(url) {
+  return new URL(ensureHttps(url)).host;
+}
+
 async function listPreviewDeployments() {
   const deployments = [];
 
@@ -138,14 +165,24 @@ async function listPreviewDeployments() {
   }
 }
 
+function sortNewestFirst(left, right) {
+  const leftTime = Date.parse(left.modified_on ?? left.created_on ?? "") || 0;
+  const rightTime = Date.parse(right.modified_on ?? right.created_on ?? "") || 0;
+  return rightTime - leftTime;
+}
+
 function selectLatestDeploymentForBranch(deployments, branch) {
-  return deployments
+  const branchDeployments = deployments
     .filter((deployment) => deployment.deployment_trigger?.metadata?.branch === branch)
-    .sort((left, right) => {
-      const leftTime = Date.parse(left.modified_on ?? left.created_on ?? "") || 0;
-      const rightTime = Date.parse(right.modified_on ?? right.created_on ?? "") || 0;
-      return rightTime - leftTime;
-    })[0];
+    .sort(sortNewestFirst);
+
+  if (!GITHUB_SHA) {
+    return branchDeployments[0];
+  }
+
+  return branchDeployments.find(
+    (deployment) => deployment.deployment_trigger?.metadata?.commit_hash === GITHUB_SHA
+  );
 }
 
 async function waitForLatestDeployment(branch) {
@@ -168,12 +205,24 @@ async function waitForLatestDeployment(branch) {
 }
 
 function selectPreviewUrl(deployment, branch) {
-  const expectedAlias = `${normalizeBranchAlias(branch)}.${CLOUDFLARE_PAGES_PROJECT}.pages.dev`;
-  const aliases = Array.isArray(deployment.aliases) ? deployment.aliases : [];
-  const preferredAlias = aliases.find((alias) => alias === expectedAlias) ?? aliases[0];
+  const normalizedBranch = normalizeBranchAlias(branch);
+  const expectedAlias = `${normalizedBranch}.${CLOUDFLARE_PAGES_PROJECT}.pages.dev`;
+  const deploymentHost = deployment.url ? getHost(deployment.url) : null;
+  const aliases = (Array.isArray(deployment.aliases) ? deployment.aliases : [])
+    .map((alias) => ({
+      raw: alias,
+      host: getHost(alias)
+    }))
+    .filter(({ host }) => host.endsWith(`.${CLOUDFLARE_PAGES_PROJECT}.pages.dev`) && host !== deploymentHost)
+    .sort((left, right) => left.host.localeCompare(right.host));
+
+  const preferredAlias =
+    aliases.find(({ host }) => host === expectedAlias) ??
+    aliases.find(({ host }) => host.startsWith(`${normalizedBranch}-`)) ??
+    aliases[0];
 
   if (preferredAlias) {
-    return ensureHttps(preferredAlias);
+    return ensureHttps(preferredAlias.raw);
   }
 
   if (deployment.url) {
