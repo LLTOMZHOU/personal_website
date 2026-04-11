@@ -28,6 +28,7 @@ function setupRevealAnimation() {
   if (prefersReducedMotion()) {
     revealSections.forEach((section) => {
       collectRevealTargets(section).forEach((target) => {
+        target.dataset.motionRevealed = "true";
         target.style.opacity = "1";
         target.style.transform = "none";
       });
@@ -58,19 +59,19 @@ function setupRevealAnimation() {
           y: [32, 0],
           delay: stagger(140, { start: delay }),
           duration: 980,
-          ease: "out(4)"
+          ease: "out(4)",
+          onComplete: () => {
+            targets.forEach((target) => {
+              target.dataset.motionRevealed = "true";
+            });
+          }
         });
         observer.unobserve(section);
       });
     },
     { threshold: 0.22, rootMargin: "0px 0px -8% 0px" }
   );
-
   revealSections.forEach((section) => {
-    collectRevealTargets(section).forEach((target) => {
-      target.style.opacity = "0";
-      target.style.transform = "translateY(32px)";
-    });
     observer.observe(section);
   });
 }
@@ -83,30 +84,59 @@ function setupTiltCards() {
   const cards = document.querySelectorAll<HTMLElement>("[data-home-tilt]");
 
   cards.forEach((card) => {
-    card.style.transformStyle = "preserve-3d";
+    let bounds: DOMRect | null = null;
+    let frameId: number | null = null;
+    let pointerX = 0;
+    let pointerY = 0;
 
-    card.addEventListener("pointermove", (event) => {
-      const bounds = card.getBoundingClientRect();
-      const x = event.clientX - bounds.left;
-      const y = event.clientY - bounds.top;
+    const updateBounds = () => {
+      bounds = card.getBoundingClientRect();
+    };
+
+    const applyTilt = () => {
+      frameId = null;
+
+      if (!bounds) {
+        updateBounds();
+      }
+
+      if (!bounds || bounds.width === 0 || bounds.height === 0) {
+        return;
+      }
+
+      const x = pointerX - bounds.left;
+      const y = pointerY - bounds.top;
       const rotateX = ((y / bounds.height) - 0.5) * -3.2;
       const rotateY = ((x / bounds.width) - 0.5) * 3.8;
 
-      animate(card, {
-        rotateX,
-        rotateY,
-        duration: 180,
-        ease: "out(2)"
-      });
+      card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    };
+
+    card.style.transformStyle = "preserve-3d";
+    card.style.transition = "transform 180ms cubic-bezier(0.215, 0.61, 0.355, 1)";
+    card.style.willChange = "transform";
+
+    card.addEventListener("pointerenter", () => {
+      updateBounds();
+    });
+
+    card.addEventListener("pointermove", (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+
+      if (frameId === null) {
+        frameId = window.requestAnimationFrame(applyTilt);
+      }
     });
 
     card.addEventListener("pointerleave", () => {
-      animate(card, {
-        rotateX: 0,
-        rotateY: 0,
-        duration: 260,
-        ease: "out(3)"
-      });
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+
+      bounds = null;
+      card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
     });
   });
 }

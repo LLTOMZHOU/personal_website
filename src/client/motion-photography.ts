@@ -28,6 +28,7 @@ function setupPhotographyReveal() {
   if (prefersReducedMotion()) {
     sections.forEach((section) => {
       collectRevealTargets(section).forEach((target) => {
+        target.dataset.motionRevealed = "true";
         target.style.opacity = "1";
         target.style.transform = "none";
       });
@@ -56,7 +57,12 @@ function setupPhotographyReveal() {
           y: [28, 0],
           delay: stagger(120),
           duration: 920,
-          ease: "out(4)"
+          ease: "out(4)",
+          onComplete: () => {
+            targets.forEach((target) => {
+              target.dataset.motionRevealed = "true";
+            });
+          }
         });
 
         observer.unobserve(section);
@@ -64,12 +70,7 @@ function setupPhotographyReveal() {
     },
     { threshold: 0.22, rootMargin: "0px 0px -8% 0px" }
   );
-
   sections.forEach((section) => {
-    collectRevealTargets(section).forEach((target) => {
-      target.style.opacity = "0";
-      target.style.transform = "translateY(28px)";
-    });
     observer.observe(section);
   });
 }
@@ -87,19 +88,48 @@ function setupGalleryLightboxMotion() {
     return;
   }
 
-  const observer = new MutationObserver(() => {
-    if (lightbox.hidden) {
-      return;
-    }
+  let lastAnimatedImageSrc = "";
 
+  lightbox.addEventListener("gallery-lightbox-open", () => {
     animate(lightbox, { opacity: [0, 1], duration: 180, ease: "out(2)" });
     animate(panel, { opacity: [0, 1], y: [10, 0], duration: 260, ease: "out(3)" });
   });
 
-  observer.observe(lightbox, { attributes: true, attributeFilter: ["hidden"] });
+  lightbox.addEventListener("gallery-lightbox-before-close", (event) => {
+    const customEvent = event as CustomEvent<{ waitUntil: (promise: Promise<unknown>) => void }>;
+    const fadeOut = Promise.allSettled([
+      lightbox
+        .animate([{ opacity: 1 }, { opacity: 0 }], {
+          duration: 140,
+          easing: "ease-out",
+          fill: "forwards"
+        })
+        .finished,
+      panel
+        .animate([{ opacity: 1, transform: "translateY(0px)" }, { opacity: 0, transform: "translateY(12px)" }], {
+          duration: 200,
+          easing: "cubic-bezier(0.33, 1, 0.68, 1)",
+          fill: "forwards"
+        })
+        .finished
+    ]).then(() => {
+      lightbox.style.opacity = "";
+      panel.style.opacity = "";
+      panel.style.transform = "";
+    });
+
+    customEvent.detail.waitUntil(fadeOut);
+  });
 
   if (image instanceof HTMLImageElement) {
     image.addEventListener("load", () => {
+      const currentImageSrc = image.currentSrc || image.src;
+
+      if (!currentImageSrc || currentImageSrc === lastAnimatedImageSrc) {
+        return;
+      }
+
+      lastAnimatedImageSrc = currentImageSrc;
       animate(image, { opacity: [0.1, 1], scale: [0.992, 1], duration: 200, ease: "out(2)" });
     });
   }

@@ -30,6 +30,7 @@ function setupPhotographyLightbox() {
   let displayedIndex = -1;
   let requestedIndex = -1;
   let activeRequestId = 0;
+  let isClosing = false;
   const imageLoadPromises = new Map<string, Promise<void>>();
 
   const scheduleIdleWork =
@@ -180,12 +181,14 @@ function setupPhotographyLightbox() {
   }
 
   function openLightbox(index: number) {
+    isClosing = false;
     void setActiveImage(index, { preferPreview: true });
     lightbox.hidden = false;
     lightbox.classList.remove("hidden");
     lightbox.classList.add("flex");
     lightbox.setAttribute("aria-hidden", "false");
     document.body.classList.add("overflow-hidden");
+    lightbox.dispatchEvent(new CustomEvent("gallery-lightbox-open"));
     window.requestAnimationFrame(() => {
       if (closeButton instanceof HTMLButtonElement) {
         closeButton.focus();
@@ -196,8 +199,28 @@ function setupPhotographyLightbox() {
     });
   }
 
-  function closeLightbox() {
+  async function closeLightbox() {
+    if (isClosing || lightbox.hidden) {
+      return;
+    }
+
+    isClosing = true;
     activeRequestId += 1;
+    const pendingCloseWork: Promise<unknown>[] = [];
+    lightbox.dispatchEvent(
+      new CustomEvent("gallery-lightbox-before-close", {
+        detail: {
+          waitUntil(promise: Promise<unknown>) {
+            pendingCloseWork.push(promise);
+          }
+        }
+      })
+    );
+
+    if (pendingCloseWork.length > 0) {
+      await Promise.allSettled(pendingCloseWork);
+    }
+
     lightbox.hidden = true;
     lightbox.classList.add("hidden");
     lightbox.classList.remove("flex");
@@ -211,6 +234,7 @@ function setupPhotographyLightbox() {
 
     displayedIndex = -1;
     requestedIndex = -1;
+    isClosing = false;
   }
 
   function moveLightbox(direction: number) {
@@ -244,7 +268,7 @@ function setupPhotographyLightbox() {
   closeButtons?.forEach((button) => {
     if (button instanceof HTMLButtonElement) {
       button.addEventListener("click", () => {
-        closeLightbox();
+        void closeLightbox();
       });
     }
   });
@@ -268,7 +292,7 @@ function setupPhotographyLightbox() {
 
     if (event.key === "Escape") {
       event.preventDefault();
-      closeLightbox();
+      void closeLightbox();
     }
 
     if (event.key === "ArrowRight") {
