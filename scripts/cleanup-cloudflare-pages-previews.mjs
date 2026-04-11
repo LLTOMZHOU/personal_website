@@ -4,6 +4,7 @@ const MAX_ATTEMPTS = 5;
 const RETRY_BASE_DELAY_MS = 1000;
 const DELETE_DELAY_MS = 250;
 const MAX_RETRY_DELAY_MS = 5 * 60 * 1000;
+const PRODUCTION_DEPLOYMENTS_TO_KEEP = 2;
 
 const CLOUDFLARE_API_TOKEN =
   process.env.CLOUDFLARE_API_TOKEN ?? process.env.CF_API_TOKEN;
@@ -154,12 +155,12 @@ function getGitHubRetryDelayMs(response) {
   return null;
 }
 
-async function listPreviewDeployments() {
+async function listDeployments(environment) {
   const deployments = [];
 
   for (let page = 1; ; page += 1) {
     const params = new URLSearchParams({
-      env: "preview",
+      env: environment,
       page: String(page),
       per_page: String(DEPLOYMENTS_PER_PAGE)
     });
@@ -174,6 +175,10 @@ async function listPreviewDeployments() {
       return deployments;
     }
   }
+}
+
+function sortNewestFirst(left, right) {
+  return deploymentTimestamp(right) - deploymentTimestamp(left);
 }
 
 async function deleteDeployment(deployment) {
@@ -214,26 +219,12 @@ function deploymentTimestamp(deployment) {
   return Date.parse(deployment.modified_on ?? deployment.created_on ?? "") || 0;
 }
 
-async function main() {
-  requireEnv("CLOUDFLARE_API_TOKEN", CLOUDFLARE_API_TOKEN);
-  requireEnv("CLOUDFLARE_ACCOUNT_ID", CLOUDFLARE_ACCOUNT_ID);
-  requireEnv("CLOUDFLARE_PAGES_PROJECT", CLOUDFLARE_PAGES_PROJECT);
-
-  const deployments = await listPreviewDeployments();
-  if (deployments.length === 0) {
-    console.log("No preview deployments found.");
-    return;
-  }
-
-  requireEnv("GITHUB_TOKEN", GITHUB_TOKEN);
-  requireEnv("GITHUB_REPOSITORY", GITHUB_REPOSITORY);
-
-  const openPullRequestBranches = await listOpenPullRequestBranches();
+function selectPreviewDeploymentsToDelete(deployments, openPullRequestBranches) {
   const preservedBranches = new Set();
   const preservedDeploymentIds = new Set();
 
   [...deployments]
-    .sort((left, right) => deploymentTimestamp(right) - deploymentTimestamp(left))
+    .sort(sortNewestFirst)
     .forEach((deployment) => {
       const branch = deployment.deployment_trigger?.metadata?.branch;
       if (!branch || !openPullRequestBranches.has(branch) || preservedBranches.has(branch)) {
@@ -243,38 +234,80 @@ async function main() {
       preservedDeploymentIds.add(deployment.id);
     });
 
-  const deploymentsToDelete = [...deployments]
+  return [...deployments]
     .filter((deployment) => !preservedDeploymentIds.has(deployment.id))
     .sort((left, right) => deploymentTimestamp(left) - deploymentTimestamp(right));
+}
 
-  const preservedCount = deployments.length - deploymentsToDelete.length;
+function selectProductionDeploymentsToDelete(deployments) {
+  return [...deployments]
+    .sort(sortNewestFirst)
+    .slice(PRODUCTION_DEPLOYMENTS_TO_KEEP)
+    .sort((left, right) => deploymentTimestamp(left) - deploymentTimestamp(right));
+}
 
-  console.log(
-    `Found ${deployments.length} preview deployment${deployments.length === 1 ? "" : "s"} in ${CLOUDFLARE_PAGES_PROJECT}; deleting ${deploymentsToDelete.length} and preserving ${preservedCount}.`
-  );
+async function deleteDeployments(deployments, environment) {
+  if (deployments.length === 0) {
+    console.log(`No ${environment} deployments to delete.`);
+    return;
+  }
 
   const failures = [];
 
-  for (const deployment of deploymentsToDelete) {
+  for (const deployment of deployments) {
     const branch = deployment.deployment_trigger?.metadata?.branch ?? "unknown-branch";
     const alias = deployment.aliases?.[0] ?? deployment.url ?? "unknown-url";
 
     try {
       await deleteDeployment(deployment);
-      console.log(`Deleted preview ${deployment.id} (${branch}) ${alias}`);
+      console.log(`Deleted ${environment} ${deployment.id} (${branch}) ${alias}`);
       await sleep(DELETE_DELAY_MS);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       failures.push({ id: deployment.id, branch, message });
-      console.warn(`Failed to delete preview ${deployment.id} (${branch}): ${message}`);
+      console.warn(`Failed to delete ${environment} ${deployment.id} (${branch}): ${message}`);
     }
   }
 
   if (failures.length > 0) {
     throw new Error(
-      `Failed to delete ${failures.length} preview deployment${failures.length === 1 ? "" : "s"}.`
+      `Failed to delete ${failures.length} ${environment} deployment${failures.length === 1 ? "" : "s"}.`
     );
   }
+}
+
+async function main() {
+  requireEnv("CLOUDFLARE_API_TOKEN", CLOUDFLARE_API_TOKEN);
+  requireEnv("CLOUDFLARE_ACCOUNT_ID", CLOUDFLARE_ACCOUNT_ID);
+  requireEnv("CLOUDFLARE_PAGES_PROJECT", CLOUDFLARE_PAGES_PROJECT);
+
+  requireEnv("GITHUB_TOKEN", GITHUB_TOKEN);
+  requireEnv("GITHUB_REPOSITORY", GITHUB_REPOSITORY);
+
+  const previewDeployments = await listDeployments("preview");
+  const productionDeployments = await listDeployments("production");
+  if (previewDeployments.length === 0 && productionDeployments.length === 0) {
+    console.log("No preview or production deployments found.");
+    return;
+  }
+
+  const openPullRequestBranches = await listOpenPullRequestBranches();
+  const previewDeploymentsToDelete = selectPreviewDeploymentsToDelete(
+    previewDeployments,
+    openPullRequestBranches
+  );
+  const previewPreservedCount = previewDeployments.length - previewDeploymentsToDelete.length;
+  console.log(
+    `Found ${previewDeployments.length} preview deployment${previewDeployments.length === 1 ? "" : "s"} in ${CLOUDFLARE_PAGES_PROJECT}; deleting ${previewDeploymentsToDelete.length} and preserving ${previewPreservedCount}.`
+  );
+  await deleteDeployments(previewDeploymentsToDelete, "preview");
+
+  const productionDeploymentsToDelete = selectProductionDeploymentsToDelete(productionDeployments);
+  const productionPreservedCount = productionDeployments.length - productionDeploymentsToDelete.length;
+  console.log(
+    `Found ${productionDeployments.length} production deployment${productionDeployments.length === 1 ? "" : "s"} in ${CLOUDFLARE_PAGES_PROJECT}; deleting ${productionDeploymentsToDelete.length} and preserving ${productionPreservedCount}.`
+  );
+  await deleteDeployments(productionDeploymentsToDelete, "production");
 }
 
 main().catch((error) => {
