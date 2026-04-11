@@ -1,20 +1,36 @@
-import { animate, createTimeline, stagger } from "animejs";
+import { animate, stagger } from "animejs";
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function setupRevealAnimation() {
-  const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-home-reveal]"));
+function collectRevealTargets(section: HTMLElement) {
+  const explicitTargets = Array.from(section.querySelectorAll<HTMLElement>("[data-home-item]"));
 
-  if (revealItems.length === 0) {
+  if (explicitTargets.length > 0) {
+    return explicitTargets;
+  }
+
+  const directChildren = Array.from(section.children).filter(
+    (child): child is HTMLElement => child instanceof HTMLElement
+  );
+
+  return directChildren.length > 0 ? directChildren : [section];
+}
+
+function setupRevealAnimation() {
+  const revealSections = Array.from(document.querySelectorAll<HTMLElement>("[data-home-reveal]"));
+
+  if (revealSections.length === 0) {
     return;
   }
 
   if (prefersReducedMotion()) {
-    revealItems.forEach((item) => {
-      item.style.opacity = "1";
-      item.style.transform = "none";
+    revealSections.forEach((section) => {
+      collectRevealTargets(section).forEach((target) => {
+        target.style.opacity = "1";
+        target.style.transform = "none";
+      });
     });
     return;
   }
@@ -26,21 +42,36 @@ function setupRevealAnimation() {
           return;
         }
 
-        const item = entry.target;
-        const delay = Number(item.dataset.revealDelay ?? "0");
-        createTimeline({ defaults: { ease: "out(3)", duration: 640 } })
-          .add(item, { opacity: [0, 1], y: [20, 0], delay })
-          .add(item.querySelectorAll("h2, h3, h4, p, li, article"), { opacity: [0, 1], y: [14, 0], delay: stagger(48) }, 60);
-        observer.unobserve(item);
+        const section = entry.target;
+
+        if (section.dataset.homeRevealState === "revealed") {
+          observer.unobserve(section);
+          return;
+        }
+
+        section.dataset.homeRevealState = "revealed";
+        const delay = Number(section.dataset.revealDelay ?? "0");
+        const targets = collectRevealTargets(section);
+
+        animate(targets, {
+          opacity: [0, 1],
+          y: [32, 0],
+          delay: stagger(140, { start: delay }),
+          duration: 980,
+          ease: "out(4)"
+        });
+        observer.unobserve(section);
       });
     },
-    { threshold: 0.2, rootMargin: "0px 0px -12% 0px" }
+    { threshold: 0.22, rootMargin: "0px 0px -8% 0px" }
   );
 
-  revealItems.forEach((item) => {
-    item.style.opacity = "0";
-    item.style.transform = "translateY(20px)";
-    observer.observe(item);
+  revealSections.forEach((section) => {
+    collectRevealTargets(section).forEach((target) => {
+      target.style.opacity = "0";
+      target.style.transform = "translateY(32px)";
+    });
+    observer.observe(section);
   });
 }
 

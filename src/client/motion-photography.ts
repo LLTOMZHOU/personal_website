@@ -1,7 +1,21 @@
-import { animate, createTimeline, stagger } from "animejs";
+import { animate, stagger } from "animejs";
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function collectRevealTargets(section: HTMLElement) {
+  const explicitTargets = Array.from(section.querySelectorAll<HTMLElement>("[data-photography-item]"));
+
+  if (explicitTargets.length > 0) {
+    return explicitTargets;
+  }
+
+  const directChildren = Array.from(section.children).filter(
+    (child): child is HTMLElement => child instanceof HTMLElement
+  );
+
+  return directChildren.length > 0 ? directChildren : [section];
 }
 
 function setupPhotographyReveal() {
@@ -13,8 +27,10 @@ function setupPhotographyReveal() {
 
   if (prefersReducedMotion()) {
     sections.forEach((section) => {
-      section.style.opacity = "1";
-      section.style.transform = "none";
+      collectRevealTargets(section).forEach((target) => {
+        target.style.opacity = "1";
+        target.style.transform = "none";
+      });
     });
     return;
   }
@@ -27,23 +43,33 @@ function setupPhotographyReveal() {
         }
 
         const section = entry.target;
-        const children = section.querySelectorAll("[data-photography-item]");
-        const timeline = createTimeline({ defaults: { duration: 620, ease: "out(3)" } });
-        timeline.add(section, { opacity: [0, 1], y: [22, 0] });
 
-        if (children.length > 0) {
-          timeline.add(children, { opacity: [0, 1], y: [14, 0], delay: stagger(50) }, 80);
+        if (section.dataset.photographyRevealState === "revealed") {
+          observer.unobserve(section);
+          return;
         }
+
+        section.dataset.photographyRevealState = "revealed";
+        const targets = collectRevealTargets(section);
+        animate(targets, {
+          opacity: [0, 1],
+          y: [28, 0],
+          delay: stagger(120),
+          duration: 920,
+          ease: "out(4)"
+        });
 
         observer.unobserve(section);
       });
     },
-    { threshold: 0.18, rootMargin: "0px 0px -12% 0px" }
+    { threshold: 0.22, rootMargin: "0px 0px -8% 0px" }
   );
 
   sections.forEach((section) => {
-    section.style.opacity = "0";
-    section.style.transform = "translateY(20px)";
+    collectRevealTargets(section).forEach((target) => {
+      target.style.opacity = "0";
+      target.style.transform = "translateY(28px)";
+    });
     observer.observe(section);
   });
 }
