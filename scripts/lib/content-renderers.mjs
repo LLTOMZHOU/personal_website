@@ -326,7 +326,7 @@ function renderJustifiedGallery(images) {
       .join("");
 
   return `
-      <div class="${rowClass}">
+      <div class="${rowClass}" data-photography-item>
         ${figures}
       </div>
     `;
@@ -350,8 +350,8 @@ function renderAlbumSequence(album, index) {
 
   if (patternIndex === 0) {
     return `
-      <section class="grid grid-cols-1 gap-6 md:grid-cols-12">
-        <figure class="group relative overflow-hidden rounded-[2px] md:col-span-7">
+      <section class="grid grid-cols-1 gap-6 md:grid-cols-12" data-photography-reveal>
+        <figure class="group relative overflow-hidden rounded-[2px] md:col-span-7" data-photography-item>
           ${renderAlbumLink(
             album,
             renderImage(previewImages[0], "h-[23rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] md:h-[25rem]", coverLoading),
@@ -367,7 +367,7 @@ function renderAlbumSequence(album, index) {
             <p class="font-body text-sm text-white/70">${albumFrameCount(album)} frames</p>
           </figcaption>
         </figure>
-        <div class="grid gap-6 md:col-span-5">
+        <div class="grid gap-6 md:col-span-5" data-photography-item>
           ${previewImages[1]
             ? renderAlbumLink(album, renderAlbumFigure(previewImages[1], "h-[11rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:h-[13rem]"), "block")
             : ""}
@@ -397,8 +397,8 @@ function renderAlbumSequence(album, index) {
 
   if (patternIndex === 1) {
     return `
-      <section class="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div class="lg:col-span-4">
+      <section class="grid grid-cols-1 gap-6 lg:grid-cols-12" data-photography-reveal>
+        <div class="lg:col-span-4" data-photography-item>
           <p class="mb-4 font-label text-[0.72rem] uppercase tracking-[0.22em] text-on-surface-variant">
             ${escapeHtml(inferLabel(album))}
           </p>
@@ -414,7 +414,7 @@ function renderAlbumSequence(album, index) {
             )}
           </p>
         </div>
-        <div class="grid gap-6 lg:col-span-8 lg:grid-cols-2">
+        <div class="grid gap-6 lg:col-span-8 lg:grid-cols-2" data-photography-item>
           ${previewImages.map((item, itemIndex) =>
             renderAlbumLink(
               album,
@@ -433,8 +433,8 @@ function renderAlbumSequence(album, index) {
   }
 
   return `
-    <section class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
-      <div class="px-1 py-2">
+    <section class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start" data-photography-reveal>
+      <div class="px-1 py-2" data-photography-item>
         <p class="mb-4 font-label text-[0.72rem] uppercase tracking-[0.22em] text-primary">
           ${escapeHtml(inferLabel(album))}
         </p>
@@ -450,7 +450,7 @@ function renderAlbumSequence(album, index) {
             )}
         </p>
       </div>
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2" data-photography-item>
         ${previewImages.map((item, itemIndex) =>
           renderAlbumLink(
             album,
@@ -515,8 +515,8 @@ export async function renderPhotographyIndex() {
   const rest = albums.slice(1);
 
   const intro = `
-    <section class="mb-12 flex items-end justify-between gap-8">
-      <div>
+    <section class="mb-12 flex items-end justify-between gap-8" data-photography-reveal>
+      <div data-photography-item>
         <p class="mb-4 font-label text-[0.75rem] uppercase tracking-[0.24em] text-on-surface-variant">
           Photography
         </p>
@@ -524,7 +524,7 @@ export async function renderPhotographyIndex() {
           Studies in light and form
         </h1>
       </div>
-      <div class="shrink-0 text-right">
+      <div class="shrink-0 text-right" data-photography-item>
         <p class="font-label text-[0.72rem] uppercase tracking-[0.22em] text-on-surface-variant">
           Collections
         </p>
@@ -559,7 +559,7 @@ export function renderPhotographyAlbum(album) {
   const galleryHtml = renderJustifiedGallery(images);
 
   return `
-    <section class="mb-8 flex items-start justify-between gap-8">
+    <section class="mb-8 flex items-start justify-between gap-8" data-photography-reveal>
       <a
         class="font-body text-[0.72rem] font-bold uppercase tracking-[0.2em] text-primary transition-opacity hover:opacity-70"
         href="/photography/"
@@ -571,8 +571,8 @@ export function renderPhotographyAlbum(album) {
       </span>
     </section>
 
-    <section class="mb-10 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)] lg:items-end">
-      <div>
+    <section class="mb-10 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)] lg:items-end" data-photography-reveal>
+      <div data-photography-item>
         <p class="mb-5 font-label text-[0.75rem] uppercase tracking-[0.24em] text-on-surface-variant">
           ${escapeHtml(inferLabel(album))}
         </p>
@@ -580,12 +580,12 @@ export function renderPhotographyAlbum(album) {
           ${escapeHtml(album.title)}
         </h1>
       </div>
-      <p class="max-w-xl text-base leading-6 text-on-surface-variant">
+      <p class="max-w-xl text-base leading-6 text-on-surface-variant" data-photography-item>
         ${escapeHtml(album.description ?? "")}
       </p>
     </section>
 
-    <section class="space-y-8">
+    <section class="space-y-8" data-photography-reveal>
       ${galleryHtml}
     </section>
 
@@ -605,7 +605,7 @@ export function renderPhotographyAlbum(album) {
         aria-label="Close larger image view"
         data-gallery-lightbox-backdrop
       ></button>
-      <div class="relative z-10 flex max-h-full w-full max-w-[min(96vw,88rem)] flex-col gap-4">
+      <div class="relative z-10 flex max-h-full w-full max-w-[min(96vw,88rem)] flex-col gap-4" data-gallery-lightbox-panel>
         <h2 class="sr-only" id="gallery-lightbox-title">Image viewer</h2>
         <div class="flex items-center justify-between gap-4 text-white">
           <p
@@ -670,7 +670,7 @@ export async function getGeneratedPages() {
           : "Photography collection by Yuxing Zhou.",
       path: albumRoute(album),
       section: "photography",
-      bundles: ["gallery"],
+      bundles: ["gallery", "motion-photography"],
       bodyClass: "page-photography-album",
       ogImage: album.cover?.src ?? ""
     },

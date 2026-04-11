@@ -4,6 +4,6 @@
   "path": "/",
   "section": "home",
   "ogImage": "",
-  "bundles": [],
+  "bundles": ["motion-home"],
   "bodyClass": "page-home"
 }

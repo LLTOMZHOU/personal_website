@@ -149,6 +149,17 @@ function renderScriptTags(scriptFiles) {
   return scriptFiles.map((src) => `<script type="module" src="${src}"></script>`).join("\n");
 }
 
+function renderMotionInitScript() {
+  return `<script>(() => {
+    const root = document.documentElement;
+    root.dataset.js = "enabled";
+
+    if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+      root.dataset.motion = "enabled";
+    }
+  })();</script>`;
+}
+
 function renderAppIcons() {
   return `
     <link rel="icon" href="/favicon.png" sizes="512x512" type="image/png">
@@ -193,6 +204,7 @@ export function renderPage({
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Newsreader:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     >
+    ${renderMotionInitScript()}
     ${renderAppIcons()}
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${description}">
