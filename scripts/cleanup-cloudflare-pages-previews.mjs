@@ -29,13 +29,29 @@ function isRetryableStatus(status) {
 }
 
 async function apiRequest(path, init = {}, attempt = 1) {
-  const response = await fetch(`${API_ROOT}${path}`, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
-      ...(init.headers ?? {})
+  let response;
+
+  try {
+    response = await fetch(`${API_ROOT}${path}`, {
+      ...init,
+      headers: {
+        Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
+        ...(init.headers ?? {})
+      }
+    });
+  } catch (error) {
+    if (attempt < MAX_ATTEMPTS) {
+      const delay = RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+      const message = error instanceof Error ? error.message : String(error);
+      console.warn(
+        `Request failed for ${init.method ?? "GET"} ${path} (${message}). Retrying in ${delay}ms (${attempt}/${MAX_ATTEMPTS}).`
+      );
+      await sleep(delay);
+      return apiRequest(path, init, attempt + 1);
     }
-  });
+
+    throw error;
+  }
 
   let body = null;
   try {
@@ -65,20 +81,55 @@ async function apiRequest(path, init = {}, attempt = 1) {
   return body;
 }
 
-async function githubRequest(path) {
-  const response = await fetch(`https://api.github.com${path}`, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
-      "X-GitHub-Api-Version": "2022-11-28"
-    }
-  });
+async function githubRequest(path, attempt = 1) {
+  let response;
 
-  if (!response.ok) {
-    throw new Error(`GitHub API request failed with status ${response.status}.`);
+  try {
+    response = await fetch(`https://api.github.com${path}`, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        "X-GitHub-Api-Version": "2022-11-28"
+      }
+    });
+  } catch (error) {
+    if (attempt < MAX_ATTEMPTS) {
+      const delay = RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+      const message = error instanceof Error ? error.message : String(error);
+      console.warn(
+        `GitHub request failed for ${path} (${message}). Retrying in ${delay}ms (${attempt}/${MAX_ATTEMPTS}).`
+      );
+      await sleep(delay);
+      return githubRequest(path, attempt + 1);
+    }
+
+    throw error;
   }
 
-  return response.json();
+  let body = null;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+
+  const errorMessage =
+    body?.message ?? `GitHub API request failed with status ${response.status}.`;
+
+  if (!response.ok && isRetryableStatus(response.status) && attempt < MAX_ATTEMPTS) {
+    const delay = RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+    console.warn(
+      `GitHub request failed for ${path} (${errorMessage}). Retrying in ${delay}ms (${attempt}/${MAX_ATTEMPTS}).`
+    );
+    await sleep(delay);
+    return githubRequest(path, attempt + 1);
+  }
+
+  if (!response.ok) {
+    throw new Error(errorMessage);
+  }
+
+  return body;
 }
 
 async function listPreviewDeployments() {
