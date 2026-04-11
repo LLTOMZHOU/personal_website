@@ -3,6 +3,7 @@ const DEPLOYMENTS_PER_PAGE = 25;
 const MAX_ATTEMPTS = 5;
 const RETRY_BASE_DELAY_MS = 1000;
 const DELETE_DELAY_MS = 250;
+const MAX_RETRY_DELAY_MS = 5 * 60 * 1000;
 
 const CLOUDFLARE_API_TOKEN =
   process.env.CLOUDFLARE_API_TOKEN ?? process.env.CF_API_TOKEN;
@@ -115,9 +116,16 @@ async function githubRequest(path, attempt = 1) {
 
   const errorMessage =
     body?.message ?? `GitHub API request failed with status ${response.status}.`;
+  const isGitHubRateLimit =
+    response.status === 403 &&
+    (response.headers.get("x-ratelimit-remaining") === "0" ||
+      response.headers.has("retry-after") ||
+      body?.message?.toLowerCase().includes("secondary rate limit"));
 
-  if (!response.ok && isRetryableStatus(response.status) && attempt < MAX_ATTEMPTS) {
-    const delay = RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+  const retryDelayMs = getGitHubRetryDelayMs(response);
+
+  if (!response.ok && (isRetryableStatus(response.status) || isGitHubRateLimit) && attempt < MAX_ATTEMPTS) {
+    const delay = retryDelayMs ?? RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
     console.warn(
       `GitHub request failed for ${path} (${errorMessage}). Retrying in ${delay}ms (${attempt}/${MAX_ATTEMPTS}).`
     );
@@ -130,6 +138,20 @@ async function githubRequest(path, attempt = 1) {
   }
 
   return body;
+}
+
+function getGitHubRetryDelayMs(response) {
+  const retryAfterSeconds = Number(response.headers.get("retry-after"));
+  if (Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0) {
+    return Math.min(retryAfterSeconds * 1000, MAX_RETRY_DELAY_MS);
+  }
+
+  const resetAtSeconds = Number(response.headers.get("x-ratelimit-reset"));
+  if (Number.isFinite(resetAtSeconds) && resetAtSeconds > 0) {
+    return Math.min(Math.max(0, resetAtSeconds * 1000 - Date.now()), MAX_RETRY_DELAY_MS);
+  }
+
+  return null;
 }
 
 async function listPreviewDeployments() {

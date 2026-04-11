@@ -111,6 +111,10 @@ function normalizeBranchAlias(branch) {
   return branch.toLowerCase().replace(/[^a-z0-9]/g, "-");
 }
 
+function ensureHttps(url) {
+  return url.startsWith("http") ? url : `https://${url}`;
+}
+
 async function listPreviewDeployments() {
   const deployments = [];
 
@@ -169,11 +173,11 @@ function selectPreviewUrl(deployment, branch) {
   const preferredAlias = aliases.find((alias) => alias === expectedAlias) ?? aliases[0];
 
   if (preferredAlias) {
-    return `https://${preferredAlias}`;
+    return ensureHttps(preferredAlias);
   }
 
   if (deployment.url) {
-    return deployment.url.startsWith("http") ? deployment.url : `https://${deployment.url}`;
+    return ensureHttps(deployment.url);
   }
 
   throw new Error(`Could not determine preview URL for branch ${branch}.`);
@@ -232,11 +236,7 @@ async function main() {
 
   const previewUrl = selectPreviewUrl(deployment, PR_BRANCH);
   const deploymentUrl =
-    deployment.url && deployment.url.startsWith("http")
-      ? deployment.url
-      : deployment.url
-        ? `https://${deployment.url}`
-        : null;
+    deployment.url ? ensureHttps(deployment.url) : null;
 
   const pullRequest = await githubRequest(
     `/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}`
