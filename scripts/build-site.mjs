@@ -77,6 +77,14 @@ function outputPathForRoute(route) {
   return resolveInsideDist(cleanRoute, "index.html");
 }
 
+async function writeHtmlForRoute(route, html) {
+  await writeText(outputPathForRoute(route), html);
+
+  if (route === "/404/") {
+    await writeText(resolveInsideDist("404.html"), html);
+  }
+}
+
 function registerEmittedRoute(route, sourceLabel, emittedRoutes) {
   const existingSource = emittedRoutes.get(route);
 
@@ -152,7 +160,7 @@ async function assemblePages(manifest) {
       assistantSrc: assistantEntry.scripts[0] ?? null
     });
 
-    await writeText(outputPathForRoute(route), html);
+    await writeHtmlForRoute(route, html);
   }
 
   for (const generatedPage of generatedPages) {
@@ -177,7 +185,7 @@ async function assemblePages(manifest) {
       assistantSrc: assistantEntry.scripts[0] ?? null
     });
 
-    await writeText(outputPathForRoute(route), html);
+    await writeHtmlForRoute(route, html);
   }
 }
 
