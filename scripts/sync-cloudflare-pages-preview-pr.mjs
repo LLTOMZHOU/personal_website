@@ -18,8 +18,10 @@ const CLOUDFLARE_PAGES_PROJECT =
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
 const GITHUB_SHA = process.env.GITHUB_SHA;
+const DEPLOYMENT_URL = process.env.DEPLOYMENT_URL;
 const PR_NUMBER = process.env.PR_NUMBER;
 const PR_BRANCH = process.env.PR_BRANCH;
+const PREVIEW_URL = process.env.PREVIEW_URL;
 
 function requireEnv(name, value) {
   if (!value) {
@@ -281,11 +283,17 @@ async function main() {
   requireEnv("PR_NUMBER", PR_NUMBER);
   requireEnv("PR_BRANCH", PR_BRANCH);
 
-  const deployment = await waitForLatestDeployment(PR_BRANCH);
+  const outputPreviewUrl = PREVIEW_URL ? ensureHttps(PREVIEW_URL) : null;
+  const outputDeploymentUrl = DEPLOYMENT_URL ? ensureHttps(DEPLOYMENT_URL) : null;
 
-  const previewUrl = selectPreviewUrl(deployment, PR_BRANCH);
-  const deploymentUrl =
-    deployment.url ? ensureHttps(deployment.url) : null;
+  let previewUrl = outputPreviewUrl;
+  let deploymentUrl = outputDeploymentUrl;
+
+  if (!previewUrl) {
+    const deployment = await waitForLatestDeployment(PR_BRANCH);
+    previewUrl = selectPreviewUrl(deployment, PR_BRANCH);
+    deploymentUrl = deployment.url ? ensureHttps(deployment.url) : deploymentUrl;
+  }
 
   const pullRequest = await githubRequest(
     `/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}`

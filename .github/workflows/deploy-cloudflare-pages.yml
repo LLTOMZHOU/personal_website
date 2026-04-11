@@ -126,6 +126,7 @@ jobs:
           fi
 
       - name: Deploy to Cloudflare Pages
+        id: deploy_pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ env.CLOUDFLARE_API_TOKEN }}
@@ -138,6 +139,9 @@ jobs:
 
       - name: Sync preview URL into PR body
         if: github.event_name == 'pull_request'
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy_pages.outputs.deployment-url }}
+          PREVIEW_URL: ${{ steps.deploy_pages.outputs.pages-deployment-alias-url }}
         run: node scripts/sync-cloudflare-pages-preview-pr.mjs
 
       - name: Delete old Cloudflare Pages previews
