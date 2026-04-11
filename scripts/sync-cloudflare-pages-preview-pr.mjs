@@ -1,6 +1,8 @@
 const API_ROOT = "https://api.cloudflare.com/client/v4";
 const GITHUB_API_ROOT = "https://api.github.com";
-const DEPLOYMENTS_PER_PAGE = 100;
+const DEPLOYMENTS_PER_PAGE = 25;
+const MAX_ATTEMPTS = 5;
+const RETRY_BASE_DELAY_MS = 1000;
 const DEPLOYMENT_LOOKUP_ATTEMPTS = 12;
 const DEPLOYMENT_LOOKUP_DELAY_MS = 5000;
 const PREVIEW_BLOCK_START = "<!-- codex-preview-link:start -->";
@@ -28,21 +30,56 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function cloudflareRequest(path, init = {}) {
-  const response = await fetch(`${API_ROOT}${path}`, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
-      ...(init.headers ?? {})
+function isRetryableStatus(status) {
+  return status === 429 || status >= 500;
+}
+
+async function cloudflareRequest(path, init = {}, attempt = 1) {
+  let response;
+
+  try {
+    response = await fetch(`${API_ROOT}${path}`, {
+      ...init,
+      headers: {
+        Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
+        ...(init.headers ?? {})
+      }
+    });
+  } catch (error) {
+    if (attempt < MAX_ATTEMPTS) {
+      const delay = RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+      console.warn(
+        `Cloudflare request failed for ${init.method ?? "GET"} ${path}. Retrying in ${delay}ms (${attempt}/${MAX_ATTEMPTS}).`
+      );
+      await sleep(delay);
+      return cloudflareRequest(path, init, attempt + 1);
     }
-  });
-  const body = await response.json();
+
+    throw error;
+  }
+
+  let body = null;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+
+  const message =
+    body?.errors?.[0]?.message ??
+    body?.messages?.[0]?.message ??
+    `Cloudflare API request failed with status ${response.status}.`;
+
+  if ((!response.ok || !body?.success) && isRetryableStatus(response.status) && attempt < MAX_ATTEMPTS) {
+    const delay = RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+    console.warn(
+      `Cloudflare request failed for ${init.method ?? "GET"} ${path} (${message}). Retrying in ${delay}ms (${attempt}/${MAX_ATTEMPTS}).`
+    );
+    await sleep(delay);
+    return cloudflareRequest(path, init, attempt + 1);
+  }
 
   if (!response.ok || !body?.success) {
-    const message =
-      body?.errors?.[0]?.message ??
-      body?.messages?.[0]?.message ??
-      `Cloudflare API request failed with status ${response.status}.`;
     throw new Error(message);
   }
 
@@ -169,12 +206,17 @@ function mergePreviewBlock(body, previewBlock) {
     return currentBody.replace(blockPattern, previewBlock);
   }
 
-  const trimmed = currentBody.trimEnd();
-  if (!trimmed) {
+  if (!currentBody) {
     return previewBlock;
   }
 
-  return `${trimmed}\n\n${previewBlock}`;
+  const separator = currentBody.endsWith("\n\n")
+    ? ""
+    : currentBody.endsWith("\n")
+      ? "\n"
+      : "\n\n";
+
+  return `${currentBody}${separator}${previewBlock}`;
 }
 
 async function main() {

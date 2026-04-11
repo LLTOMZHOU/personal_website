@@ -1,5 +1,5 @@
 const API_ROOT = "https://api.cloudflare.com/client/v4";
-const DEPLOYMENTS_PER_PAGE = 100;
+const DEPLOYMENTS_PER_PAGE = 25;
 const MAX_ATTEMPTS = 5;
 const RETRY_BASE_DELAY_MS = 1000;
 const DELETE_DELAY_MS = 250;
@@ -112,11 +112,6 @@ async function deleteDeployment(deployment) {
 }
 
 async function listOpenPullRequestBranches() {
-  if (!GITHUB_TOKEN || !GITHUB_REPOSITORY) {
-    console.warn("GitHub context is missing. Preview cleanup will not preserve open PR branches.");
-    return new Set();
-  }
-
   const branches = new Set();
 
   for (let page = 1; ; page += 1) {
@@ -130,7 +125,8 @@ async function listOpenPullRequestBranches() {
 
     for (const pull of pulls) {
       const branch = pull?.head?.ref;
-      if (branch) {
+      const repository = pull?.head?.repo?.full_name;
+      if (branch && repository === GITHUB_REPOSITORY) {
         branches.add(branch);
       }
     }
@@ -139,6 +135,10 @@ async function listOpenPullRequestBranches() {
       return branches;
     }
   }
+}
+
+function deploymentTimestamp(deployment) {
+  return Date.parse(deployment.modified_on ?? deployment.created_on ?? "") || 0;
 }
 
 async function main() {
@@ -152,27 +152,39 @@ async function main() {
     return;
   }
 
-  const openPullRequestBranches = await listOpenPullRequestBranches();
+  requireEnv("GITHUB_TOKEN", GITHUB_TOKEN);
+  requireEnv("GITHUB_REPOSITORY", GITHUB_REPOSITORY);
 
-  deployments.sort((left, right) => {
-    const leftTime = Date.parse(left.created_on ?? "") || 0;
-    const rightTime = Date.parse(right.created_on ?? "") || 0;
-    return leftTime - rightTime;
-  });
+  const openPullRequestBranches = await listOpenPullRequestBranches();
+  const preservedBranches = new Set();
+  const preservedDeploymentIds = new Set();
+
+  [...deployments]
+    .sort((left, right) => deploymentTimestamp(right) - deploymentTimestamp(left))
+    .forEach((deployment) => {
+      const branch = deployment.deployment_trigger?.metadata?.branch;
+      if (!branch || !openPullRequestBranches.has(branch) || preservedBranches.has(branch)) {
+        return;
+      }
+      preservedBranches.add(branch);
+      preservedDeploymentIds.add(deployment.id);
+    });
+
+  const deploymentsToDelete = [...deployments]
+    .filter((deployment) => !preservedDeploymentIds.has(deployment.id))
+    .sort((left, right) => deploymentTimestamp(left) - deploymentTimestamp(right));
+
+  const preservedCount = deployments.length - deploymentsToDelete.length;
 
   console.log(
-    `Deleting ${deployments.length} preview deployment${deployments.length === 1 ? "" : "s"} from ${CLOUDFLARE_PAGES_PROJECT}.`
+    `Found ${deployments.length} preview deployment${deployments.length === 1 ? "" : "s"} in ${CLOUDFLARE_PAGES_PROJECT}; deleting ${deploymentsToDelete.length} and preserving ${preservedCount}.`
   );
 
   const failures = [];
 
-  for (const deployment of deployments) {
+  for (const deployment of deploymentsToDelete) {
     const branch = deployment.deployment_trigger?.metadata?.branch ?? "unknown-branch";
     const alias = deployment.aliases?.[0] ?? deployment.url ?? "unknown-url";
-    if (openPullRequestBranches.has(branch)) {
-      console.log(`Keeping preview ${deployment.id} for open PR branch ${branch}.`);
-      continue;
-    }
 
     try {
       await deleteDeployment(deployment);
