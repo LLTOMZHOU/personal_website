@@ -1,7 +1,16 @@
+import "./motion-photography.css";
 import { animate, stagger } from "animejs";
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function revealTargets(targets: HTMLElement[]) {
+  targets.forEach((target) => {
+    target.dataset.motionRevealed = "true";
+    target.style.opacity = "1";
+    target.style.transform = "none";
+  });
 }
 
 function collectRevealTargets(section: HTMLElement) {
@@ -18,6 +27,11 @@ function collectRevealTargets(section: HTMLElement) {
   return directChildren.length > 0 ? directChildren : [section];
 }
 
+function sectionIsVisible(section: HTMLElement) {
+  const rect = section.getBoundingClientRect();
+  return rect.top < window.innerHeight && rect.bottom > 0;
+}
+
 function setupPhotographyReveal() {
   const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-photography-reveal]"));
 
@@ -27,14 +41,17 @@ function setupPhotographyReveal() {
 
   if (prefersReducedMotion()) {
     sections.forEach((section) => {
-      collectRevealTargets(section).forEach((target) => {
-        target.dataset.motionRevealed = "true";
-        target.style.opacity = "1";
-        target.style.transform = "none";
-      });
+      revealTargets(collectRevealTargets(section));
     });
     return;
   }
+
+  sections.forEach((section) => {
+    if (sectionIsVisible(section)) {
+      section.dataset.photographyRevealState = "revealed";
+      revealTargets(collectRevealTargets(section));
+    }
+  });
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -59,9 +76,7 @@ function setupPhotographyReveal() {
           duration: 920,
           ease: "out(4)",
           onComplete: () => {
-            targets.forEach((target) => {
-              target.dataset.motionRevealed = "true";
-            });
+            revealTargets(targets);
           }
         });
 
@@ -71,13 +86,14 @@ function setupPhotographyReveal() {
     { threshold: 0.22, rootMargin: "0px 0px -8% 0px" }
   );
   sections.forEach((section) => {
+    if (section.dataset.photographyRevealState === "revealed") {
+      return;
+    }
+
     observer.observe(section);
   });
-}
 
-function setupGalleryLightboxMotion() {
-  return;
+  document.documentElement.dataset.photographyMotion = "enabled";
 }
 
 setupPhotographyReveal();
-setupGalleryLightboxMotion();

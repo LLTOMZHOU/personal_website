@@ -1,7 +1,16 @@
+import "./motion-home.css";
 import { animate, stagger } from "animejs";
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function revealTargets(targets: HTMLElement[]) {
+  targets.forEach((target) => {
+    target.dataset.motionRevealed = "true";
+    target.style.opacity = "1";
+    target.style.transform = "none";
+  });
 }
 
 function collectRevealTargets(section: HTMLElement) {
@@ -18,6 +27,11 @@ function collectRevealTargets(section: HTMLElement) {
   return directChildren.length > 0 ? directChildren : [section];
 }
 
+function sectionIsVisible(section: HTMLElement) {
+  const rect = section.getBoundingClientRect();
+  return rect.top < window.innerHeight && rect.bottom > 0;
+}
+
 function setupRevealAnimation() {
   const revealSections = Array.from(document.querySelectorAll<HTMLElement>("[data-home-reveal]"));
 
@@ -27,14 +41,17 @@ function setupRevealAnimation() {
 
   if (prefersReducedMotion()) {
     revealSections.forEach((section) => {
-      collectRevealTargets(section).forEach((target) => {
-        target.dataset.motionRevealed = "true";
-        target.style.opacity = "1";
-        target.style.transform = "none";
-      });
+      revealTargets(collectRevealTargets(section));
     });
     return;
   }
+
+  revealSections.forEach((section) => {
+    if (section.dataset.revealDelay === "0" || sectionIsVisible(section)) {
+      section.dataset.homeRevealState = "revealed";
+      revealTargets(collectRevealTargets(section));
+    }
+  });
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -61,9 +78,7 @@ function setupRevealAnimation() {
           duration: 980,
           ease: "out(4)",
           onComplete: () => {
-            targets.forEach((target) => {
-              target.dataset.motionRevealed = "true";
-            });
+            revealTargets(targets);
           }
         });
         observer.unobserve(section);
@@ -72,8 +87,14 @@ function setupRevealAnimation() {
     { threshold: 0.22, rootMargin: "0px 0px -8% 0px" }
   );
   revealSections.forEach((section) => {
+    if (section.dataset.homeRevealState === "revealed") {
+      return;
+    }
+
     observer.observe(section);
   });
+
+  document.documentElement.dataset.homeMotion = "enabled";
 }
 
 function setupTiltCards() {

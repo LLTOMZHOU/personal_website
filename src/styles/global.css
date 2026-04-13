@@ -56,20 +56,6 @@
     display: block;
     max-width: 100%;
   }
-
-  html[data-motion="enabled"] [data-home-item]:not([data-motion-revealed]),
-  html[data-motion="enabled"] [data-photography-item]:not([data-motion-revealed]) {
-    opacity: 0;
-    will-change: opacity, transform;
-  }
-
-  html[data-motion="enabled"] [data-home-item]:not([data-motion-revealed]) {
-    transform: translate3d(0, 32px, 0);
-  }
-
-  html[data-motion="enabled"] [data-photography-item]:not([data-motion-revealed]) {
-    transform: translate3d(0, 28px, 0);
-  }
 }
 
 @layer components {
