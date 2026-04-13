@@ -1,8 +1,8 @@
-<section class="mb-20 md:mb-24">
-  <h1 class="headline-bold mb-12 max-w-4xl text-[3.15rem] leading-[0.92] tracking-tighter sm:text-[4rem] md:mb-16 md:text-[4.5rem]">
+<section class="mb-20 md:mb-24" data-home-reveal data-reveal-delay="0">
+  <h1 class="headline-bold mb-12 max-w-4xl text-[3.15rem] leading-[0.92] tracking-tighter sm:text-[4rem] md:mb-16 md:text-[4.5rem]" data-home-item>
     Archiving the intersection of architectural systems and digital memory.
   </h1>
-  <div class="mb-16 border-y border-text-main/10 py-6">
+  <div class="mb-16 border-y border-text-main/10 py-6" data-home-item>
     <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
       <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
         <span class="font-body text-[9px] font-bold uppercase tracking-[0.3em] text-text-muted/60">
@@ -21,13 +21,13 @@
           System Status
         </span>
         <div class="flex items-center gap-2">
-          <span class="h-2 w-2 rounded-full bg-status-ok shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+          <span class="h-2 w-2 rounded-full bg-status-ok shadow-[0_0_8px_rgba(34,197,94,0.6)] motion-safe:animate-pulse"></span>
           <span class="font-body text-[10px] font-bold uppercase tracking-[0.15em]">Operational</span>
         </div>
       </div>
     </div>
   </div>
-  <div class="mb-24 grid grid-cols-12 items-start gap-x-8 md:mb-32">
+  <div class="mb-24 grid grid-cols-12 items-start gap-x-8 md:mb-32" data-home-item>
     <div class="col-span-12 mb-10 md:col-span-4 md:mb-0 lg:col-span-3">
       <h3 class="mb-6 font-body text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">
         Core Interests
@@ -64,8 +64,8 @@
   </div>
 </section>
 
-<section class="mb-32 md:mb-56">
-  <div class="mb-24 flex items-baseline justify-between border-b border-text-main/10 pb-4">
+<section class="mb-32 md:mb-56" data-home-reveal data-reveal-delay="120">
+  <div class="mb-24 flex items-baseline justify-between border-b border-text-main/10 pb-4" data-home-item>
     <h2 class="headline-bold text-[2.35rem] md:text-[3.5rem]">Selected Projects</h2>
     <a
       class="border-b border-primary pb-1 font-body text-[0.8rem] font-bold uppercase tracking-widest text-primary transition-opacity hover:opacity-80"
@@ -77,154 +77,157 @@
   <div class="space-y-48">
     <div
       class="flex flex-col items-center gap-16 lg:flex-row lg:gap-24"
+      data-home-tilt
       style="--color-primary:#FD7060; --color-primary-container:#FFE2DE; --convoice-accent-rgb:253 112 96; --convoice-accent-soft-rgb:255 226 222; --convoice-glow-rgb:255 192 178;"
     >
-      <div class="w-full overflow-hidden lg:w-3/5">
-        <a aria-label="Convoice AI project page" href="/projects/convoice/">
-          <div aria-hidden="true" class="relative min-h-[24rem] w-full overflow-hidden text-white bg-[radial-gradient(circle_at_16%_18%,rgb(var(--convoice-glow-rgb)/0.28),transparent_24%),radial-gradient(circle_at_88%_22%,rgb(255_255_255/0.12),transparent_18%),linear-gradient(150deg,#221017_0%,#47202b_38%,#b74c56_68%,var(--color-primary)_84%,var(--color-primary-container)_100%)] sm:min-h-0 sm:aspect-[16/10]">
-            <div class="pointer-events-none absolute -left-[8%] top-[58%] h-48 w-48 rounded-full bg-[rgb(var(--convoice-accent-rgb)/0.32)] blur-[28px]"></div>
-            <div class="pointer-events-none absolute -right-[10%] -top-[6%] h-36 w-36 rounded-full border border-white/20"></div>
-            <div class="relative z-10 flex h-full min-h-0 flex-col gap-4 p-4 sm:gap-[1.1rem] sm:p-5">
-              <div class="flex flex-wrap items-center justify-between gap-2.5">
-                <span class="border border-white/20 bg-white/10 px-3 py-2 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">Inbound / Outbound</span>
-                <span class="border border-white/20 bg-white/10 px-3 py-2 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">Knowledge + Analytics</span>
-              </div>
-              <div class="flex min-h-0 flex-1 flex-col border border-white/15 bg-[linear-gradient(180deg,rgba(24,10,15,0.54),rgba(48,20,29,0.28))] shadow-[0_26px_60px_-28px_rgba(17,6,10,0.72)] backdrop-blur-[20px]">
-                <div class="flex items-center gap-3 border-b border-white/10 px-4 py-3">
-                  <div class="flex gap-1.5" aria-hidden="true">
-                    <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
-                    <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
-                    <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
-                  </div>
-                  <p class="min-w-0 font-body text-[0.7rem] font-bold uppercase tracking-[0.12em] text-white/65">
-                    Convoice workspace
-                  </p>
-                  <span class="ml-auto rounded-full border border-white/15 bg-white/10 px-2 py-1 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-white/75">
-                    Live
-                  </span>
+        <div class="w-full overflow-hidden lg:w-3/5">
+          <a aria-label="Convoice AI project page" href="/projects/convoice/">
+            <div aria-hidden="true" class="relative min-h-[24rem] w-full overflow-hidden text-white bg-[radial-gradient(circle_at_16%_18%,rgb(var(--convoice-glow-rgb)/0.28),transparent_24%),radial-gradient(circle_at_88%_22%,rgb(255_255_255/0.12),transparent_18%),linear-gradient(150deg,#221017_0%,#47202b_38%,#b74c56_68%,var(--color-primary)_84%,var(--color-primary-container)_100%)] sm:min-h-0 sm:aspect-[16/10]">
+              <div class="pointer-events-none absolute -left-[8%] top-[58%] h-48 w-48 rounded-full bg-[rgb(var(--convoice-accent-rgb)/0.32)] blur-[28px]"></div>
+              <div class="pointer-events-none absolute -right-[10%] -top-[6%] h-36 w-36 rounded-full border border-white/20"></div>
+              <div class="relative z-10 flex h-full min-h-0 flex-col gap-4 p-4 sm:gap-[1.1rem] sm:p-5">
+                <div class="flex flex-wrap items-center justify-between gap-2.5">
+                  <span class="border border-white/20 bg-white/10 px-3 py-2 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">Inbound / Outbound</span>
+                  <span class="border border-white/20 bg-white/10 px-3 py-2 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">Knowledge + Analytics</span>
                 </div>
-                <div class="grid min-h-0 flex-1 grid-cols-2 gap-3 p-4">
-                  <div class="flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
-                    <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Knowledge</p>
-                    <p class="font-headline text-[1.05rem] font-bold leading-[1.05] text-white/90">Websites, PDFs, call notes</p>
-                    <div class="flex flex-wrap gap-2">
-                      <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">website</span>
-                      <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">faq.pdf</span>
-                      <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">reviews</span>
+                <div class="flex min-h-0 flex-1 flex-col border border-white/15 bg-[linear-gradient(180deg,rgba(24,10,15,0.54),rgba(48,20,29,0.28))] shadow-[0_26px_60px_-28px_rgba(17,6,10,0.72)] backdrop-blur-[20px]">
+                  <div class="flex items-center gap-3 border-b border-white/10 px-4 py-3">
+                    <div class="flex gap-1.5" aria-hidden="true">
+                      <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
+                      <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
+                      <span class="block h-[0.45rem] w-[0.45rem] rounded-full bg-white/50"></span>
                     </div>
+                    <p class="min-w-0 font-body text-[0.7rem] font-bold uppercase tracking-[0.12em] text-white/65">
+                      Convoice workspace
+                    </p>
+                    <span class="ml-auto rounded-full border border-white/15 bg-white/10 px-2 py-1 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-white/75">
+                      Live
+                    </span>
                   </div>
-                  <div class="flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
-                    <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Calls</p>
-                    <p class="font-headline text-[1.05rem] font-bold leading-[1.05] text-white/90">History and routing</p>
-                    <div class="mt-auto grid gap-2" aria-hidden="true">
-                      <span class="block h-1.5 w-[84%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
-                      <span class="block h-1.5 w-[68%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
-                      <span class="block h-1.5 w-[52%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
-                    </div>
-                  </div>
-                  <div class="col-span-2 flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
-                    <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Conversation Review</p>
-                    <div class="flex flex-col gap-2">
-                      <div class="max-w-[85%] border border-white/15 bg-white/10 px-3 py-2 text-[0.73rem] leading-[1.4] text-white/80">
-                        Caller: I need to move Friday&apos;s reservation to 7:30.
-                      </div>
-                      <div class="max-w-[85%] self-end border border-white/15 bg-[rgb(var(--convoice-accent-rgb)/0.22)] px-3 py-2 text-[0.73rem] leading-[1.4] text-white/90">
-                        Bot: updated, confirmed, and logged for follow-up.
+                  <div class="grid min-h-0 flex-1 grid-cols-2 gap-3 p-4">
+                    <div class="flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
+                      <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Knowledge</p>
+                      <p class="font-headline text-[1.05rem] font-bold leading-[1.05] text-white/90">Websites, PDFs, call notes</p>
+                      <div class="flex flex-wrap gap-2">
+                        <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">website</span>
+                        <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">faq.pdf</span>
+                        <span class="border border-white/15 bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-white/80">reviews</span>
                       </div>
                     </div>
+                    <div class="flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
+                      <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Calls</p>
+                      <p class="font-headline text-[1.05rem] font-bold leading-[1.05] text-white/90">History and routing</p>
+                      <div class="mt-auto grid gap-2" aria-hidden="true">
+                        <span class="block h-1.5 w-[84%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
+                        <span class="block h-1.5 w-[68%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
+                        <span class="block h-1.5 w-[52%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.86),rgb(var(--convoice-accent-soft-rgb)/0.24))]"></span>
+                      </div>
+                    </div>
+                    <div class="col-span-2 flex min-h-0 flex-col gap-2 border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-3">
+                      <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/60">Conversation Review</p>
+                      <div class="flex flex-col gap-2">
+                        <div class="max-w-[85%] border border-white/15 bg-white/10 px-3 py-2 text-[0.73rem] leading-[1.4] text-white/80">
+                          Caller: I need to move Friday&apos;s reservation to 7:30.
+                        </div>
+                        <div class="max-w-[85%] self-end border border-white/15 bg-[rgb(var(--convoice-accent-rgb)/0.22)] px-3 py-2 text-[0.73rem] leading-[1.4] text-white/90">
+                          Bot: updated, confirmed, and logged for follow-up.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap gap-2 px-4 pb-4">
+                    <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Voices</span>
+                    <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Summaries</span>
+                    <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Reservations</span>
                   </div>
                 </div>
-                <div class="flex flex-wrap gap-2 px-4 pb-4">
-                  <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Voices</span>
-                  <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Summaries</span>
-                  <span class="border border-white/20 bg-white/10 px-2.5 py-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">Reservations</span>
-                </div>
-              </div>
-              <div class="flex flex-wrap items-center justify-between gap-2.5">
-                <div>
-                  <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.24em] text-white/60">AI voice agents for business calls</p>
-                  <p class="mt-1 font-headline text-[clamp(1.9rem,4vw,2.6rem)] font-bold italic leading-[0.96] text-white/90">Convoice</p>
+                <div class="flex flex-wrap items-center justify-between gap-2.5">
+                  <div>
+                    <p class="font-body text-[0.62rem] font-bold uppercase tracking-[0.24em] text-white/60">AI voice agents for business calls</p>
+                    <p class="mt-1 font-headline text-[clamp(1.9rem,4vw,2.6rem)] font-bold italic leading-[0.96] text-white/90">Convoice</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </a>
-      </div>
-      <div class="w-full lg:w-2/5">
-        <div class="mb-6 flex items-center justify-between">
-          <span class="font-body text-[0.7rem] font-bold uppercase tracking-widest text-primary">
-            Ref. 002/P
-          </span>
-          <span class="font-body text-[0.7rem] font-bold uppercase tracking-widest text-primary">
-            Startup / Voice AI
-          </span>
+          </a>
         </div>
-        <h3 class="headline-bold mb-6 text-4xl">
-          <a href="/projects/convoice/">Convoice AI</a>
-        </h3>
-        <p class="mb-10 font-body text-[1.1rem] leading-relaxed text-text-muted">
-          I co-founded Convoice and led software engineering. It was a voice-agent product for
-          real business calls: knowledge-backed inbound and outbound flows, conversation review,
-          analytics, and appointment-style workflows.
-        </p>
-        <div class="flex flex-wrap gap-3">
-          <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
-            Voice Agents
-          </span>
-          <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
-            Telephony
-          </span>
-          <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
-            Analytics
-          </span>
+        <div class="w-full lg:w-2/5" data-home-item>
+          <div class="mb-6 flex items-center justify-between">
+            <span class="font-body text-[0.7rem] font-bold uppercase tracking-widest text-primary">
+              Ref. 002/P
+            </span>
+            <span class="font-body text-[0.7rem] font-bold uppercase tracking-widest text-primary">
+              Startup / Voice AI
+            </span>
+          </div>
+          <h3 class="headline-bold mb-6 text-4xl">
+            <a href="/projects/convoice/">Convoice AI</a>
+          </h3>
+          <p class="mb-10 font-body text-[1.1rem] leading-relaxed text-text-muted">
+            I co-founded Convoice and led software engineering. It was a voice-agent product for
+            real business calls: knowledge-backed inbound and outbound flows, conversation review,
+            analytics, and appointment-style workflows.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
+              Voice Agents
+            </span>
+            <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
+              Telephony
+            </span>
+            <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
+              Analytics
+            </span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="flex flex-col items-center gap-16 lg:flex-row-reverse lg:gap-24">
-      <div class="w-full overflow-hidden lg:w-3/5">
-        <a href="/projects/glitch-witch/">
-          <img
-            alt="Neon logo for The Glitch Witch inside a hexagonal circuit motif."
-            class="aspect-[16/10] h-auto w-full object-cover grayscale transition-all duration-1000 hover:grayscale-0"
-            src="https://images.squarespace-cdn.com/content/v1/5f6b6caec90f2d572ac8f7f9/788767e9-44d4-47a4-aedd-0d2f3d8a9a0f/Expo%2BLogo%2B4.png"
-          >
-        </a>
-      </div>
-      <div class="w-full lg:w-2/5">
-        <div class="mb-6 flex items-center justify-between">
-          <span class="font-body text-[0.7rem] font-bold uppercase tracking-widest text-primary">
-            Ref. 001/P
-          </span>
-          <span class="font-body text-[0.7rem] font-bold uppercase tracking-widest text-primary">
-            Game Design
-          </span>
+    <div class="flex flex-col items-center gap-16 lg:flex-row-reverse lg:gap-24" data-home-tilt>
+        <div class="w-full overflow-hidden lg:w-3/5">
+          <a href="/projects/glitch-witch/">
+            <img
+              alt="Neon logo for The Glitch Witch inside a hexagonal circuit motif."
+              class="aspect-[16/10] h-auto w-full object-cover grayscale transition-all duration-1000 hover:grayscale-0"
+              src="https://images.squarespace-cdn.com/content/v1/5f6b6caec90f2d572ac8f7f9/788767e9-44d4-47a4-aedd-0d2f3d8a9a0f/Expo%2BLogo%2B4.png"
+            >
+          </a>
         </div>
-        <h3 class="headline-bold mb-6 text-4xl">
-          <a href="/projects/glitch-witch/">The Glitch Witch</a>
-        </h3>
-        <p class="mb-10 font-body text-[1.1rem] leading-relaxed text-text-muted">
-          I led engineering on this retro-future puzzle adventure, where restoring broken
-          technology drives both progression and story in a world that mistakes technical literacy
-          for witchcraft.
-        </p>
-        <div class="flex flex-wrap gap-3">
-          <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
-            Adventure
-          </span>
-          <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
-            Puzzle
-          </span>
-          <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
-            UE5
-          </span>
+        <div class="w-full lg:w-2/5" data-home-item>
+          <div class="mb-6 flex items-center justify-between">
+            <span class="font-body text-[0.7rem] font-bold uppercase tracking-widest text-primary">
+              Ref. 001/P
+            </span>
+            <span class="font-body text-[0.7rem] font-bold uppercase tracking-widest text-primary">
+              Game Design
+            </span>
+          </div>
+          <h3 class="headline-bold mb-6 text-4xl">
+            <a href="/projects/glitch-witch/">The Glitch Witch</a>
+          </h3>
+          <p class="mb-10 font-body text-[1.1rem] leading-relaxed text-text-muted">
+            I led engineering on this retro-future puzzle adventure, where restoring broken
+            technology drives both progression and story in a world that mistakes technical literacy
+            for witchcraft.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
+              Adventure
+            </span>
+            <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
+              Puzzle
+            </span>
+            <span class="border border-text-main/10 px-4 py-1.5 text-[0.7rem] font-bold uppercase text-text-muted">
+              UE5
+            </span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="mb-32 grid grid-cols-1 gap-16 lg:grid-cols-12 md:mb-56">
-  <div class="lg:col-span-4">
+<section class="mb-32 grid grid-cols-1 gap-16 lg:grid-cols-12 md:mb-56" data-home-reveal data-reveal-delay="160">
+  <div class="lg:col-span-4" data-home-item>
     <h2 class="headline-bold sticky top-32 text-[2.35rem] leading-tight md:text-[3rem]">Writing &amp; Speculations</h2>
     <p class="mt-8 font-body text-[1.1rem] leading-relaxed text-text-muted">
       A chronological repository of theoretical frameworks, technical papers, and essays on the
@@ -238,7 +241,7 @@
     </a>
   </div>
   <div class="space-y-0 lg:col-span-8">
-    <article class="group border-b-4 border-text-main py-12 transition-all">
+    <article class="group border-b-4 border-text-main py-12 transition-all" data-home-item>
       <span class="block font-body text-[0.75rem] font-bold uppercase tracking-widest text-primary">
         AUG 2024
       </span>
@@ -250,7 +253,7 @@
         redundancy in digital archives...
       </p>
     </article>
-    <article class="group border-b-4 border-text-main py-12 transition-all">
+    <article class="group border-b-4 border-text-main py-12 transition-all" data-home-item>
       <span class="block font-body text-[0.75rem] font-bold uppercase tracking-widest text-primary">
         MAR 2024
       </span>
@@ -262,7 +265,7 @@
         memory restoration...
       </p>
     </article>
-    <article class="group border-b-4 border-text-main py-12 transition-all">
+    <article class="group border-b-4 border-text-main py-12 transition-all" data-home-item>
       <span class="block font-body text-[0.75rem] font-bold uppercase tracking-widest text-primary">
         DEC 2023
       </span>
@@ -277,8 +280,8 @@
   </div>
 </section>
 
-<section class="mb-32 md:mb-56">
-  <div class="mb-16 flex flex-col items-baseline justify-between gap-6 md:flex-row">
+<section class="mb-32 md:mb-56" data-home-reveal data-reveal-delay="120">
+  <div class="mb-16 flex flex-col items-baseline justify-between gap-6 md:flex-row" data-home-item>
     <h2 class="headline-bold text-[2.35rem] md:text-[3rem]">Research Threads</h2>
     <div class="flex gap-8">
       <button aria-pressed="true" class="border-b-2 border-primary pb-1 font-body text-[0.8rem] font-bold uppercase tracking-widest text-text-main" type="button">
@@ -294,7 +297,7 @@
     </div>
   </div>
   <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-    <div class="group flex min-h-[16rem] flex-col justify-between border border-text-main/10 bg-surface p-8 transition-colors hover:border-primary md:aspect-square">
+    <div class="group flex min-h-[16rem] flex-col justify-between border border-text-main/10 bg-surface p-8 transition-colors hover:border-primary md:aspect-square" data-home-item>
       <span class="font-body text-[0.65rem] font-bold uppercase tracking-[0.22em] text-primary">
         Thread 01
       </span>
@@ -306,7 +309,7 @@
         </p>
       </div>
     </div>
-    <div class="group flex min-h-[16rem] flex-col justify-between border border-text-main/10 bg-surface p-8 transition-colors hover:border-primary md:aspect-square">
+    <div class="group flex min-h-[16rem] flex-col justify-between border border-text-main/10 bg-surface p-8 transition-colors hover:border-primary md:aspect-square" data-home-item>
       <span class="font-body text-[0.65rem] font-bold uppercase tracking-[0.22em] text-primary">
         Thread 02
       </span>
@@ -318,7 +321,7 @@
         </p>
       </div>
     </div>
-    <div class="group flex min-h-[16rem] flex-col justify-between border border-text-main/10 bg-surface p-8 transition-colors hover:border-primary md:aspect-square">
+    <div class="group flex min-h-[16rem] flex-col justify-between border border-text-main/10 bg-surface p-8 transition-colors hover:border-primary md:aspect-square" data-home-item>
       <span class="font-body text-[0.65rem] font-bold uppercase tracking-[0.22em] text-primary">
         Thread 03
       </span>
@@ -333,8 +336,8 @@
   </div>
 </section>
 
-<section class="mb-32 md:mb-56">
-  <div class="mb-14 flex flex-col items-baseline justify-between gap-6 md:flex-row">
+<section class="mb-32 md:mb-56" data-home-reveal data-reveal-delay="120">
+  <div class="mb-14 flex flex-col items-baseline justify-between gap-6 md:flex-row" data-home-item>
     <h2 class="headline-bold text-[2.35rem] md:text-[3.25rem]">Visual Archive</h2>
     <a
       class="border-b border-primary pb-1 font-body text-[0.78rem] font-bold uppercase tracking-[0.18em] text-primary transition-opacity hover:opacity-80"
@@ -345,51 +348,51 @@
   </div>
   <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
     <article class="group overflow-hidden bg-surface-container-low">
-      <a href="/photography/los-angeles/">
-        <img
-          alt="Sharp concrete skylights and angular rooflines in monochrome against a flat sky."
-          class="h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          src="https://media.yuxingzhou.me/photography/los-angeles/cover@full.webp"
-          width="6000"
-          height="4000"
-          loading="lazy"
-          decoding="async"
-          fetchpriority="low"
-        >
-      </a>
-      <div class="bg-black/85 px-8 py-5 text-white">
-        <p class="font-body text-[0.72rem] font-bold uppercase tracking-[0.18em] text-white/70">
-          Los Angeles
-        </p>
-      </div>
-    </article>
+        <a href="/photography/los-angeles/">
+          <img
+            alt="Sharp concrete skylights and angular rooflines in monochrome against a flat sky."
+            class="h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            src="https://media.yuxingzhou.me/photography/los-angeles/cover@full.webp"
+            width="6000"
+            height="4000"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
+          >
+        </a>
+        <div class="bg-black/85 px-8 py-5 text-white">
+          <p class="font-body text-[0.72rem] font-bold uppercase tracking-[0.18em] text-white/70">
+            Los Angeles
+          </p>
+        </div>
+      </article>
     <article class="group overflow-hidden bg-surface-container-low">
-      <a href="/photography/pacific-coast/">
-        <img
-          alt="Sunlit sea cliffs at Big Sur dropping to deep blue water with a rocky islet below."
-          class="h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          src="https://media.yuxingzhou.me/photography/pacific-coast/cover@display.webp"
-        >
-      </a>
-      <div class="bg-black/85 px-8 py-5 text-white">
-        <p class="font-body text-[0.72rem] font-bold uppercase tracking-[0.18em] text-white/70">
-          Pacific Coast
-        </p>
-      </div>
-    </article>
+        <a href="/photography/pacific-coast/">
+          <img
+            alt="Sunlit sea cliffs at Big Sur dropping to deep blue water with a rocky islet below."
+            class="h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            src="https://media.yuxingzhou.me/photography/pacific-coast/cover@display.webp"
+          >
+        </a>
+        <div class="bg-black/85 px-8 py-5 text-white">
+          <p class="font-body text-[0.72rem] font-bold uppercase tracking-[0.18em] text-white/70">
+            Pacific Coast
+          </p>
+        </div>
+      </article>
     <article class="group overflow-hidden bg-surface-container-low">
-      <a href="/photography/getty-villa-sep-2022/">
-        <img
-          alt="Looking up through Ionic columns at a coffered ceiling with gilded diamond-pattern tiles and a pendant lamp against blue sky."
-          class="h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          src="https://media.yuxingzhou.me/photography/getty-villa-sep-2022/cover@display.webp"
-        >
-      </a>
-      <div class="bg-black/85 px-8 py-5 text-white">
-        <p class="font-body text-[0.72rem] font-bold uppercase tracking-[0.18em] text-white/70">
-          Getty Villa
-        </p>
-      </div>
-    </article>
+        <a href="/photography/getty-villa-sep-2022/">
+          <img
+            alt="Looking up through Ionic columns at a coffered ceiling with gilded diamond-pattern tiles and a pendant lamp against blue sky."
+            class="h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            src="https://media.yuxingzhou.me/photography/getty-villa-sep-2022/cover@display.webp"
+          >
+        </a>
+        <div class="bg-black/85 px-8 py-5 text-white">
+          <p class="font-body text-[0.72rem] font-bold uppercase tracking-[0.18em] text-white/70">
+            Getty Villa
+          </p>
+        </div>
+      </article>
   </div>
 </section>

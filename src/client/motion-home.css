@@ -1,0 +1,5 @@
+html[data-home-motion="enabled"] [data-home-item]:not([data-motion-revealed]) {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  will-change: opacity, transform;
+}

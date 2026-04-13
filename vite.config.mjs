@@ -11,6 +11,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         site: "src/client/site.ts",
+        "motion-home": "src/client/motion-home.ts",
+        "motion-photography": "src/client/motion-photography.ts",
         gallery: "src/client/gallery.ts",
         assistant: "src/client/assistant/entry.ts"
       }

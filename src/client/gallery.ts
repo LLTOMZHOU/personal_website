@@ -197,6 +197,10 @@ function setupPhotographyLightbox() {
   }
 
   function closeLightbox() {
+    if (lightbox.hidden) {
+      return;
+    }
+
     activeRequestId += 1;
     lightbox.hidden = true;
     lightbox.classList.add("hidden");

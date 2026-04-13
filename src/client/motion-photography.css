@@ -1,0 +1,5 @@
+html[data-photography-motion="enabled"] [data-photography-item]:not([data-motion-revealed]) {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  will-change: opacity, transform;
+}
