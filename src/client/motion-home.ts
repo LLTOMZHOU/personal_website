@@ -27,6 +27,11 @@ function collectRevealTargets(section: HTMLElement) {
   return directChildren.length > 0 ? directChildren : [section];
 }
 
+function sectionIsVisible(section: HTMLElement) {
+  const rect = section.getBoundingClientRect();
+  return rect.top < window.innerHeight && rect.bottom > 0;
+}
+
 function setupRevealAnimation() {
   const revealSections = Array.from(document.querySelectorAll<HTMLElement>("[data-home-reveal]"));
 
@@ -42,7 +47,7 @@ function setupRevealAnimation() {
   }
 
   revealSections.forEach((section) => {
-    if (section.dataset.revealDelay === "0") {
+    if (section.dataset.revealDelay === "0" || sectionIsVisible(section)) {
       section.dataset.homeRevealState = "revealed";
       revealTargets(collectRevealTargets(section));
     }
