@@ -27,11 +27,6 @@ function collectRevealTargets(section: HTMLElement) {
   return directChildren.length > 0 ? directChildren : [section];
 }
 
-function sectionIsVisible(section: HTMLElement) {
-  const rect = section.getBoundingClientRect();
-  return rect.top < window.innerHeight && rect.bottom > 0;
-}
-
 function setupRevealAnimation() {
   const revealSections = Array.from(document.querySelectorAll<HTMLElement>("[data-home-reveal]"));
 
@@ -47,7 +42,7 @@ function setupRevealAnimation() {
   }
 
   revealSections.forEach((section) => {
-    if (section.dataset.revealDelay === "0" || sectionIsVisible(section)) {
+    if (section.dataset.revealDelay === "0") {
       section.dataset.homeRevealState = "revealed";
       revealTargets(collectRevealTargets(section));
     }
@@ -95,6 +90,36 @@ function setupRevealAnimation() {
   });
 
   document.documentElement.dataset.homeMotion = "enabled";
+}
+
+function setupHeroIntroAnimation() {
+  if (prefersReducedMotion()) {
+    return;
+  }
+
+  const heroSection = document.querySelector<HTMLElement>('[data-home-reveal][data-reveal-delay="0"]');
+
+  if (!heroSection) {
+    return;
+  }
+
+  const targets = collectRevealTargets(heroSection);
+
+  targets.forEach((target, index) => {
+    target.animate(
+      [
+        { opacity: 1, transform: "translate3d(0, 0, 0)" },
+        { opacity: 1, transform: "translate3d(0, -6px, 0)" },
+        { opacity: 1, transform: "translate3d(0, 0, 0)" }
+      ],
+      {
+        duration: 880,
+        delay: index * 120,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        fill: "both"
+      }
+    );
+  });
 }
 
 function setupTiltCards() {
@@ -163,4 +188,5 @@ function setupTiltCards() {
 }
 
 setupRevealAnimation();
+setupHeroIntroAnimation();
 setupTiltCards();
